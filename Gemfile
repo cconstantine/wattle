@@ -1,13 +1,12 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0.beta1'
-
+#gem 'rails', '4.0.0.beta1'
+#gem 'rails', path: '../rails'#, '4.0.0.beta1'
+gem 'rails', github: 'rails/rails'#, '4.0.0.beta1'
 gem 'pg'
 
 gem "haml-rails"
-
-
 gem 'jquery-rails'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
