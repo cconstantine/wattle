@@ -31,10 +31,10 @@ describe Wat do
 
     it {should match /spec/ }
 
-    context "with an exception from a gem" do
-      let(:error) {capture_error {Wat.create!(:not_a_field => 1)} }
-      it {should match /spec/ }
-    end
+    #context "with an exception from a gem" do
+    #  let(:error) {capture_error {Wat.create!(:not_a_field => 1)} }
+    #  it {should match /spec/ }
+    #end
   end
 
   describe "ensure_grouping" do
