@@ -20,9 +20,5 @@ FixtureBuilder.configure do |fbuilder|
     e = capture_error {raise RuntimeError.new( "a test")}
     fbuilder.name(:default, Wat.create!(message: e.message, error_class: e.class.to_s, backtrace: e.backtrace))
 
-    10.times do |i|
-      e = capture_error {raise RuntimeError.new( "#{i} test")}
-      fbuilder.name(:"wat_#{i}", Wat.create!(message: e.message, error_class: e.class.to_s, backtrace: e.backtrace))
-    end
   end
 end
