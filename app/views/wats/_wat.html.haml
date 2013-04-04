@@ -1,0 +1,14 @@
+.row-fluid
+  %dl.dl-horizontal
+    %dt Message
+    %dd= wat.message
+    %dt Backtrace
+    %dd
+      %table.table-striped
+        %tbody
+          %tr
+            %td= wat.error_class
+          - wat.backtrace.each do |bt|
+            %tr
+              %td
+                = bt

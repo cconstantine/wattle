@@ -1,14 +1,1 @@
-- @wats.each do |wat|
-  .row-fluid
-    %dl Message
-    %dd= wat.message
-    %dl Class
-    %dd= wat.error_class
-    %dl Backtrace
-    %dd
-      %table.table-striped
-        %tbody
-          - wat.backtrace.each do |bt|
-            %tr
-              %td
-                = bt
+= render @wats

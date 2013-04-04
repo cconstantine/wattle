@@ -1,5 +1,5 @@
 class WatsController < ApplicationController
-  respond_to :json
+  respond_to :html, :json
 
   before_filter :load_context
 
