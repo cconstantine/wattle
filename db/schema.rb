@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130331063932) do
+ActiveRecord::Schema.define(version: 20130405042638) do
 
   create_table "groupings", force: true do |t|
     t.string   "key_line"
@@ -28,9 +28,17 @@ ActiveRecord::Schema.define(version: 20130331063932) do
     t.string   "error_class"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "grouping_id"
   end
 
-  add_index "wats", ["grouping_id"], name: "index_wats_on_grouping_id"
+  create_table "wats_groupings", force: true do |t|
+    t.integer  "wat_id",      null: false
+    t.integer  "grouping_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "wats_groupings", ["grouping_id", "wat_id"], name: "index_wats_groupings_on_grouping_id_and_wat_id", unique: true
+  add_index "wats_groupings", ["grouping_id"], name: "index_wats_groupings_on_grouping_id"
+  add_index "wats_groupings", ["wat_id"], name: "index_wats_groupings_on_wat_id"
 
 end

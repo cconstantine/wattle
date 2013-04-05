@@ -2,10 +2,10 @@ class Wat < ActiveRecord::Base
   #before_save :clean_backtrace
   EXCLUDES = [/\.rvm\/gems/]
 
-  belongs_to :grouping
-  validates :grouping, presence: :true
+  has_many :wats_groupings
+  has_many :groupings, through: :wats_groupings
 
-  before_validation :ensure_grouping
+  after_save :construct_groupings!
 
   def self.new_from_exception(e)
     new(message: e.message, error_class: e.class.to_s, backtrace: e.backtrace)
@@ -13,7 +13,6 @@ class Wat < ActiveRecord::Base
 
   def self.create_from_exception!(e)
     new_from_exception(e).tap {|w| w.save!}
-
   end
 
   def key_line
@@ -23,15 +22,8 @@ class Wat < ActiveRecord::Base
     end
   end
 
-  protected
-
-  def ensure_grouping
-    self.grouping = Grouping.get_or_create_from_wat!(self)
+  def construct_groupings!
+    self.groupings << Grouping.get_or_create_from_wat!(self)
   end
 
-  def clean_backtrace
-    if backtrace_changed? && backtrace.present?
-      self.backtrace = backtrace.map {|x| x.to_s.gsub(/(:\d+).*/, '\1').gsub("'", "*") }
-    end
-  end
 end

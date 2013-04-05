@@ -37,8 +37,8 @@ describe Wat do
     end
   end
 
-  describe "ensure_grouping" do
-    subject {wat.send :ensure_grouping}
+  describe "construct_groupings!" do
+    subject {wat.construct_groupings!}
 
     let(:wat) { wats(:default)}
 
@@ -55,7 +55,7 @@ describe Wat do
 
       it "should bind to the existing grouping" do
         subject
-        wat.grouping.should == grouping
+        wat.groupings.should include(grouping)
       end
     end
   end

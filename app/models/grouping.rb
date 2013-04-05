@@ -1,5 +1,6 @@
 class Grouping < ActiveRecord::Base
-  has_many :wats
+  has_many :wats_groupings
+  has_many :wats, through: :wats_groupings
 
 
   def self.get_or_create_from_wat!(wat)
