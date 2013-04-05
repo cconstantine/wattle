@@ -35,7 +35,8 @@ group :assets do
   gem 'sass-rails',   '~> 4.0.0.beta1'
   gem 'coffee-rails', '~> 4.0.0.beta1'
   gem 'bootstrap-sass', '~> 2.3.1.0'
-
+  gem "backbone-on-rails"
+  #gem 'underscore-rails'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', platforms: :ruby
 

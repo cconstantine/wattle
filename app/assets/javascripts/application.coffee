@@ -20,5 +20,7 @@
 #= require bootstrap-modal
 #= require bootstrap-dropdown
 
+#= require underscore
+#= require backbone
 
 #= require_tree .
