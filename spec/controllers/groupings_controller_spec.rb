@@ -29,7 +29,7 @@ describe GroupingsController do
 
   describe "GET #show" do
     let(:wat) { Wat.create_from_exception!(error)}
-    let(:grouping) {wat.grouping}
+    let(:grouping) {wat.groupings.first}
 
     subject {get :show, id: grouping.to_param, format: :json }
     it {should be_success}

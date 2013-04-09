@@ -11,7 +11,7 @@ describe Wat do
     let(:backtrace) { error.backtrace }
 
     subject {Wat.create!(message: error.message, error_class: error.class.to_s, backtrace: error.backtrace)}
-    it { should == Wat.last}
+    it { should == Wat.last }
 
     describe "#create_from_exception" do
       subject { Wat.create_from_exception!(error)}
@@ -38,6 +38,7 @@ describe Wat do
   end
 
   describe "construct_groupings!" do
+    let!(:wat) {Wat.new_from_exception {RuntimeError.new 'hi'}}
     subject {wat.construct_groupings!}
 
     let(:wat) { wats(:default)}

@@ -5,14 +5,21 @@ class Wat < ActiveRecord::Base
   has_many :wats_groupings
   has_many :groupings, through: :wats_groupings
 
-  after_save :construct_groupings!
+  after_create :construct_groupings!
 
-  def self.new_from_exception(e)
+  def self.new_from_exception(e=nil, &block)
+    if block_given?
+      begin
+        yield
+      rescue
+        e = $!
+      end
+    end
     new(message: e.message, error_class: e.class.to_s, backtrace: e.backtrace)
   end
 
-  def self.create_from_exception!(e)
-    new_from_exception(e).tap {|w| w.save!}
+  def self.create_from_exception!(e=nil, &block)
+    new_from_exception(e, &block).tap {|w| w.save!}
   end
 
   def key_line
