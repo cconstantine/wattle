@@ -2,7 +2,7 @@ class GroupingsController < ApplicationController
   respond_to :html, :json
 
   def index
-    @groupings = Grouping.all
+    @groupings = Grouping.wat_order.reverse
 
     respond_with(@grouping)
   end

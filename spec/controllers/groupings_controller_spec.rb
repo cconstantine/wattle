@@ -12,17 +12,9 @@ describe GroupingsController do
 
     it {should be_success}
 
-    context "with some groupings" do
-      let!(:grouping1) {Grouping.create!}
-      let!(:grouping2) {Grouping.create!}
-
-      it {should be_success}
-
-      it "should include both groupings" do
-        subject
-        assigns[:groupings].should include(grouping1, grouping2)
-      end
-
+    it "should include groupings" do
+      subject
+      assigns[:groupings].to_a.should have(Grouping.count).items
     end
 
   end

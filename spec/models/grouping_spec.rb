@@ -16,4 +16,19 @@ describe Grouping do
       expect {subject}.to change {Grouping.count}.by 1
     end
   end
+
+  describe "#wat_order" do
+    subject {Grouping.wat_order}
+
+    it "should be sorted in-order" do
+     subject.to_a.should == Grouping.all.sort {|x, y| x.wats.last.id <=> y.wats.last.id}
+    end
+
+    context "#reverse" do
+      subject {Grouping.wat_order.reverse}
+      it "should be sorted in-order" do
+        subject.to_a.should == Grouping.all.sort {|x, y| y.wats.last.id <=> x.wats.last.id}
+      end
+    end
+  end
 end
