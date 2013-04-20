@@ -38,17 +38,19 @@ describe Wat do
   end
 
   describe "construct_groupings!" do
-    let!(:wat) {Wat.new_from_exception {RuntimeError.new 'hi'}}
-    subject {wat.construct_groupings!}
-
     let(:wat) { wats(:default)}
+    subject { wat.construct_groupings! }
 
-    it "should create a Grouping" do
-      expect {subject}.to change {Grouping.count}.by 1
+    context "with a brand new wat" do
+      let(:wat) { Wat.new_from_exception {raise RuntimeError.new 'hi'} }
+
+      it "should create a Grouping" do
+        expect {subject}.to change {Grouping.count}.by 1
+      end
     end
 
     context "with an existing duplicate error" do
-      let!(:grouping) {Grouping.create!(key_line: wat.key_line, error_class: wat.error_class)}
+      let!(:grouping) {Grouping.where(key_line: wat.key_line, error_class: wat.error_class).first_or_create!}
 
       it "should not create a grouping" do
         expect {subject}.not_to change {Grouping.count}

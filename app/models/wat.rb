@@ -32,7 +32,7 @@ class Wat < ActiveRecord::Base
   end
 
   def construct_groupings!
-    self.groupings << Grouping.get_or_create_from_wat!(self)
+    self.groupings = [Grouping.get_or_create_from_wat!(self)]
   end
 
 end
