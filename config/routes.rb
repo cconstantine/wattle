@@ -7,6 +7,11 @@ Wattle::Application.routes.draw do
     resources :wats, only: [:show, :index]
   end
 
+  resource :exceptionals, only: [] do
+    get :an_exception
+    get :rendered_exception
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

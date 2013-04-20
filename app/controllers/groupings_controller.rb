@@ -4,7 +4,7 @@ class GroupingsController < ApplicationController
   def index
     @groupings = Grouping.wat_order.reverse
 
-    respond_with(@grouping)
+    respond_with(@groupings)
   end
 
   def show

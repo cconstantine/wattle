@@ -2,13 +2,18 @@
   %dl.dl-horizontal
     %dt Message
     %dd= wat.message
-    %dt Backtrace
+    %dt Error Class
     %dd
       %table.table-striped
         %tbody
           %tr
             %td= wat.error_class
-          - wat.backtrace.each do |bt|
-            %tr
-              %td
-                = bt
+    - if wat.session.present?
+      %dt Session
+      %dd= wat.session.to_json
+    - if wat.request_headers.present?
+      %dt Request Headers
+      %dd= wat.request_headers
+    - if wat.request_params.present?
+      %dt Request Parameters
+      %dd= wat.request_params

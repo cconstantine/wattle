@@ -7,7 +7,7 @@ class Wat < ActiveRecord::Base
 
   after_create :construct_groupings!
 
-  def self.new_from_exception(e=nil, &block)
+  def self.new_from_exception(e=nil, metadata={}, &block)
     if block_given?
       begin
         yield
@@ -15,11 +15,13 @@ class Wat < ActiveRecord::Base
         e = $!
       end
     end
-    new(message: e.message, error_class: e.class.to_s, backtrace: e.backtrace)
+    new(metadata.merge(message: e.message, error_class: e.class.to_s, backtrace: e.backtrace))
   end
 
-  def self.create_from_exception!(e=nil, &block)
-    new_from_exception(e, &block).tap {|w| w.save!}
+  def self.create_from_exception!(e=nil, metadata={}, &block)
+    new_from_exception(e, metadata, &block).tap {|w|
+      w.save!
+    }
   end
 
   def key_line
