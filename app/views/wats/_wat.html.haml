@@ -1,13 +1,8 @@
 .row-fluid
   %dl.dl-horizontal
-    %dt Message
-    %dd= wat.message
-    %dt Error Class
-    %dd
-      %table.table-striped
-        %tbody
-          %tr
-            %td= wat.error_class
+    - if wat.page_url.present?
+      %dt Page URL
+      %dd= wat.page_url
     - if wat.session.present?
       %dt Session
       %dd= wat.session.to_json
@@ -17,3 +12,12 @@
     - if wat.request_params.present?
       %dt Request Parameters
       %dd= wat.request_params
+    - if wat.message.present?
+      %dt Message
+      %dd= wat.message
+    - if wat.error_class.present?
+      %dt Error Class
+      %dd= wat.error_class
+    - if wat.backtrace.present?
+      %dt Backtrace
+      %dd= wat.backtrace.first

@@ -27,7 +27,16 @@ describe WatsController do
   end
 
   describe "POST #create" do
-    subject {post :create, format: :json , wat: {message: "hi", error_class: "ErrFoo", backtrace: [:a, :b, :c]}}
+    let(:das_post) {post :create, format: :json , wat: {page_url: "somefoo", message: "hi", error_class: "ErrFoo", backtrace: ["a", "b", "c"]}}
+    subject {das_post }
+
     it {should be_success}
+    context "the created wat" do
+      subject {das_post;assigns[:wat]}
+      its(:backtrace) {should == ["a", "b", "c"]}
+      its(:error_class) {should == "ErrFoo"}
+      its(:message) {should == "hi"}
+      its(:page_url) {should == "somefoo"}
+    end
   end
 end

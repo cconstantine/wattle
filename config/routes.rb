@@ -7,7 +7,7 @@ Wattle::Application.routes.draw do
     resources :wats, only: [:show, :index]
   end
 
-  resource :exceptionals, only: [] do
+  resource :exceptionals, only: [:show] do
     get :an_exception
     get :rendered_exception
   end

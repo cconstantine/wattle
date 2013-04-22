@@ -96,7 +96,8 @@ CREATE TABLE wats (
     updated_at timestamp without time zone,
     session hstore,
     request_headers hstore,
-    request_params hstore
+    request_params hstore,
+    page_url character varying(255)
 );
 
 
@@ -252,3 +253,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130418161032');
 INSERT INTO schema_migrations (version) VALUES ('20130418161235');
 
 INSERT INTO schema_migrations (version) VALUES ('20130418161513');
+
+INSERT INTO schema_migrations (version) VALUES ('20130422042733');
