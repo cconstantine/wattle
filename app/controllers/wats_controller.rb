@@ -16,7 +16,9 @@ class WatsController < ApplicationController
   end
 
   def create
-    @wat = Wat.create!(params.require(:wat).permit(:message, :error_class, :page_url, backtrace: []))
+    wat_params = params.require(:wat).permit(:message, :error_class, :page_url, backtrace: [])
+    wat_params[:session] ||= session.as_json
+    @wat = Wat.create!(wat_params)
     head :ok and return if request.xhr?
     respond_with(@wat)
   end
