@@ -1,3 +1,4 @@
+#Send the error to the same host that served this file (I think)
 window.onerror = (msg,url,line) ->
   xmlhttp = if window.XMLHttpRequest
       new XMLHttpRequest()
