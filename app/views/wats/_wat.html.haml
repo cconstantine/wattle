@@ -20,4 +20,5 @@
       %dd= wat.error_class
     - if wat.backtrace.present?
       %dt Backtrace
-      %dd= wat.backtrace.first
+      - wat.backtrace.each do |bt|
+        %dd= bt

@@ -19,8 +19,6 @@ gem 'jbuilder', '~> 1.0.1'
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
-#Use unicorn as the app server
-gem 'unicorn'
 
 # Deploy with Capistrano
 # gem 'capistrano', group: :development
@@ -28,6 +26,13 @@ gem 'unicorn'
 # To use debugger
 # gem 'debugger'
 
+gem 'httpclient'
+
+
+group :production do
+  #Use unicorn as the app server
+  gem 'unicorn'
+end
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -46,4 +51,5 @@ end
 group :test, :development do
   gem "rspec-rails", "~> 2.0"
   gem 'fixture_builder'
+  gem 'thin'
 end
