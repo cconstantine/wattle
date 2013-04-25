@@ -22,8 +22,6 @@ module Wattle
 
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
 
-    config.middleware.use "WatCatcher::Middleware"
-
     config.active_record.schema_format = :sql
   end
 end
