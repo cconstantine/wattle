@@ -27,7 +27,7 @@ gem 'jbuilder', '~> 1.0.1'
 # gem 'debugger'
 
 gem 'httpclient'
-
+gem 'wat_catcher'
 
 group :production do
   #Use unicorn as the app server
