@@ -1,3 +1,18 @@
 // Place all the styles related to the groupings controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.group_listing {
+  margin-bottom: 10px;
+  
+  .media-body {
+    border-bottom: 1px solid transparent;
+    &:hover {
+      border-bottom: 1px solid silver;
+    }
+  }
+
+  .badge-large {
+    margin-right: 10px;
+  }
+}

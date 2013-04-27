@@ -25,12 +25,14 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.brand(href="#") Wattle
+          %a.brand(href="#")
+            .label.label-warning ?!
+            Wattle
           .container.nav-collapse
             %ul.nav
-              %li= link_to "Link 1", "/path1"
-              %li= link_to "Link 2", "/path2"
-              %li= link_to "Link 3", "/path3"
+              %li= link_to "Reports", groupings_path
+              -#%li= link_to "Link 2", "/path2"
+              -#%li= link_to "Link 3", "/path3"
 
     .container-fluid
 
@@ -38,10 +40,14 @@
         .span3
           .well.sidebar-nav
             %ul.nav.nav-list
-              %li.nav-header Sidebar
-              %li= link_to "Link 1", "/path1"
-              %li= link_to "Link 2", "/path2"
-              %li= link_to "Link 3", "/path3"
+              %li.nav-header 
+                Top Wats
+                - top_wats.each do |group|
+                  %li
+                    = link_to group do
+                      .badge=group.wats.count
+                      = wat_heading(group.wats.last)
+
         .span9
           = yield
     

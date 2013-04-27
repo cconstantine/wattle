@@ -51,7 +51,8 @@ CREATE TABLE groupings (
     key_line character varying(255),
     error_class character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    wats_count integer
 );
 
 
@@ -255,3 +256,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130418161235');
 INSERT INTO schema_migrations (version) VALUES ('20130418161513');
 
 INSERT INTO schema_migrations (version) VALUES ('20130422042733');
+
+INSERT INTO schema_migrations (version) VALUES ('20130427192026');

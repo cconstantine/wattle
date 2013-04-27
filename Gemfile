@@ -28,6 +28,7 @@ gem 'jbuilder', '~> 1.0.1'
 
 gem 'httpclient'
 gem 'wat_catcher'
+gem 'kaminari'
 
 group :production do
   #Use unicorn as the app server

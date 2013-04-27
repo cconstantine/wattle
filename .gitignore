@@ -2,3 +2,5 @@
 log
 spec/fixtures
 tmp
+tags
+*.swp
