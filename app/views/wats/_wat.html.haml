@@ -3,6 +3,10 @@
     - if wat.page_url.present?
       %dt Page URL
       %dd= wat.page_url
+    %dt Occured at
+    %dd= wat.created_at
+    %dt Key Line
+    %dd= wat.key_line
     - if wat.session.present?
       %dt Session
       %dd= wat.session.to_json
@@ -20,5 +24,11 @@
       %dd= wat.error_class
     - if wat.backtrace.present?
       %dt Backtrace
-      - wat.backtrace.each do |bt|
-        %dd= bt
+      %dd
+        .backtrace_container
+          - wat.backtrace.each do |bt|
+            %div{class: (bt == wat.key_line ? "text-error" : "muted")}
+              = bt
+          = link_to "Show Less", "#obscure_backtrace", class: "obscure_backtrace"
+          
+        = link_to "Show More", "#complete_backtrace", class: "complete_backtrace"

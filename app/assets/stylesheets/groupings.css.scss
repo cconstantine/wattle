@@ -16,3 +16,19 @@
     margin-right: 10px;
   }
 }
+
+.backtrace_container {
+  height: 200px;
+  overflow: hidden;
+
+  .obscure_backtrace {
+    display: none;
+  }
+}
+
+.backtrace_container.complete {
+  height: auto;
+  .obscure_backtrace {
+    display: inline;
+  }
+}

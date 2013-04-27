@@ -22,4 +22,4 @@
 
 #= require underscore
 #= require backbone
-
+#= require ./groupings
