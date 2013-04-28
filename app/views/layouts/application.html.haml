@@ -26,16 +26,19 @@
             %span.icon-bar
             %span.icon-bar
           %a.brand(href="#")
-            .label.label-warning ?!
+            .label.label-warning.logo-label ?!
             Wattle
           .container.nav-collapse
             %ul.nav
               %li= link_to "Reports", groupings_path
 
-            %ul.nav.pull-right
-              %li
-                = image_tag gravatar_url current_user
-                = current_user.display_name
+            .pull-right
+              %ul.nav
+                %li
+                  = image_tag gravatar_url(current_user), class: "watcher-avatar"
+                %li
+                  %a{href: "#settings"}
+                    = current_user.display_name
 
     .container-fluid
 

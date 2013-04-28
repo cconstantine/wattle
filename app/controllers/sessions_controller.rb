@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  skip_before_filter :require_login
+  skip_before_filter :verify_authenticity_token, :require_login
 
   def create
     @watcher = Watcher.find_or_create_from_auth_hash(auth_hash)

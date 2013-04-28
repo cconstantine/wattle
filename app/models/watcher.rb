@@ -6,6 +6,6 @@ class Watcher < ActiveRecord::Base
   end
 
   def display_name
-    first_name
+    first_name || name || email
   end
 end
