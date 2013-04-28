@@ -1,28 +1,19 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Wattle is a self-hosted open source project to help your team collect, manage and process your Exceptions, or as we like to call them, Wats[https://www.destroyallsoftware.com/talks/wat]
 
-Things you may want to cover:
+== Configuration
 
-* Ruby version
+=== To enable Google+ Oauth
 
-* System dependencies
+You will need to acquire a Google API key to run your local instance. 
+You can get one here: https://code.google.com/apis/console/b/0/?pli=1
 
-* Configuration
+Create a file in config/secrets.yml, with your Google API key:
 
-* Database creation
+    development:
+      google_key: YOUR_GOOGLE_KEY
+      google_secret: YOUR_GOOGLE_SECRET
 
-* Database initialization
+Google Auth is required for production mode.  *Do not check secrets.yml into the repository.*
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.

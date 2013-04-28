@@ -7,8 +7,12 @@ class ApplicationController < ActionController::Base
   protected
 
   def auth_path
-    return "/auth/developer" if Rails.env.development? && !Secret.includes(:google_key)
+    return "/auth/developer" if Rails.env.development? && !google_auth_enabled?
     "/auth/gplus"
+  end
+
+  def google_auth_enabled?
+    Secret.to_h.has_key?(:google_key)
   end
 
   def require_login
