@@ -29,6 +29,8 @@ gem 'jbuilder', '~> 1.0.1'
 gem 'httpclient'
 gem 'wat_catcher'
 gem 'kaminari'
+gem 'omniauth-gplus'
+gem 'secrets', :github => "austinfromboston/secrets"
 
 group :production do
   #Use unicorn as the app server

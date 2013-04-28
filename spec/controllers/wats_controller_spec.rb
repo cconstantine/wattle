@@ -7,22 +7,33 @@ describe WatsController do
 
   describe "GET #index" do
     subject { get :index, format: :json }
-    it {should be_success}
+    context 'when logged in' do
+      before do
+        login watchers(:default)
+      end
+
+      it {should be_success}
 
 
-    it "should get all wats" do
-      subject
-      assigns[:wats].should have(Wat.count).items
+      it "should get all wats" do
+        subject
+        assigns[:wats].should have(Wat.count).items
+      end
     end
   end
 
   describe "GET #show" do
     subject { get :show, id:  wat.to_param, format: :json}
 
-    it {should be_success}
-    it "should give the wat" do
-      subject
-      assigns[:wat].should == wat
+    context 'when logged in' do
+      before do
+        login watchers(:default)
+      end
+      it {should be_success}
+      it "should give the wat" do
+        subject
+        assigns[:wat].should == wat
+      end
     end
   end
 

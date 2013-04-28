@@ -85,6 +85,39 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: watchers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE watchers (
+    id integer NOT NULL,
+    first_name character varying(255),
+    name character varying(255),
+    email character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: watchers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE watchers_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: watchers_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE watchers_id_seq OWNED BY watchers.id;
+
+
+--
 -- Name: wats; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -164,6 +197,13 @@ ALTER TABLE ONLY groupings ALTER COLUMN id SET DEFAULT nextval('groupings_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY watchers ALTER COLUMN id SET DEFAULT nextval('watchers_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY wats ALTER COLUMN id SET DEFAULT nextval('wats_id_seq'::regclass);
 
 
@@ -180,6 +220,14 @@ ALTER TABLE ONLY wats_groupings ALTER COLUMN id SET DEFAULT nextval('wats_groupi
 
 ALTER TABLE ONLY groupings
     ADD CONSTRAINT groupings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: watchers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY watchers
+    ADD CONSTRAINT watchers_pkey PRIMARY KEY (id);
 
 
 --
@@ -258,3 +306,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130418161513');
 INSERT INTO schema_migrations (version) VALUES ('20130422042733');
 
 INSERT INTO schema_migrations (version) VALUES ('20130427192026');
+
+INSERT INTO schema_migrations (version) VALUES ('20130427222513');

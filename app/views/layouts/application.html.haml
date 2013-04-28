@@ -31,8 +31,11 @@
           .container.nav-collapse
             %ul.nav
               %li= link_to "Reports", groupings_path
-              -#%li= link_to "Link 2", "/path2"
-              -#%li= link_to "Link 3", "/path3"
+
+            %ul.nav.pull-right
+              %li
+                = image_tag gravatar_url current_user
+                = current_user.display_name
 
     .container-fluid
 

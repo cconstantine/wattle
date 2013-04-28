@@ -10,11 +10,21 @@ describe GroupingsController do
   describe "GET #index" do
     subject { get :index, format: :json }
 
-    it {should be_success}
+    it "should require login" do
+      subject.should redirect_to auth_path
+    end
 
-    it "should include groupings" do
-      subject
-      assigns[:groupings].to_a.should have(Grouping.count).items
+    context "when logged in" do 
+      before do
+        login watchers(:default)
+      end
+
+      it {should be_success}
+
+      it "should include groupings" do
+        subject
+        assigns[:groupings].to_a.should have(Grouping.count).items
+      end
     end
 
   end
@@ -24,10 +34,15 @@ describe GroupingsController do
     let(:grouping) {wat.groupings.first}
 
     subject {get :show, id: grouping.to_param, format: :json }
-    it {should be_success}
-    it "should load the grouping" do
-      subject
-      assigns[:grouping].should == grouping
+    context "when logged in" do 
+      before do
+        login watchers(:default)
+      end
+      it {should be_success}
+      it "should load the grouping" do
+        subject
+        assigns[:grouping].should == grouping
+      end
     end
 
   end

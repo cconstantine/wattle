@@ -3,6 +3,7 @@ Wattle::Application.routes.draw do
   root to: 'groupings#index'
 
   resources :wats
+
   resources :groupings do
     resources :wats, only: [:show, :index]
   end
@@ -11,6 +12,8 @@ Wattle::Application.routes.draw do
     get :an_exception
     get :rendered_exception
   end
+
+  get '/auth/gplus/callback', to: 'sessions#create'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

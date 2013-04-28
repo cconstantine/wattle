@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/austinfromboston/secrets.git
+  revision: f2808efa2d76df16fe822520b932332ca7314cae
+  specs:
+    secrets (1.0.0)
+
+GIT
   remote: git://github.com/cconstantine/rails.git
   revision: fffbac2d999f0f25909be2609b7b0656628ee820
   branch: working
@@ -74,6 +80,8 @@ GEM
     eventmachine (1.0.3)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    faraday (0.8.7)
+      multipart-post (~> 1.1)
     fixture_builder (0.3.5)
       activerecord (>= 2)
       activesupport (>= 2)
@@ -84,7 +92,9 @@ GEM
       activesupport (>= 3.1, < 4.1)
       haml (>= 3.1, < 4.1)
       railties (>= 3.1, < 4.1)
+    hashie (2.0.4)
     hike (1.2.2)
+    httpauth (0.2.0)
     httpclient (2.3.3)
     i18n (0.6.4)
     jbuilder (1.0.2)
@@ -93,6 +103,8 @@ GEM
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     json (1.7.7)
+    jwt (0.1.8)
+      multi_json (>= 1.5)
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -104,6 +116,21 @@ GEM
     mime-types (1.22)
     minitest (4.7.2)
     multi_json (1.7.2)
+    multipart-post (1.2.0)
+    oauth2 (0.8.1)
+      faraday (~> 0.8)
+      httpauth (~> 0.1)
+      jwt (~> 0.1.4)
+      multi_json (~> 1.0)
+      rack (~> 1.2)
+    omniauth (1.1.4)
+      hashie (>= 1.2, < 3)
+      rack
+    omniauth-gplus (1.1.1)
+      omniauth-oauth2 (~> 1.1)
+    omniauth-oauth2 (1.1.1)
+      oauth2 (~> 0.8.0)
+      omniauth (~> 1.0)
     pg (0.15.0)
     polyglot (0.3.3)
     rack (1.5.2)
@@ -175,10 +202,12 @@ DEPENDENCIES
   jbuilder (~> 1.0.1)
   jquery-rails
   kaminari
+  omniauth-gplus
   pg
   rails!
   rspec-rails (~> 2.0)
   sass-rails (~> 4.0.0.beta1)
+  secrets!
   thin
   turbolinks
   uglifier (>= 1.0.3)

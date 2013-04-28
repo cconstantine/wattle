@@ -1,7 +1,7 @@
 class WatsController < ApplicationController
   respond_to :html, :json
 
-  skip_before_filter :verify_authenticity_token, only: :create
+  skip_before_filter :verify_authenticity_token, :require_login, only: :create
 
   before_filter :load_context
 
