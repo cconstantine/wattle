@@ -13,7 +13,7 @@
     %link(href="images/apple-touch-icon-144x144.png" rel="apple-touch-icon-precomposed" sizes="144x144")
     %link(href="images/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114")
     %link(href="images/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72")
-    %link(href="images/apple-touch-icon.png" rel="apple-touch-icon-precomposed")
+    %link(href="/wattle_logo.png" rel="apple-touch-icon")
     %link(href="/favicon.ico" rel="shortcut icon")
     = javascript_include_wat_catcher
 
@@ -32,7 +32,7 @@
             %ul.nav
               %li= link_to "Reports", groupings_path
 
-            .pull-right
+            .pull-right.hidden-phone
               %ul.nav
                 %li
                   = image_tag gravatar_url(current_user), class: "watcher-avatar"
@@ -44,15 +44,17 @@
 
       .row-fluid
         .span3
-          .well.sidebar-nav
-            %ul.nav.nav-list
+          %ul.nav.nav-stacked.nav-tabs
+            - if content_for?(:sidebar)
+              = content_for :sidebar
+            - else
               %li.nav-header 
                 Top Wats
-                - top_wats.each do |group|
-                  %li
-                    = link_to group do
-                      .badge=group.wats.count
-                      = wat_heading(group.wats.last)
+              - top_wats.each do |group|
+                %li
+                  = link_to group do
+                    .badge=group.wats.count
+                    = wat_heading(representative_wat(group)) 
 
         .span9
           = yield

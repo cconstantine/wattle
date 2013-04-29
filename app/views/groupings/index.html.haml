@@ -1,2 +1,12 @@
 %ul
   = render :partial => 'group', :collection => @groupings
+
+- content_for :sidebar do
+  %li.nav-header 
+    Wats
+  - @groupings.each do |group|
+    %li
+      = link_to group do
+        .badge=group.wats.count
+        = wat_heading(group.wats.last)
+

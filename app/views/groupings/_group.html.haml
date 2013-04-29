@@ -1,24 +1,22 @@
-- wat = group.wats.last
-%li.group_listing
-  .media
-    .pull-left
-      = link_to group do
-        .badge.badge-large.badge-warning
-          = group.wats.count
-    .media-body
-      %h4.media-heading
-        = link_to wat_heading(wat), group
+- wat = representative_wat group
+%article.group_listing
+  = link_to group do
+    %h4
+      .badge.badge-warning
+        = group.wats.count
+      = link_to wat_heading(wat), group
 
-      %dl
-        - if wat_heading(wat) != wat.message
-          %dt Message
-          %dd= wat.message
-        - if wat.page_url.present?
-          %dt Last Page URL
-          %dd= link_to wat.page_url
-        %dt Backtrace
-        %dd= wat.key_line
-        %dt Last Seen
-        %dd
-          = time_ago_in_words wat.updated_at
-          ago
+  %strong Last Incident
+  %dl
+    - if wat_heading(wat) != wat.message
+      %dt Message
+      %dd= wat.message
+    - if wat.page_url.present?
+      %dt Page URL
+      %dd= link_to wat.page_url
+    %dt Backtrace
+    %dd= wat.key_line
+    %dt Time
+    %dd
+      = time_ago_in_words wat.updated_at
+      ago

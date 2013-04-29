@@ -1,6 +1,7 @@
 module WatsHelper
   def wat_heading(wat)
-    wat.error_class || wat.message
+    return wat.message unless wat.error_class
+    wat.error_class.gsub("::", ":: ") 
   end
 
   def top_wats

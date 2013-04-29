@@ -1,33 +1,34 @@
-- wat = representative_wat(@grouping)
-%h2= wat_heading(wat)
-%p= wat.message
+.grouping_data
+  - wat = representative_wat(@grouping)
+  %h2= wat_heading(wat)
+  %p= wat.message
 
-.grouping_summary
-  .item
-    .badge.badge-warning
-      = @grouping.wats_count
-    Incidents
+  .grouping_summary
+    .item
+      .badge.badge-warning
+        = @grouping.wats_count
+      Incidents
 
-  .item
-    On Pages:
-    - @grouping.wats.group(:page_url).pluck(:page_url).each do |page|
-      = link_to page
-  .item
-    - wat_the_first = @grouping.wats.order(:created_at).first
-    - wat_the_last = @grouping.wats.order(:created_at).last
-    First Incident
-    %abbr{title: wat_the_first.created_at}
-      = time_ago_in_words wat_the_first.created_at
-      ago
-  .item
-    Most Recent Incident
-    %abbr{title: wat_the_last.created_at}
-      = time_ago_in_words wat_the_last.created_at
-      ago
+    .item
+      On Pages:
+      - @grouping.wats.group(:page_url).pluck(:page_url).each do |page|
+        = link_to page
+    .item
+      - wat_the_first = @grouping.wats.order(:created_at).first
+      - wat_the_last = @grouping.wats.order(:created_at).last
+      First Incident
+      %abbr{title: wat_the_first.created_at}
+        = time_ago_in_words wat_the_first.created_at
+        ago
+    .item
+      Most Recent Incident
+      %abbr{title: wat_the_last.created_at}
+        = time_ago_in_words wat_the_last.created_at
+        ago
 
-- wats = @grouping.wats.order("created_at desc").page(params[:page]).per(1)
-= paginate wats
+  - wats = @grouping.wats.order("created_at desc").page(params[:page]).per(1)
+  = paginate wats
 
-.grouping_details
-  = render wats
-    
+  .grouping_details
+    = render wats
+      
