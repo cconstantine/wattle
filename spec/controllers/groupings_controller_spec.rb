@@ -23,7 +23,7 @@ describe GroupingsController do
 
       it "should include groupings" do
         subject
-        assigns[:groupings].to_a.should have(Grouping.active.count).items
+        assigns[:groupings].to_a.should have(Grouping.open.count).items
       end
     end
 
@@ -59,7 +59,7 @@ describe GroupingsController do
       before do
         login watchers(:default)
       end
-      
+
       it {should redirect_to '/something'}
       it "should resolve the grouping" do
         expect {subject}.to change {grouping.reload.resolved?}.from(false).to(true)
@@ -67,6 +67,62 @@ describe GroupingsController do
 
       context "with a resolved grouping" do
         let(:grouping) {groupings(:resolved)}
+        it "should raise and error" do
+          expect{subject}.to raise_error StateMachine::InvalidTransition
+        end
+      end
+    end
+  end
+
+  describe "POST #acknowledge" do
+    let(:wat) { grouping.wats.first}
+    let(:grouping) {groupings(:grouping2)}
+
+    subject do
+      @request.env['HTTP_REFERER'] = '/something'
+      post :acknowledge, id: grouping.to_param, format: :json
+    end
+
+    context "when logged in" do
+      before do
+        login watchers(:default)
+      end
+
+      it {should redirect_to '/something'}
+      it "should resolve the grouping" do
+        expect {subject}.to change {grouping.reload.acknowledged?}.from(false).to(true)
+      end
+
+      context "with a acknowledged grouping" do
+        let(:grouping) {groupings(:acknowledged)}
+        it "should raise and error" do
+          expect{subject}.to raise_error StateMachine::InvalidTransition
+        end
+      end
+    end
+  end
+
+  describe "POST #activate" do
+    let(:wat) { grouping.wats.first}
+    let(:grouping) {groupings(:acknowledged)}
+
+    subject do
+      @request.env['HTTP_REFERER'] = '/something'
+      post :activate, id: grouping.to_param, format: :json
+    end
+
+    context "when logged in" do
+      before do
+        login watchers(:default)
+      end
+
+      it {should redirect_to '/something'}
+      it "should resolve the grouping" do
+        expect {subject}.to change {grouping.reload.active?}.from(false).to(true)
+      end
+
+      context "with a acknowledged grouping" do
+        let(:grouping) {groupings(:grouping1)}
         it "should raise and error" do
           expect{subject}.to raise_error StateMachine::InvalidTransition
         end

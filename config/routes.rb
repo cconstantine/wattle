@@ -8,6 +8,8 @@ Wattle::Application.routes.draw do
     resources :wats, only: [:show, :index]
     member do
       post :resolve
+      post :acknowledge
+      post :activate
     end
   end
 

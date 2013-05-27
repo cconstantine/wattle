@@ -10,10 +10,27 @@ describe Grouping do
 
   let(:wat) {Wat.new_from_exception(error) }
 
-  describe "#get_or_create_from_wat!!!" do
+  describe "#get_or_create_from_wat!" do
     subject {Grouping.get_or_create_from_wat!(wat)}
     it "creates" do
       expect {subject}.to change {Grouping.count}.by 1
+    end
+  end
+
+  describe "#open?" do
+    subject {grouping}
+
+    context "with an active wat" do
+      let(:grouping) {groupings(:grouping1)}
+      it {should be_open}
+    end
+    context "with an acknowledged wat" do
+      let(:grouping) {groupings(:acknowledged)}
+      it {should be_open}
+    end
+    context "with a resolved wat" do
+      let(:grouping) {groupings(:resolved)}
+      it {should_not be_open}
     end
   end
 

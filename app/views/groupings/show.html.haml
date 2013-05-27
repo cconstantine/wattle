@@ -1,9 +1,12 @@
 .grouping_data
   - wat = representative_wat(@grouping)
   %h2
-    .pull-right
-      = render partial: "state", locals: {group: @grouping}
+    .pull-right.alert.alert-info
+      = @grouping.state.capitalize
     = wat_heading(wat)
+
+
+  = render partial: "state", locals: {group: @grouping}
   %p= wat.message
 
   .grouping_summary
