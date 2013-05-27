@@ -11,5 +11,6 @@ window.onerror = (msg,url,line) ->
 
   xmlhttp.open("POST", "/wats", true);
   xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
   xmlhttp.send(params);
   return false;

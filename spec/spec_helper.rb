@@ -12,6 +12,7 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
+require "email_spec"
 
 def capture_error &block
   err = nil
@@ -54,4 +55,7 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
   config.include SessionSpecHelper, type: :controller
+
+  config.include(EmailSpec::Helpers)
+  config.include(EmailSpec::Matchers)
 end

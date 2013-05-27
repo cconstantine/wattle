@@ -51,8 +51,16 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+group :development do
+  gem 'mailcatcher'
+end
+
 group :test, :development do
-  gem "rspec-rails", "~> 2.0"
   gem 'fixture_builder'
   gem 'thin'
+end
+
+group :test do
+  gem 'email_spec'
+  gem "rspec-rails", "~> 2.0"
 end

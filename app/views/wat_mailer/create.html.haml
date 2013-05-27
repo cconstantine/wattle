@@ -1,0 +1,40 @@
+%h1 A new wat has been detected
+
+
+%table
+  %tbody
+    - if @wat.page_url.present?
+      %tr
+        %th Page URL
+        %td= link_to @wat.page_url, @wat.page_url
+
+    %tr
+      %th Occured at
+      %td= @wat.created_at
+
+    %tr
+      %th Key Line
+      %td= @wat.key_line
+
+
+    - if @wat.session.present?
+      %tr
+        %th Session
+        %td= @wat.session.to_json
+
+  - if @wat.request_headers.present?
+    %tr
+      %th Request Headers
+      %td= @wat.request_headers
+  - if @wat.request_params.present?
+    %tr
+      %th Request Parameters
+      %td= @wat.request_params
+  - if @wat.message.present?
+    %tr
+      %th Message
+      %td= @wat.message
+  - if @wat.error_class.present?
+    %tr
+      %th Error Class
+      %td= @wat.error_class

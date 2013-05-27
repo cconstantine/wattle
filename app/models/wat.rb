@@ -5,7 +5,7 @@ class Wat < ActiveRecord::Base
   has_many :wats_groupings
   has_many :groupings, through: :wats_groupings
 
-  after_create :construct_groupings!
+  after_create :construct_groupings!, :send_emails
 
   def self.new_from_exception(e=nil, metadata={}, &block)
     if block_given?
@@ -35,4 +35,7 @@ class Wat < ActiveRecord::Base
     self.groupings = [Grouping.get_or_create_from_wat!(self)]
   end
 
+  def send_emails
+    WatMailer.create(self).deliver
+  end
 end
