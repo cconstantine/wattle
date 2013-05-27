@@ -1,0 +1,4 @@
+- if group.active?
+  = button_to "Resolve", resolve_grouping_path(group),{ class: "inline btn  btn-primary"}
+- else
+  = button_to "Resolved", resolve_grouping_path(group),{ class: "inline btn disabled"}

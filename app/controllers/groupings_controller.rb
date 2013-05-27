@@ -1,14 +1,24 @@
 class GroupingsController < ApplicationController
   respond_to :html, :json
 
+  before_filter :load_group, except: :index
+
   def index
-    @groupings = Grouping.wat_order.reverse
+    @groupings = Grouping.active.wat_order.reverse
 
     respond_with(@groupings)
   end
 
   def show
-    @grouping = Grouping.find(params.require(:id))
     respond_with(@grouping)
+  end
+
+  def resolve
+    @grouping.resolve!
+    redirect_to request.referer
+  end
+
+  def load_group
+    @grouping = Grouping.find(params.require(:id))
   end
 end

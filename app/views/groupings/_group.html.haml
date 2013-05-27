@@ -6,7 +6,8 @@
         = group.wats.count
       = link_to wat_heading(wat), group
 
-  %strong Last Incident
+  %p.state
+    = render partial: "state", locals: {group: group}
   %dl
     - if wat_heading(wat) != wat.message
       %dt Message

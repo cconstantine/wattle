@@ -31,6 +31,7 @@ gem 'wat_catcher'
 gem 'kaminari'
 gem 'omniauth-gplus'
 gem 'secrets', :github => "austinfromboston/secrets"
+gem 'state_machine'
 
 group :production do
   #Use unicorn as the app server

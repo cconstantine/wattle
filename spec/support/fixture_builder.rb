@@ -13,9 +13,10 @@ FixtureBuilder.configure do |fbuilder|
 
     @grouping1 = Grouping.create!
     @grouping2 = Grouping.create!
+    @resolved = Grouping.create!
 
     # Create some wats without groupings
-    wats = 10.times.map do |i|
+    wats = 15.times.map do |i|
       wat = Wat.create_from_exception! {raise RuntimeError.new( "a test")}
       wat.groupings.each do|x| x.destroy end
       wat.groupings.destroy_all
@@ -28,5 +29,8 @@ FixtureBuilder.configure do |fbuilder|
 
     @grouping2.wats = [wats[3], wats[4], wats[5], wats[6], wats[7]]
     @grouping2.save!
+
+    @resolved.wats = [wats[10], wats[11], wats[12], wats[13], wats[14]]
+    @resolved.resolve!
   end
 end

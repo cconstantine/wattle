@@ -61,5 +61,18 @@ describe Wat do
         wat.groupings.should include(grouping)
       end
     end
+
+    context "with an existing resolved duplicate error" do
+      let!(:grouping) { Grouping.where(key_line: wat.key_line, error_class: wat.error_class).first_or_create!.tap {|g| g.resolve!} }
+
+      it "should create a grouping" do
+        expect {subject}.to change {Grouping.count}.by 1
+      end
+
+      it "should not bind to the existing grouping" do
+        subject
+        wat.groupings.should_not include(grouping)
+      end
+    end
   end
 end

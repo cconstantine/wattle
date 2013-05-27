@@ -52,7 +52,8 @@ CREATE TABLE groupings (
     error_class character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    wats_count integer
+    wats_count integer,
+    state character varying(255) DEFAULT 'active'::character varying NOT NULL
 );
 
 
@@ -254,6 +255,13 @@ CREATE INDEX index_groupings_on_key_line_and_error_class ON groupings USING btre
 
 
 --
+-- Name: index_groupings_on_state; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_groupings_on_state ON groupings USING btree (state);
+
+
+--
 -- Name: index_wats_groupings_on_grouping_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -308,3 +316,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130422042733');
 INSERT INTO schema_migrations (version) VALUES ('20130427192026');
 
 INSERT INTO schema_migrations (version) VALUES ('20130427222513');
+
+INSERT INTO schema_migrations (version) VALUES ('20130527210405');

@@ -5,6 +5,6 @@ module WatsHelper
   end
 
   def top_wats
-    Grouping.order("wats_count desc").limit(3)
+    Grouping.active.order("wats_count desc").limit(3)
   end
 end

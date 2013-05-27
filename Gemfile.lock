@@ -193,6 +193,7 @@ GEM
     sqlite3 (1.3.7)
     sqlite3-ruby (1.3.3)
       sqlite3 (>= 1.3.3)
+    state_machine (1.2.0)
     thin (1.5.1)
       daemons (>= 1.0.9)
       eventmachine (>= 0.12.6)
@@ -237,6 +238,7 @@ DEPENDENCIES
   rspec-rails (~> 2.0)
   sass-rails (~> 4.0.0.beta1)
   secrets!
+  state_machine
   thin
   turbolinks
   uglifier (>= 1.0.3)

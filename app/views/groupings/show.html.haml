@@ -1,6 +1,9 @@
 .grouping_data
   - wat = representative_wat(@grouping)
-  %h2= wat_heading(wat)
+  %h2
+    .pull-right
+      = render partial: "state", locals: {group: @grouping}
+    = wat_heading(wat)
   %p= wat.message
 
   .grouping_summary
