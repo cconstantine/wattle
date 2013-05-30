@@ -2,8 +2,9 @@ source 'https://rubygems.org'
 
 #gem 'rails', '4.0.0.beta1'
 #gem 'rails', path: '../rails'
-gem 'rails', github: 'cconstantine/rails', branch: :working
+#gem 'rails', github: 'cconstantine/rails', branch: :working
 #gem 'rails', github: 'rails/rails'
+gem 'rails', github: 'rails/rails', branch: 'v4.0.0.rc1'
 
 gem 'pg'
 
