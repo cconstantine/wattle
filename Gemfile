@@ -30,23 +30,14 @@ gem 'omniauth-gplus'
 gem 'secrets', :github => "austinfromboston/secrets"
 gem 'state_machine'
 
+gem 'sass-rails',   '~> 4.0.0.beta1'
+gem 'coffee-rails', '~> 4.0.0.beta1'
+gem 'bootstrap-sass', '~> 2.3.1.0'
+gem "backbone-on-rails"
+gem 'uglifier', '>= 1.0.3'
+
 group :production do
-  #Use unicorn as the app server
-  gem 'unicorn'
-end
-
-# Gems used only for assets and not required
-# in production environments by default.
-group :assets do
-  gem 'sass-rails',   '~> 4.0.0.beta1'
-  gem 'coffee-rails', '~> 4.0.0.beta1'
-  gem 'bootstrap-sass', '~> 2.3.1.0'
-  gem "backbone-on-rails"
-  #gem 'underscore-rails'
-  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-  # gem 'therubyracer', platforms: :ruby
-
-  gem 'uglifier', '>= 1.0.3'
+  gem 'passenger'
 end
 
 group :development do

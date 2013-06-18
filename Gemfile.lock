@@ -68,6 +68,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.2)
+    daemon_controller (1.1.4)
     daemons (1.1.9)
     diff-lcs (1.2.4)
     eco (1.0.0)
@@ -111,7 +112,6 @@ GEM
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    kgio (2.8.0)
     launchy (2.3.0)
       addressable (~> 2.3)
     mail (2.5.4)
@@ -145,6 +145,10 @@ GEM
     omniauth-oauth2 (1.1.1)
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
+    passenger (4.0.5)
+      daemon_controller (>= 1.1.0)
+      rack
+      rake (>= 0.8.1)
     pg (0.15.1)
     polyglot (0.3.3)
     rack (1.5.2)
@@ -152,7 +156,6 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
-    raindrops (0.11.0)
     rake (10.0.4)
     rspec-core (2.13.1)
     rspec-expectations (2.13.0)
@@ -208,10 +211,6 @@ GEM
     uglifier (2.1.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
-    unicorn (4.6.2)
-      kgio (~> 2.6)
-      rack
-      raindrops (~> 0.7)
     wat_catcher (0.0.2)
 
 PLATFORMS
@@ -230,6 +229,7 @@ DEPENDENCIES
   kaminari
   mailcatcher
   omniauth-gplus
+  passenger
   pg
   rails!
   rspec-rails (~> 2.0)
@@ -239,5 +239,4 @@ DEPENDENCIES
   thin
   turbolinks
   uglifier (>= 1.0.3)
-  unicorn
   wat_catcher
