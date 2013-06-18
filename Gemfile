@@ -35,6 +35,7 @@ gem 'coffee-rails', '~> 4.0.0.beta1'
 gem 'bootstrap-sass', '~> 2.3.1.0'
 gem "backbone-on-rails"
 gem 'uglifier', '>= 1.0.3'
+gem 'execjs'
 
 group :production do
   gem 'passenger'
