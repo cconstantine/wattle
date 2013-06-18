@@ -36,6 +36,7 @@ gem 'bootstrap-sass', '~> 2.3.1.0'
 gem "backbone-on-rails"
 gem 'uglifier', '>= 1.0.3'
 gem 'execjs'
+gem 'therubyracer'
 
 group :production do
   gem 'passenger'
