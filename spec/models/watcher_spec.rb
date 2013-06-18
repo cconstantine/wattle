@@ -13,14 +13,20 @@ describe Watcher do
       end
     end
     context "when no matching user exists" do
-      let(:auth_data) {{ email: "fake@example.com", first_name: "Edward" }}
+      let(:auth_data) {{ email: "fake1@example.com", first_name: "Edward" }}
       it "should make a new Watcher" do
         expect { subject }.to change(Watcher, :count)
+
         subject.should == Watcher.last
-        Watcher.last.email.should == "fake@example.com"
+        Watcher.last.email.should == "fake1@example.com"
         Watcher.last.first_name.should == "Edward"
       end
-
+    end
+    context "when creating a non @example.com user" do
+      let(:auth_data) {{email: "mallory@scoobilydoo.com", first_name: "Mallory"}}
+      it "should refuse to make the watcher" do
+        expect { subject }.not_to change(Watcher, :count)
+      end
     end
     context "when the hash is bad" do
       let(:auth_data) { nil }
