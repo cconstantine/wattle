@@ -17,12 +17,6 @@ gem 'jbuilder', '~> 1.0.1'
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
 
-# Deploy with Capistrano
-# gem 'capistrano', group: :development
-
-# To use debugger
-# gem 'debugger'
-
 gem 'httpclient'
 gem 'wat_catcher'
 gem 'kaminari'
