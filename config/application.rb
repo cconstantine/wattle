@@ -25,7 +25,7 @@ module Wattle
     config.active_record.schema_format = :sql
 
     config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+    config.action_mailer.smtp_settings = { :address => "localhost", :port => 587 }
 
     config.middleware.insert_after ActionDispatch::DebugExceptions, "WatCatcher::Middleware"
   end
