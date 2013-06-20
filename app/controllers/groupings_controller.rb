@@ -5,6 +5,7 @@ class GroupingsController < ApplicationController
 
   def index
     @groupings = Grouping.open.wat_order.reverse
+    @groupings = @groupings.where(app_env: params[:app_env]) if params[:app_env].present?
 
     respond_with(@groupings)
   end

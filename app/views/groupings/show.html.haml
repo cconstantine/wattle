@@ -4,6 +4,8 @@
     .pull-right.alert.alert-info
       = @grouping.state.capitalize
     = wat_heading(wat)
+    .pull-right.alert.alert-info
+      = @grouping.app_env
 
 
   = render partial: "state", locals: {group: @grouping}

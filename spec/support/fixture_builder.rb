@@ -8,17 +8,20 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :default, Watcher.create!(name: "Fake Watcher", first_name: "Fake", email: "test@example.com")
     fbuilder.name :another_watcher, Watcher.create!(name: "Super Fake Watcher", first_name: "Fakey faker", email: "test2@example.com")
 
-    fbuilder.name(:default, Wat.create_from_exception! {raise RuntimeError.new( "a test")})
+    fbuilder.name(:default, Wat.create_from_exception!(nil, {app_env: 'production'}) {raise RuntimeError.new( "a test")})
 
 
     @grouping1 = 5.times.map do |i|
-      Wat.create_from_exception! {raise RuntimeError.new( "a test")}
+      Wat.create_from_exception!(nil, {app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
     @grouping2 = 5.times.map do |i|
-      Wat.create_from_exception! {raise RuntimeError.new( "a test")}
+      Wat.create_from_exception!(nil, {app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
+    @demo_grouping = 5.times.map do |i|
+      Wat.create_from_exception!(nil, {app_env: 'demo'})  {raise RuntimeError.new( "a test")}
+    end.first.groupings.first
     #
     #@grouping1.wats = [wats[0], wats[1], wats[2], wats[8], wats[9]]
     #@grouping1.key_line = wats[0].key_line
@@ -32,7 +35,7 @@ FixtureBuilder.configure do |fbuilder|
 
     # Create some wats without groupings
     @resolved = 5.times.map do |i|
-      Wat.create_from_exception! {raise RuntimeError.new( "a test")}
+      Wat.create_from_exception!(nil, {app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
     #@resolved.wats = [wats[10], wats[11], wats[12], wats[13], wats[14]]
@@ -42,7 +45,7 @@ FixtureBuilder.configure do |fbuilder|
 
     # Create some wats without groupings
     @acknowledged = 5.times.map do |i|
-      Wat.create_from_exception! {raise RuntimeError.new( "a test")}
+      Wat.create_from_exception!(nil, {app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
     #@acknowledged.wats = [wats[15], wats[16], wats[17], wats[18], wats[19]]
     #@acknowledged.key_line = wats[15].key_line

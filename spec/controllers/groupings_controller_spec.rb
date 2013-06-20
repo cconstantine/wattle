@@ -21,10 +21,27 @@ describe GroupingsController do
 
       it {should be_success}
 
-      it "should include groupings" do
-        subject
-        assigns[:groupings].to_a.should have(Grouping.open.count).items
+      context "groupings" do
+        subject { get :index, params }
+        let(:grouping1)  {groupings(:group)}
+        let(:demo_group) {groupings(:demo_grouping)}
+        let(:params) { {} }
+
+        it "should include unfilted groupings" do
+          subject
+          assigns[:groupings].to_a.should have(Grouping.open.count).items
+          assigns[:groupings].to_a.map(&:app_env).uniq.should =~ ['demo', 'production']
+        end
+
+        context "filtered" do
+          let(:params) { { :app_env => "demo" } }
+          it "should include filtered groupings" do
+            subject
+            assigns[:groupings].to_a.map(&:app_env).uniq.should =~ ['demo']
+          end
+        end
       end
+
     end
 
   end

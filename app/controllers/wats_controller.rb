@@ -16,7 +16,7 @@ class WatsController < ApplicationController
   end
 
   def create
-    wat_params = params.require(:wat).permit(:message, :error_class, :page_url, :session, backtrace: [])
+    wat_params = params.require(:wat).permit(:message, :error_class, :page_url, :session, :app_env, backtrace: [])
     if wat_params[:session].blank? && session.as_json.class != Array
       wat_params[:session] = session.as_json
     end

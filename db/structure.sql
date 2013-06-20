@@ -53,7 +53,8 @@ CREATE TABLE groupings (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     wats_count integer,
-    state character varying(255) DEFAULT 'active'::character varying NOT NULL
+    state character varying(255) DEFAULT 'active'::character varying NOT NULL,
+    app_env character varying(255)
 );
 
 
@@ -132,7 +133,8 @@ CREATE TABLE wats (
     session hstore,
     request_headers hstore,
     request_params hstore,
-    page_url character varying(255)
+    page_url character varying(255),
+    app_env character varying(255) NOT NULL
 );
 
 
@@ -248,6 +250,13 @@ ALTER TABLE ONLY wats
 
 
 --
+-- Name: index_groupings_on_app_env; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_groupings_on_app_env ON groupings USING btree (app_env);
+
+
+--
 -- Name: index_groupings_on_key_line_and_error_class; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -280,6 +289,13 @@ CREATE UNIQUE INDEX index_wats_groupings_on_grouping_id_and_wat_id ON wats_group
 --
 
 CREATE INDEX index_wats_groupings_on_wat_id ON wats_groupings USING btree (wat_id);
+
+
+--
+-- Name: index_wats_on_app_env; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_wats_on_app_env ON wats USING btree (app_env);
 
 
 --
@@ -318,3 +334,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130427192026');
 INSERT INTO schema_migrations (version) VALUES ('20130427222513');
 
 INSERT INTO schema_migrations (version) VALUES ('20130527210405');
+
+INSERT INTO schema_migrations (version) VALUES ('20130619184758');
+
+INSERT INTO schema_migrations (version) VALUES ('20130619191540');

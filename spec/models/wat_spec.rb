@@ -9,16 +9,18 @@ describe Wat do
     let(:message) {error.message}
     let(:error_class) {error.class.to_s}
     let(:backtrace) { error.backtrace }
+    let(:app_env) { "production" }
 
-    subject {Wat.create!(message: error.message, error_class: error.class.to_s, backtrace: error.backtrace)}
+    subject {Wat.create!(message: error.message, error_class: error.class.to_s, backtrace: error.backtrace, app_env: app_env)}
     it { should == Wat.last }
 
     describe "#create_from_exception" do
-      subject { Wat.create_from_exception!(error)}
+      subject { Wat.create_from_exception!(error, {app_env: app_env} )}
 
       it                { should == Wat.last }
       its(:message)     { should == "test message"}
       its(:error_class) { should == "RuntimeError"}
+      its(:app_env)     { should == "production"}
       it "should create a new wat" do
         expect {subject}.to change {Wat.count}.by(1)
       end

@@ -16,6 +16,7 @@
     %link(href="/wattle_logo.png" rel="apple-touch-icon")
     %link(href="/favicon.ico" rel="shortcut icon")
     = javascript_include_tag "wat_catcher"
+    = javascript_wattle
 
   %body
     .navbar.navbar-fluid-top
@@ -54,7 +55,14 @@
                 %li
                   = link_to group do
                     .badge=group.wats.count
-                    = wat_heading(representative_wat(group)) 
+                    = wat_heading(representative_wat(group))
+            %li.nav-header
+              App Environments
+              - app_envs.each do |env|
+                %li
+                  = link_to env, groupings_path(app_env: env)
+              %li
+                = link_to "All Environments", groupings_path
 
         .span9
           = yield
