@@ -1,4 +1,4 @@
-%h1 A new wat has been detected
+%h1 A new wat has been detected on #{@wat.app_env}
 
 
 %table
@@ -9,7 +9,7 @@
         %td= link_to @wat.page_url, @wat.page_url
 
     %tr
-      %th Occured at
+      %th Occurred at
       %td= @wat.created_at
 
     %tr

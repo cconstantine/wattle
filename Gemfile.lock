@@ -216,8 +216,6 @@ GEM
     uglifier (2.1.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
-    wat_catcher (0.0.5)
-      coffee-rails
 
 PLATFORMS
   ruby
@@ -247,4 +245,4 @@ DEPENDENCIES
   thin
   turbolinks
   uglifier (>= 1.0.3)
-  wat_catcher
+  wat_catcher!

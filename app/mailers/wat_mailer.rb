@@ -6,6 +6,6 @@ class WatMailer < ActionMailer::Base
     @wat = wat
 
     @no_backtrace = true
-    mail :to => Watcher.pluck(:email), :subject => "A wild wat appears"
+    mail :to => Watcher.pluck(:email), :subject => "[#{@wat.app_env.upcase}] #{@wat.message}"
   end
 end
