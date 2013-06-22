@@ -27,7 +27,7 @@ describe GroupingsController do
         let(:demo_group) {groupings(:demo_grouping)}
         let(:params) { {} }
 
-        it "should include unfilted groupings" do
+        it "should include unfiltered groupings" do
           subject
           assigns[:groupings].to_a.should have(Grouping.open.count).items
           assigns[:groupings].to_a.map(&:app_env).uniq.should =~ ['demo', 'production']

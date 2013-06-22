@@ -44,29 +44,25 @@
     .container-fluid
 
       .row-fluid
+        .span2
+          =render 'layouts/filters'
+
+        .span7
+          = yield
+
         .span3
           %ul.nav.nav-stacked.nav-tabs
             - if content_for?(:sidebar)
               = content_for :sidebar
             - else
-              %li.nav-header 
+              %li.nav-header
                 Top Wats
               - top_wats.each do |group|
                 %li
                   = link_to group do
                     .badge=group.wats.count
                     = wat_heading(representative_wat(group))
-            %li.nav-header
-              App Environments
-              - app_envs.each do |env|
-                %li
-                  = link_to env, groupings_path(app_env: env)
-              %li
-                = link_to "All Environments", groupings_path
 
-        .span9
-          = yield
-    
       %footer
         %p &copy; Company 2013
     /

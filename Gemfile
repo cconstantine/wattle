@@ -18,7 +18,7 @@ gem 'jbuilder', '~> 1.0.1'
 
 
 gem 'httpclient'
-gem 'wat_catcher'
+gem 'wat_catcher', :github => "cconstantine/wat_catcher"
 gem 'kaminari'
 gem 'omniauth-gplus'
 gem 'secrets', :github => "austinfromboston/secrets"
@@ -41,6 +41,7 @@ group :development do
 end
 
 group :test, :development do
+  gem 'rr', require: false
   gem "rspec-rails", "~> 2.0"
   gem 'fixture_builder'
   gem 'thin'

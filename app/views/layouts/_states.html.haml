@@ -1,0 +1,15 @@
+%li.nav-header
+  States
+  %ul.filter#states
+    %li
+      =label_tag do
+        = check_box_tag 'state[]', 'active', checked?(:state, 'active')
+        Active
+    %li
+      =label_tag do
+        = check_box_tag 'state[]', 'acknowledged', checked?(:state, 'acknowledged')
+        Acknowledged
+    %li
+      =label_tag do
+        = check_box_tag 'state[]', 'resolved', checked?(:state, 'resolved')
+        Resolved

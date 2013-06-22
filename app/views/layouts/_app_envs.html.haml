@@ -1,0 +1,8 @@
+%li.nav-header
+  App Environments
+  %ul.filter#app_envs
+    - app_envs.each do |env|
+      %li
+        =label_tag do
+          = check_box_tag 'app_env[]', env, checked?(:app_env, env)
+          = env
