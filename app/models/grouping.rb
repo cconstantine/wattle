@@ -24,18 +24,24 @@ class Grouping < ActiveRecord::Base
   scope :acknowledged, -> {where(state: :acknowledged)}
 
   scope( :wat_order, -> { joins(:wats).group(:"groupings.id").reorder("max(wats.id) asc") } ) do
-      def reverse
-        reorder("max(wats.id) desc")
-      end
+    def reverse
+      reorder("max(wats.id) desc")
+    end
   end
+
+  scope :app_env,  ->(ae){where('wats.app_env = ?', ae) }
 
   def open?
     acknowledged? || active?
   end
 
+  def app_envs
+    wats.select(:app_env).uniq.map &:app_env
+  end
+
   def self.get_or_create_from_wat!(wat)
     transaction do
-      open.where(error_class: wat.error_class, key_line: wat.key_line, app_env: wat.app_env).first_or_create(state: "active")
+      open.where(error_class: wat.error_class, key_line: wat.key_line).first_or_create(state: "active")
     end
   end
 

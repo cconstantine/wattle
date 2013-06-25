@@ -26,7 +26,7 @@ describe Grouping do
       end
 
       it "groups by app_env" do
-        subject.wats.count.should == 2
+        subject.app_envs.should =~ ['production', 'staging']
       end
     end
   end

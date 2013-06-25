@@ -7,15 +7,17 @@ describe WatMailer do
   context "Wat after_create" do
     subject { wat.save! }
     it "should send an email to all users" do
-      WatMailer.should_receive(:create).with(wat).and_call_original
+      stub.proxy(WatMailer).create
       subject
+      expect(WatMailer).to have_received(:create).with(wat)
     end
 
     context "with a wat that is from an acknowledged grouping" do
       let(:grouping) {groupings(:acknowledged)}
 
       it "should send an email to all users" do
-        WatMailer.should_not_receive(:create).with(wat).and_call_original
+        stub(WatMailer).create
+        expect(WatMailer).to_not have_received(:create)
         subject
       end
     end

@@ -9,6 +9,6 @@ module WatsHelper
   end
 
   def app_envs
-    Grouping.select(:app_env).uniq.load.map &:app_env
+    Wat.select(:app_env).uniq.load.map &:app_env
   end
 end

@@ -15,7 +15,8 @@ class Wat < ActiveRecord::Base
         e = $!
       end
     end
-    new(metadata.merge(message: e.message, error_class: e.class.to_s, backtrace: e.backtrace, app_env: metadata[:app_env]))
+
+    new(metadata.merge(message: e.message, error_class: e.class.to_s, backtrace: e.backtrace))
   end
 
   def self.create_from_exception!(e=nil, metadata={}, &block)

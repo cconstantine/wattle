@@ -4,12 +4,15 @@ class GroupingsController < ApplicationController
   before_filter :load_group, except: :index
 
   def index
-    params[:app_env] = 'production' if params[:app_env].nil?
-    params[:state] = 'active' if params[:state].nil?
-
     @groupings = Grouping.wat_order.reverse
-    @groupings = @groupings.where(state: params[:state])
-    @groupings = @groupings.where(app_env: params[:app_env])
+    if params[:state].present?
+      @groupings = @groupings.where(state: params[:state])
+    else
+      @groupings = @groupings.open
+    end
+    if params[:app_env].present?
+      @groupings = @groupings.app_env(params[:app_env])
+    end
 
     respond_with(@groupings)
   end
