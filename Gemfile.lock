@@ -5,13 +5,6 @@ GIT
     secrets (1.0.0)
 
 GIT
-  remote: git://github.com/cconstantine/wat_catcher.git
-  revision: 19df199d2c1378afcf5613dbc3d2d80b5f0deb47
-  specs:
-    wat_catcher (0.0.5)
-      coffee-rails
-
-GIT
   remote: git://github.com/rails/rails.git
   revision: 1ec64297f9347986a11ce38af2cc3434d99c66c2
   branch: v4.0.0.rc1
@@ -136,7 +129,7 @@ GEM
       sqlite3-ruby
       thin
     mime-types (1.23)
-    minitest (4.7.4)
+    minitest (4.7.5)
     multi_json (1.7.7)
     multipart-post (1.2.0)
     oauth2 (0.8.1)
@@ -164,7 +157,7 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
-    rake (10.0.4)
+    rake (10.1.0)
     ref (1.0.5)
     rr (1.1.1)
     rspec-core (2.13.1)
@@ -224,6 +217,8 @@ GEM
     uglifier (2.1.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
+    wat_catcher (0.0.6)
+      coffee-rails
 
 PLATFORMS
   ruby
@@ -254,4 +249,4 @@ DEPENDENCIES
   thin
   turbolinks
   uglifier (>= 1.0.3)
-  wat_catcher!
+  wat_catcher
