@@ -3,6 +3,7 @@ Wattle::Application.routes.draw do
   root to: 'groupings#index'
 
   resources :wats
+  get '/create/wat' => 'wats#create'
 
   resources :groupings do
     resources :wats, only: [:show, :index]
