@@ -6,7 +6,7 @@ class WatsController < ApplicationController
   before_filter :load_context
 
   def index
-    @wats = @context.where("true")
+    @wats = @context.where("true").order('id desc')
     respond_with(@wats)
   end
 
