@@ -1,5 +1,5 @@
 class WatMailer < ActionMailer::Base
-  default :from => "from@example.com"
+  default :from => "wattle@example.com"
   layout "mailer"
 
   def create(wat)
