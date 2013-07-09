@@ -16,7 +16,11 @@ class WatsController < ApplicationController
   end
 
   def create
-    wat_params = params.require(:wat).permit(:message, :error_class, :page_url, :session, :app_env, backtrace: [])
+    wat_params = params.require(:wat).permit!#(:message, :error_class, :page_url, :session, :app_env, backtrace: [], sidekiq_msg: { class: "", retry: "" })
+    #wat_params.merge sidekiq_msg: params.permit(:wat).permit(:sidekiq_msg).permit!
+    wat_params.delete(:id)
+    wat_params.delete(:created_at)
+    wat_params.delete(:updated_at)
     if wat_params[:session].blank? && session.as_json.class != Array
       wat_params[:session] = session.as_json
     end

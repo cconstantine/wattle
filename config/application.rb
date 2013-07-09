@@ -28,5 +28,11 @@ module Wattle
     config.action_mailer.smtp_settings = { :address => "localhost", :port => 587 }
 
     config.middleware.insert_after ActionDispatch::DebugExceptions, "WatCatcher::Middleware"
+    #
+    #::Sidekiq.configure_server do |config|
+    #  config.server_middleware do |chain|
+    #    chain.add ::WatCatcher::SidekiqMiddleware
+    #  end
+    #end
   end
 end

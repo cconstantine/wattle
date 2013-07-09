@@ -38,7 +38,7 @@ describe WatsController do
   end
 
   describe "POST #create" do
-    let(:das_post) {post :create, format: :json , wat: {page_url: "somefoo", message: "hi", error_class: "ErrFoo", backtrace: ["a", "b", "c"]}}
+    let(:das_post) {post :create, format: :json , wat: {page_url: "somefoo", message: "hi", error_class: "ErrFoo", backtrace: ["a", "b", "c"], sidekiq_msg: {retry: true, class: "FooClass"}}}
     subject {das_post }
 
     it {should be_success}
@@ -48,6 +48,7 @@ describe WatsController do
       its(:error_class) {should == "ErrFoo"}
       its(:message) {should == "hi"}
       its(:page_url) {should == "somefoo"}
+      its(:sidekiq_msg) {should == {"retry" => true, "class" => "FooClass"}}
     end
   end
 end

@@ -19,9 +19,11 @@
       Incidents
 
     .item
-      On Pages:
-      - @grouping.wats.group(:page_url).pluck(:page_url).each do |page|
-        = link_to page
+      - pages = @grouping.wats.group(:page_url).pluck(:page_url)
+      - if pages.any?
+        On Pages:
+        - pages.each do |page|
+          = link_to page
     .item
       - wat_the_first = @grouping.wats.order(:created_at).first
       - wat_the_last = @grouping.wats.order(:created_at).last

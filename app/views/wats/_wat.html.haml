@@ -16,6 +16,9 @@
     - if wat.request_params.present?
       %dt Request Parameters
       %dd= wat.request_params
+    - if wat.sidekiq_msg.present?
+      %dt Sidekiq Message
+      %dd= wat.sidekiq_msg
     - if wat.message.present?
       %dt Message
       %dd= wat.message

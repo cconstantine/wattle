@@ -133,7 +133,8 @@ CREATE TABLE wats (
     request_headers hstore,
     request_params hstore,
     page_url character varying(255),
-    app_env character varying(255) DEFAULT 'unknown'::character varying NOT NULL
+    app_env character varying(255) DEFAULT 'unknown'::character varying NOT NULL,
+    sidekiq_msg hstore
 );
 
 
@@ -328,3 +329,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130427222513');
 INSERT INTO schema_migrations (version) VALUES ('20130527210405');
 
 INSERT INTO schema_migrations (version) VALUES ('20130619184758');
+
+INSERT INTO schema_migrations (version) VALUES ('20130709004705');
