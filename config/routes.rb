@@ -1,6 +1,21 @@
+require 'sidekiq/web'
+
+class LoginConstraint
+  class << self
+    def matches?(request)
+      Watcher.where(id: request.session[:watcher_id]).any?
+    end
+  end
+end
+
+
 Wattle::Application.routes.draw do
   # You can have the root of your site routed with "root"
   root to: 'groupings#index'
+
+  constraints LoginConstraint do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   resources :wats
   get '/create/wat' => 'wats#create'

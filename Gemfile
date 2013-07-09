@@ -31,6 +31,9 @@ gem "backbone-on-rails"
 gem 'uglifier', '>= 1.0.3'
 gem 'execjs'
 gem 'therubyracer'
+gem 'sidekiq'
+gem 'slim', ">= 1.3.0", :require => false
+
 
 group :production do
   gem 'passenger'
