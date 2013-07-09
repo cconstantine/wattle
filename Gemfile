@@ -33,6 +33,7 @@ gem 'execjs'
 gem 'therubyracer'
 gem 'sidekiq'
 gem 'slim', ">= 1.3.0", :require => false
+gem 'sinatra', '>= 1.3.0', :require => false
 
 
 group :production do
