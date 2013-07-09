@@ -37,6 +37,6 @@ class Wat < ActiveRecord::Base
   end
 
   def send_emails
-    WatMailer.create(self).deliver unless groupings.acknowledged.any?
+    WatMailer.delay.create(self) unless groupings.acknowledged.any?
   end
 end
