@@ -1,5 +1,8 @@
 .row-fluid
   %dl.dl-horizontal
+    %dd= link_to "View wat", wat_path(wat)
+    %dt Grouping(s)
+    %dd!= wat.groupings.map {|x| link_to grouping_path(x), grouping_path(x)}.join " "
     - if wat.page_url.present?
       %dt Page URL
       %dd= wat.page_url
