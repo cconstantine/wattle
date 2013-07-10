@@ -1,8 +1,10 @@
 %h1 A new wat has been detected on #{@wat.app_env}
 
-
 %table
   %tbody
+    %tr
+      %th
+      %td= link_to "View wat",wat_url(@wat)
     - if @wat.page_url.present?
       %tr
         %th Page URL

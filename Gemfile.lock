@@ -234,7 +234,7 @@ GEM
     uglifier (2.1.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
-    wat_catcher (0.1.0)
+    wat_catcher (0.2.0)
       coffee-rails
       httpclient
       sidekiq

@@ -6,6 +6,14 @@ require 'rails/all'
 Bundler.require(*Rails.groups(assets: %w(development test)))
 
 module Wattle
+  class ConfigureMailer < Rails::Railtie
+    initializer "configure_mailer.set_config", after: "secrets.load" do |app|
+
+      url_options = ::Secret.respond_to?(:default_url_options) ? ::Secret.default_url_options.to_h.symbolize_keys : { host: 'localhost', port: 3001 }
+      app.config.action_mailer.default_url_options = url_options
+    end
+  end
+
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
