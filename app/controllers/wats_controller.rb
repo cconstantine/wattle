@@ -6,7 +6,7 @@ class WatsController < ApplicationController
   before_filter :load_context
 
   def index
-    @wats = @context.includes(:groupings).where("true").order('id desc').page(params[:page]).per(20)
+    @wats = @context.includes(:groupings).order('id desc').page(params[:page]).per(params[:per_page] || 20)
     respond_with(@wats)
   end
 

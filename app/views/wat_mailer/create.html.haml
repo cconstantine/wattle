@@ -5,6 +5,10 @@
     %tr
       %th
       %td= link_to "View wat",wat_url(@wat)
+
+    %tr
+      %th Application
+      %td= "#{@wat.app_name} (#{@wat.app_env})"
     - if @wat.page_url.present?
       %tr
         %th Page URL

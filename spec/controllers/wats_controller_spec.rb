@@ -6,7 +6,7 @@ describe WatsController do
   end
 
   describe "GET #index" do
-    subject { get :index, format: :json }
+    subject { get :index, format: :json, per_page: 100}
     context 'when logged in' do
       before do
         login watchers(:default)

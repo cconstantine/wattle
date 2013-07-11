@@ -7,6 +7,8 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'rr'
 require 'sidekiq/testing/inline'
+require 'email_spec'
+
 load Rails.root.join("db", "seeds.rb")
 
 # Requires supporting ruby files with custom matchers and macros, etc,

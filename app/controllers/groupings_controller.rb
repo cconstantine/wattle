@@ -4,20 +4,16 @@ class GroupingsController < ApplicationController
   before_filter :load_group, except: :index
 
   def index
-    @groupings = Grouping.wat_order.reverse
-    if params[:state].present?
-      @groupings = @groupings.where(state: params[:state])
-    else
-      @groupings = @groupings.open
-    end
-    if params[:app_env].present?
-      @groupings = @groupings.app_env(params[:app_env])
-    end
+    p params
+    @groupings = Grouping.
+        filtered(filters).
+        wat_order.reverse
 
     respond_with(@groupings)
   end
 
   def show
+    @wats = wats(@grouping)
     respond_with(@grouping)
   end
 
@@ -38,5 +34,15 @@ class GroupingsController < ApplicationController
 
   def load_group
     @grouping = Grouping.find(params.require(:id))
+  end
+
+  def wats(grouping)
+    grouping.wats.filtered(filters)
+  end
+  helper_method :wats
+
+  protected
+  def filters
+    params[:filters].present? ? params.require("filters").permit! : {}
   end
 end

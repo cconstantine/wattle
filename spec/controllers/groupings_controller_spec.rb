@@ -29,16 +29,22 @@ describe GroupingsController do
 
         it "should include unfiltered groupings" do
           subject
-          #p assigns[:groupings]
           assigns[:groupings].to_a.should have(Grouping.open.count).items
-          assigns[:groupings].to_a.map(&:app_envs).flatten.uniq.should =~ ['demo', 'production']
+          assigns[:groupings].to_a.map(&:app_envs).flatten.uniq.should =~ ['demo', 'production', 'staging']
         end
 
         context "filtered" do
-          let(:params) { { :app_env => "demo" } }
+          let(:params) { {filters: { :app_env => "staging" }} }
           it "should include filtered groupings" do
             subject
-            assigns[:groupings].to_a.map(&:wats).flatten.map(&:app_env).uniq.should =~ ['demo']
+
+            assigns[:groupings].
+                to_a.
+                map(&:wats).
+                flatten.
+                map(&:app_env).
+                uniq.
+                should =~ ['staging']
           end
         end
       end
@@ -48,10 +54,11 @@ describe GroupingsController do
   end
 
   describe "GET #show" do
-    let(:wat) { Wat.create_from_exception!(error)}
-    let(:grouping) {wat.groupings.first}
+    let(:wat) { grouping.wats.last}
+    let(:grouping) {groupings(:grouping3)}
+    let(:filters) {{}}
 
-    subject {get :show, id: grouping.to_param, format: :json }
+    subject {get :show, id: grouping.to_param, filters: filters, format: :json }
     context "when logged in" do 
       before do
         login watchers(:default)
@@ -60,6 +67,15 @@ describe GroupingsController do
       it "should load the grouping" do
         subject
         assigns[:grouping].should == grouping
+      end
+
+      context "filtering wats" do
+        let(:filters) { { :app_env => "demo" } }
+        it "filters the wats" do
+          subject
+          expect(controller.wats(assigns[:grouping])).to have(5).items
+          controller.wats(assigns[:grouping]).pluck(:app_env).uniq.should == ['demo']
+        end
       end
     end
   end

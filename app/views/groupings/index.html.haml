@@ -4,9 +4,11 @@
 - content_for :sidebar do
   %li.nav-header 
     Wats
+  - p ["grouping", @groupings]
   - @groupings.each do |group|
+    - wats = wats(group)
     %li
       = link_to group do
-        .badge=group.wats.count
-        = wat_heading(group.wats.last)
+        .badge=wats.count
+        = wat_heading(representative_wat(wats))
 

@@ -1,5 +1,5 @@
 module GroupingsHelper
-  def representative_wat(grouping)
-    grouping.wats.last
+  def representative_wat(wats)
+    wats.last
   end
 end

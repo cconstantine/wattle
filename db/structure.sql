@@ -134,7 +134,8 @@ CREATE TABLE wats (
     request_params hstore,
     page_url character varying(255),
     app_env character varying(255) DEFAULT 'unknown'::character varying NOT NULL,
-    sidekiq_msg hstore
+    sidekiq_msg hstore,
+    app_name character varying(255) DEFAULT 'unknown'::character varying NOT NULL
 );
 
 
@@ -292,6 +293,13 @@ CREATE INDEX index_wats_on_app_env ON wats USING btree (app_env);
 
 
 --
+-- Name: index_wats_on_app_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_wats_on_app_name ON wats USING btree (app_name);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -331,3 +339,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130527210405');
 INSERT INTO schema_migrations (version) VALUES ('20130619184758');
 
 INSERT INTO schema_migrations (version) VALUES ('20130709004705');
+
+INSERT INTO schema_migrations (version) VALUES ('20130710213002');

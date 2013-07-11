@@ -12,6 +12,33 @@ describe Grouping do
 
   let(:wat) {Wat.new_from_exception(error, metadata) }
 
+  describe "#filtered" do
+    let(:filter_params) {{}}
+    let(:scope) {Grouping.all}
+    subject {scope.filtered(filter_params)}
+    it {should have(Grouping.open.count).items}
+
+    context "with an app_name" do
+      let(:filter_params) {{app_name: "app1"}}
+      it {should have(Grouping.open.app_name(:app1).count).items}
+    end
+
+    context "with an app_env" do
+      let(:filter_params) {{app_env: "demo"}}
+      it {should have(Grouping.open.app_env(:demo).count).items}
+    end
+
+    context "with an app_name and an app_env" do
+      let(:filter_params) {{app_name: "app2", app_env: "production"}}
+      it {should have(Grouping.open.app_name(:app2).app_env("production").count).items}
+    end
+
+    context "with a state" do
+      let(:filter_params) {{state: :acknowledged}}
+      it {should have(1).item}
+    end
+  end
+
   describe "#get_or_create_from_wat!" do
     subject {Grouping.get_or_create_from_wat!(wat)}
     it "creates" do

@@ -7,6 +7,14 @@ class Wat < ActiveRecord::Base
 
   after_create :construct_groupings!, :send_emails
 
+  scope :filtered, ->(opts={}) {
+    running_scope = self
+    running_scope = running_scope.references(:groupings).includes(:groupings).where("groupings.state = ?", opts[:state]) if opts[:state]
+    running_scope = running_scope.where(:app_name => opts[:app_name]) if opts[:app_name]
+    running_scope = running_scope.where(:app_env  => opts[:app_env])  if opts[:app_env]
+    running_scope
+  }
+
   def self.new_from_exception(e=nil, metadata={}, &block)
     if block_given?
       begin

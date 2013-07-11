@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe WatMailer do
-  let(:wat)        { grouping.wats.first.dup }
   let(:grouping)   { groupings(:grouping1) }
 
   context "Wat after_create" do
-    subject { wat.save! }
+    let(:wat) { grouping.wats.first.dup }
+    subject   { wat.save! }
     it "should send an email to all users" do
       stub.proxy(WatMailer).create
       subject
@@ -24,7 +24,8 @@ describe WatMailer do
   end
 
   context "create" do
-    subject {WatMailer.create(wat)}
+    let(:wat) { grouping.wats.first }
+    subject   {WatMailer.create(wat)}
 
     it {should deliver_to(*Watcher.pluck(:email))}
 

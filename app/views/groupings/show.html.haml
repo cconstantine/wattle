@@ -1,5 +1,6 @@
 .grouping_data
-  - wat = representative_wat(@grouping)
+  - wats = wats(@grouping)
+  - wat = representative_wat(wats)
   %h2
     .pull-right.alert.alert-info
       = @grouping.state.capitalize
@@ -15,18 +16,26 @@
   .grouping_summary
     .item
       .badge.badge-warning
-        = @grouping.wats_count
+        = wats.count
       Incidents
 
     .item
-      - pages = @grouping.wats.group(:page_url).pluck(:page_url)
+      - pages = wats.group(:page_url).pluck(:page_url)
       - if pages.any?
         On Pages:
         - pages.each do |page|
           = link_to page
     .item
-      - wat_the_first = @grouping.wats.order(:created_at).first
-      - wat_the_last = @grouping.wats.order(:created_at).last
+      - envs = wats.group(:app_env).pluck(:app_env)
+      In Environments:
+      = envs.join ", "
+    .item
+      - apps = wats.group(:app_name).pluck(:app_name)
+      In Applications:
+      = apps.join ", "
+    .item
+      - wat_the_first = wats.order(:created_at).first
+      - wat_the_last = wats.order(:created_at).last
       First Incident
       %abbr{title: wat_the_first.created_at}
         = time_ago_in_words wat_the_first.created_at
@@ -37,9 +46,9 @@
         = time_ago_in_words wat_the_last.created_at
         ago
 
-  - wats = @grouping.wats.order("created_at desc").page(params[:page]).per(1)
-  = paginate wats
+  - paged_wats = wats.order("created_at desc").page(params[:page]).per(1)
+  = paginate paged_wats
 
   .grouping_details
-    = render wats
+    = render paged_wats
       

@@ -25,7 +25,7 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.brand(href="#")
+          %a.brand(href="/")
             .label.label-warning.logo-label ?!
             Wattle
           .container.nav-collapse
@@ -62,7 +62,7 @@
                 %li
                   = link_to group do
                     .badge=group.wats.count
-                    = wat_heading(representative_wat(group))
+                    = wat_heading(wats(group).last)
 
     /
       Javascripts

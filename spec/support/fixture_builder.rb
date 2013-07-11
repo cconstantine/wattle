@@ -12,44 +12,37 @@ FixtureBuilder.configure do |fbuilder|
 
 
     @grouping1 = 5.times.map do |i|
-      Wat.create_from_exception!(nil, {app_env: 'production'})  {raise RuntimeError.new( "a test")}
+      Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
     @grouping2 = 5.times.map do |i|
-      Wat.create_from_exception!(nil, {app_env: 'production'})  {raise RuntimeError.new( "a test")}
+      Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
     @demo_grouping = 5.times.map do |i|
-      Wat.create_from_exception!(nil, {app_env: 'demo'})  {raise RuntimeError.new( "a test")}
+      Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'demo'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
-    #
-    #@grouping1.wats = [wats[0], wats[1], wats[2], wats[8], wats[9]]
-    #@grouping1.key_line = wats[0].key_line
-    #@grouping1.error_class = wats[15].error_class
-    #@grouping1.save!
-    #
-    #@grouping2.wats = [wats[3], wats[4], wats[5], wats[6], wats[7]]
-    #@grouping2.key_line = wats[15].key_line
-    #@grouping2.error_class = wats[15].error_class
-    #@grouping2.save!
+
+    @staging_grouping = 5.times.map do |i|
+      Wat.create_from_exception!(nil, {app_name: :app3, app_env: 'staging'})  {raise RuntimeError.new( "a test")}
+    end.first.groupings.first
+
+    @grouping3 = 5.times.map do |i|
+      # These two need to be on the same line
+      Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}; Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'demo'})  {raise RuntimeError.new( "a test")}
+    end.first.groupings.first
 
     # Create some wats without groupings
     @resolved = 5.times.map do |i|
-      Wat.create_from_exception!(nil, {app_env: 'production'})  {raise RuntimeError.new( "a test")}
+      Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
-    #@resolved.wats = [wats[10], wats[11], wats[12], wats[13], wats[14]]
-    #@resolved.key_line = wats[15].key_line
-    #@resolved.error_class = wats[15].error_class
     @resolved.resolve!
 
     # Create some wats without groupings
     @acknowledged = 5.times.map do |i|
-      Wat.create_from_exception!(nil, {app_env: 'production'})  {raise RuntimeError.new( "a test")}
+      Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
-    #@acknowledged.wats = [wats[15], wats[16], wats[17], wats[18], wats[19]]
-    #@acknowledged.key_line = wats[15].key_line
-    #@acknowledged.error_class = wats[15].error_class
     @acknowledged.acknowledge!
   end
 end

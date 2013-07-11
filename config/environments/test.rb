@@ -33,4 +33,7 @@ Wattle::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+
+  #p url_options = ::Secret.respond_to?(:default_url_options) ? ::Secret.default_url_options.to_h.symbolize_keys :
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3001 }
 end

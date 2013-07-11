@@ -2,6 +2,32 @@ require 'spec_helper'
 
 describe Wat do
 
+  describe "#filtered" do
+    let(:filter_params) {{}}
+    let(:scope) {Wat.all}
+    subject {scope.filtered(filter_params)}
+    it {should have(Wat.count).items}
+
+    context "with an app_name" do
+      let(:filter_params) {{app_name: "app1"}}
+      it {should have(Wat.where(app_name: :app1).count).items}
+    end
+
+    context "with an app_env" do
+      let(:filter_params) {{app_env: "demo"}}
+      it {should have(Wat.where(app_env: :demo).count).items}
+    end
+
+    context "with an app_name and an app_env" do
+      let(:filter_params) {{app_name: "app2", app_env: "production"}}
+      it {should have(Wat.where(app_name: :app2, app_env: "production").count).items}
+    end
+
+    context "with a state" do
+      let(:filter_params) {{state: :acknowledged}}
+      it {should have(5).item}
+    end
+  end
 
   describe "#create!" do
     let(:error) { capture_error {raise RuntimeError.new "test message"} }
@@ -89,4 +115,6 @@ describe Wat do
       end
     end
   end
+
+
 end
