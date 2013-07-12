@@ -14,7 +14,7 @@ describe GroupingsController do
       subject.should redirect_to auth_path
     end
 
-    context "when logged in" do 
+    context "when logged in" do
       before do
         login watchers(:default)
       end
@@ -59,7 +59,7 @@ describe GroupingsController do
     let(:filters) {{}}
 
     subject {get :show, id: grouping.to_param, filters: filters, format: :json }
-    context "when logged in" do 
+    context "when logged in" do
       before do
         login watchers(:default)
       end
@@ -67,15 +67,6 @@ describe GroupingsController do
       it "should load the grouping" do
         subject
         assigns[:grouping].should == grouping
-      end
-
-      context "filtering wats" do
-        let(:filters) { { :app_env => "demo" } }
-        it "filters the wats" do
-          subject
-          expect(controller.wats(assigns[:grouping])).to have(5).items
-          controller.wats(assigns[:grouping]).pluck(:app_env).uniq.should == ['demo']
-        end
       end
     end
   end

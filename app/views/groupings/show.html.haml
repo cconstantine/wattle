@@ -1,54 +1,58 @@
 .grouping_data
   - wats = wats(@grouping)
+  - Rails.logger.debug "===== Wats: #{wats.all}"
   - wat = representative_wat(wats)
+  - Rails.logger.debug "===== Wat: #{wat}"
   %h2
     .pull-right.alert.alert-info
       = @grouping.state.capitalize
-    = wat_heading(wat)
-    .pull-right
-      - @grouping.app_envs.each do |app_env|
-        .alert.alert-info= app_env
+    - if wat
+      = wat_heading(wat)
+      .pull-right
+        - @grouping.app_envs.each do |app_env|
+          .alert.alert-info= app_env
 
 
-  = render partial: "state", locals: {group: @grouping}
-  %p= wat.message
+  - if wat
+    = render partial: "state", locals: {group: @grouping}
+    %p= wat.message
 
-  .grouping_summary
-    .item
-      .badge.badge-warning
-        = wats.count
-      Incidents
+    .grouping_summary
+      .item
+        .badge.badge-warning
+          = wats.count
+        Incidents
 
-    .item
-      - pages = wats.group(:page_url).pluck(:page_url)
-      - if pages.any?
-        On Pages:
-        - pages.each do |page|
-          = link_to page
-    .item
-      - envs = wats.group(:app_env).pluck(:app_env)
-      In Environments:
-      = envs.join ", "
-    .item
-      - apps = wats.group(:app_name).pluck(:app_name)
-      In Applications:
-      = apps.join ", "
-    .item
-      - wat_the_first = wats.order(:created_at).first
-      - wat_the_last = wats.order(:created_at).last
-      First Incident
-      %abbr{title: wat_the_first.created_at}
-        = time_ago_in_words wat_the_first.created_at
-        ago
-    .item
-      Most Recent Incident
-      %abbr{title: wat_the_last.created_at}
-        = time_ago_in_words wat_the_last.created_at
-        ago
+      .item
+        - pages = wats.group(:page_url).pluck(:page_url)
+        - if pages.any?
+          On Pages:
+          - pages.each do |page|
+            = link_to page
+      .item
+        - envs = wats.group(:app_env).pluck(:app_env)
+        In Environments:
+        = envs.join ", "
+      .item
+        - apps = wats.group(:app_name).pluck(:app_name)
+        In Applications:
+        = apps.join ", "
+      .item
+        - wat_the_first = wats.order(:created_at).first
+        - wat_the_last = wats.order(:created_at).last
+        First Incident
+        %abbr{title: wat_the_first.created_at}
+          = time_ago_in_words wat_the_first.created_at
+          ago
+      .item
+        Most Recent Incident
+        %abbr{title: wat_the_last.created_at}
+          = time_ago_in_words wat_the_last.created_at
+          ago
 
-  - paged_wats = wats.order("created_at desc").page(params[:page]).per(1)
-  = paginate paged_wats
+    - paged_wats = wats.order("created_at desc").page(params[:page]).per(1)
+    = paginate paged_wats
 
-  .grouping_details
-    = render paged_wats
-      
+    .grouping_details
+      = render paged_wats
+

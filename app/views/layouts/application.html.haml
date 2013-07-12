@@ -62,7 +62,7 @@
                 %li
                   = link_to group do
                     .badge=group.wats.count
-                    = wat_heading(wats(group).last)
+                    = wat_heading(representative_wat(group.wats))
 
     /
       Javascripts

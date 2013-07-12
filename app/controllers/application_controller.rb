@@ -4,6 +4,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_filter :require_login
 
+  def filters
+    params[:filters].present? ? params.require("filters").permit! : {}
+  end
+  helper_method :filters
+
   protected
 
   def auth_path
@@ -23,4 +28,5 @@ class ApplicationController < ActionController::Base
     @current_watcher ||= Watcher.where(id: session[:watcher_id]).first
   end
   helper_method :current_user
+
 end

@@ -2,13 +2,13 @@
   = render :partial => 'group', :collection => @groupings
 
 - content_for :sidebar do
-  %li.nav-header 
+  %li.nav-header
     Wats
   - p ["grouping", @groupings]
   - @groupings.each do |group|
-    - wats = wats(group)
+    - p ['group', group.wats.count]
+    - wattles = group.wats
     %li
       = link_to group do
-        .badge=wats.count
-        = wat_heading(representative_wat(wats))
-
+        .badge=wattles.count
+        = wat_heading(representative_wat(wattles))

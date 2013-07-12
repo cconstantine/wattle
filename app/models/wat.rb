@@ -8,8 +8,9 @@ class Wat < ActiveRecord::Base
   after_create :construct_groupings!, :send_emails
 
   scope :filtered, ->(opts={}) {
-    running_scope = self
-    running_scope = running_scope.references(:groupings).includes(:groupings).where("groupings.state = ?", opts[:state]) if opts[:state]
+    Rails.logger.debug "===== opts: #{opts}"
+    running_scope = Wat.all
+    running_scope = running_scope.joins(:groupings).where("groupings.state = ?", opts[:state]) if opts[:state]
     running_scope = running_scope.where(:app_name => opts[:app_name]) if opts[:app_name]
     running_scope = running_scope.where(:app_env  => opts[:app_env])  if opts[:app_env]
     running_scope

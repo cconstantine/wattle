@@ -1,7 +1,7 @@
 module WatsHelper
   def wat_heading(wat)
     return wat.message unless wat.error_class
-    wat.error_class.gsub("::", ":: ") 
+    wat.error_class.gsub("::", ":: ")
   end
 
   def top_wats
@@ -10,5 +10,9 @@ module WatsHelper
 
   def app_envs
     Wat.select(:app_env).uniq.load.map &:app_env
+  end
+
+  def app_names
+    Wat.select(:app_name).uniq.load.map &:app_name
   end
 end

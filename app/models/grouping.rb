@@ -41,8 +41,8 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  scope :app_env, -> (ae) { joins(:wats).references(:wats).where('wats.app_env = ?', ae) }
-  scope :app_name, -> (an) { joins(:wats).references(:wats).where('wats.app_name = ?', an) }
+  scope :app_env, -> (ae) { joins(:wats).references(:wats).where('wats.app_env IN (?)', ae) }
+  scope :app_name, -> (an) { joins(:wats).references(:wats).where('wats.app_name IN (?)', an) }
 
   def open?
     acknowledged? || active?

@@ -4,5 +4,5 @@
     - app_envs.each do |env|
       %li
         =label_tag do
-          = check_box_tag "filters[app_env[#{env}]]", env, checked?(:app_env, env)
+          = check_box_tag "filters[app_env][]", env, checked?(:app_env, env)
           = env
