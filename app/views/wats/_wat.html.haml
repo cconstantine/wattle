@@ -17,7 +17,14 @@
       %dd= wat.session.to_json
     - if wat.request_headers.present?
       %dt Request Headers
-      %dd= wat.request_headers
+      %dd
+        - wat.request_headers.sort.each do |header_name, value|
+          %div
+            %strong= header_name
+          %div
+            = value
+          %br
+
     - if wat.request_params.present?
       %dt Request Parameters
       %dd= wat.request_params
