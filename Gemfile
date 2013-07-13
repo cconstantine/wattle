@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', github: 'rails/rails', branch: 'v4.0.0.rc1'
+gem 'rails', ">= 4.0"#, github: 'rails/rails', branch: 'v4.0.0.rc1'
 
 gem 'pg'
 
@@ -24,9 +24,9 @@ gem 'omniauth-gplus'
 gem 'secrets', :github => "austinfromboston/secrets"
 gem 'state_machine'
 
-gem 'sass-rails',   '~> 4.0.0.beta1'
-gem 'coffee-rails', '~> 4.0.0.beta1'
-gem 'bootstrap-sass', '~> 2.3.1.0'
+gem 'sass-rails',   '>= 4.0'
+gem 'coffee-rails', '>= 4.0'
+gem 'bootstrap-sass', '>= 2.3.1.0'
 gem "backbone-on-rails"
 gem 'uglifier', '>= 1.0.3'
 gem 'execjs'
@@ -46,7 +46,7 @@ end
 
 group :test, :development do
   gem 'rr', require: false
-  gem "rspec-rails", "~> 2.0"
+  gem "rspec-rails", ">= 2.0"
   gem 'fixture_builder'
   gem 'thin'
 end
