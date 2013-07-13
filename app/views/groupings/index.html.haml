@@ -4,9 +4,7 @@
 - content_for :sidebar do
   %li.nav-header
     Wats
-  - p ["grouping", @groupings]
   - @groupings.each do |group|
-    - p ['group', group.wats.count]
     - wattles = group.wats
     %li
       = link_to group do
