@@ -88,6 +88,28 @@ describe Wat do
         subject
         wat.groupings.should include(grouping)
       end
+
+      context "when the line contains a release timestamp" do
+        let(:existing_wat) { wats(:default) }
+        let(:wat) do
+          existing_wat.dup.tap do |w|
+            original_key_line = w.key_line
+            new_key_line = w.key_line.gsub(/(#{Rails.root})/, '\1/releases/20130330231716')
+            w.backtrace.map! { |l| l == original_key_line ? new_key_line : l }
+            w.save!
+          end
+        end
+
+        before do
+          existing_wat.construct_groupings!
+        end
+
+        it "should bind to the existing grouping" do
+          subject
+          wat.groupings.should include(existing_wat.groupings.first)
+        end
+
+      end
     end
 
     context "with an existing resolved duplicate error" do

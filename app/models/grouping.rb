@@ -54,7 +54,7 @@ class Grouping < ActiveRecord::Base
 
   def self.get_or_create_from_wat!(wat)
     transaction do
-      open.where(error_class: wat.error_class, key_line: wat.key_line).first_or_create(state: "active")
+      open.where(error_class: wat.error_class, key_line: wat.key_line.sub(/releases\/\d+\//, '')).first_or_create(state: "active")
     end
   end
 
