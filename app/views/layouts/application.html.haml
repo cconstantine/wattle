@@ -31,8 +31,6 @@
           .container.nav-collapse
             %ul.nav
               %li= link_to "Reports", groupings_path
-            %ul.nav
-              %li= link_to "Wats", wats_path
 
             .pull-right.hidden-phone
               %ul.nav
@@ -51,7 +49,7 @@
         .span7
           = yield
 
-        .span3
+        -#.span3
           %ul.nav.nav-stacked.nav-tabs
             - if content_for?(:sidebar)
               = content_for :sidebar

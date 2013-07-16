@@ -1,25 +1,29 @@
 - wat = wats(group).last
 %article.group_listing
-  = link_to group do
-    %h4
-      .badge.badge-warning
+  %h4<>
+    = link_to group, class: "grouping_detail_link" do
+      .incident_count
         = wats(group).count
-      = link_to wat_heading(wat), group
-
-  %p.state
+      .incident_heading
+        = wat_heading(wat).truncate(50)
+  .group_state.pull-right
     = render partial: "state", locals: {group: group}
-  %dl
+
+  .grouping_body<>
     - if wat_heading(wat) != wat.message
-      %dt Message
-      %dd= wat.message
+      %h5.muted= wat.message.truncate(100)
+    .env
+      = wat.app_name
+      \::
+      = wat.app_env
     - if wat.page_url.present?
-      %dt Page URL
-      %dd= link_to wat.page_url
-    %dt Backtrace
-    %dd= wat.key_line
-    %dt Time
-    %dd
+      .page_url
+        Page URL:
+        = link_to wat.page_url.truncate(50), wat.page_url
+    .backtrace_key_line
+      Backtrace:
+      = wat.key_line.truncate(100)
+    .last_incident 
+      Last Seen
       = time_ago_in_words wat.updated_at
       ago
-    %dt App Env
-    %dd= wat.app_env

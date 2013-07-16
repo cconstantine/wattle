@@ -27,7 +27,7 @@
         - pages = wats.group(:page_url).pluck(:page_url)
         - if pages.any?
           On Pages:
-          - pages.each do |page|
+          - pages.uniq.each do |page|
             = link_to page
       .item
         - envs = wats.group(:app_env).pluck(:app_env)

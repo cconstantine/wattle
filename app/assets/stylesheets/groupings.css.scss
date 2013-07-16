@@ -3,17 +3,50 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 .group_listing {
-  margin-bottom: 10px;
-  
-  .media-body {
-    border-bottom: 1px solid transparent;
+  margin-bottom: 20px;
+  border: 1px solid silver;
+  border-radius: 16px 16px 0 0;
+
+  .grouping_detail_link:hover {
+    text-decoration: none;
+  }
+
+  .group_state {
+    font-size: 12px;
+    font-weight: normal; 
+    margin-right: 32px;
+    padding: 0px 10px;
+    background: rgba( 200, 200, 200, 0.5 );
+    line-height: 32px;
+  }
+
+  h4 {
+    border-bottom: 1px solid silver;
+    background: rgba( 248, 148, 6, 0.7);
+    margin-top: 0;
+    margin-bottom: 0;
+    border-radius: 16px 16px 0 0;
+    line-height: 32px;
+
     &:hover {
-      border-bottom: 1px solid silver;
+      background: rgba( 248, 148, 6, 1);
     }
   }
 
-  .badge-large {
-    margin-right: 10px;
+  .incident_heading {
+    padding-left: 20px;
+    display: inline;
+    color: white;
+  }
+
+  .incident_count {
+    display: inline;
+    margin-left: 32px; 
+    color: white;
+  }
+
+  .grouping_body {
+    padding: 10px;
   }
 }
 
