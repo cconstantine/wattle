@@ -1,5 +1,5 @@
 - wat = wats(group).last
-%article.group_listing
+%article.group_listing{class: "group_state_#{group.state}"}
   %h4<>
     = link_to group, class: "grouping_detail_link" do
       .incident_count

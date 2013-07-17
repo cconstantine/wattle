@@ -2,6 +2,31 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.group_listing.group_state_active {
+  h4 {
+    background: rgba( 248, 148, 6, 0.7);
+    &:hover {
+      background: rgba( 248, 148, 6, 1);
+    }
+  }
+}
+
+.group_listing.group_state_resolved {
+  h4 {
+    background: rgba( 70, 165, 70, 0.7);
+    &:hover {
+      background: rgba( 70, 165, 70, 1);
+    }
+  }
+}
+.group_listing.group_state_acknowledged {
+  h4 {
+    background: rgba( 180, 180, 180, 0.7);
+    &:hover {
+      background: rgba( 180, 180, 180, 1);
+    }
+  }
+}
 .group_listing {
   margin-bottom: 20px;
   border: 1px solid silver;
@@ -22,16 +47,75 @@
 
   h4 {
     border-bottom: 1px solid silver;
-    background: rgba( 248, 148, 6, 0.7);
     margin-top: 0;
     margin-bottom: 0;
     border-radius: 16px 16px 0 0;
     line-height: 32px;
 
-    &:hover {
-      background: rgba( 248, 148, 6, 1);
-    }
   }
+
+  
+
+  .incident_heading {
+    padding-left: 20px;
+    display: inline;
+    color: white;
+  }
+
+  .incident_count {
+    display: inline;
+    margin-left: 32px; 
+    color: white;
+  }
+
+  .grouping_body {
+    padding: 10px;
+  }
+}
+
+.backtrace_container {
+  height: 200px;
+  overflow: hidden;
+
+  .obscure_backtrace {
+    display: none;
+  }
+}
+
+.backtrace_container.complete {
+  height: auto;
+  .obscure_backtrace {
+    display: inline;
+  }
+}
+.group_listing {
+  margin-bottom: 20px;
+  border: 1px solid silver;
+  border-radius: 16px 16px 0 0;
+
+  .grouping_detail_link:hover {
+    text-decoration: none;
+  }
+
+  .group_state {
+    font-size: 12px;
+    font-weight: normal; 
+    margin-right: 32px;
+    padding: 0px 10px;
+    background: rgba( 200, 200, 200, 0.5 );
+    line-height: 32px;
+  }
+
+  h4 {
+    border-bottom: 1px solid silver;
+    margin-top: 0;
+    margin-bottom: 0;
+    border-radius: 16px 16px 0 0;
+    line-height: 32px;
+
+  }
+
+  
 
   .incident_heading {
     padding-left: 20px;
