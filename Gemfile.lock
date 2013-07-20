@@ -51,9 +51,16 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    columnize (0.3.6)
     connection_pool (1.1.0)
     daemon_controller (1.1.4)
     daemons (1.1.9)
+    debugger (1.6.1)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.2.3)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.2.3)
     diff-lcs (1.2.4)
     eco (1.0.0)
       coffee-script
@@ -227,7 +234,8 @@ GEM
     uglifier (2.1.2)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
-    wat_catcher (0.2.2)
+    user-agent (1.0.0)
+    wat_catcher (0.2.4)
       coffee-rails
       httpclient
       sidekiq
@@ -239,6 +247,7 @@ DEPENDENCIES
   backbone-on-rails
   bootstrap-sass (>= 2.3.1.0)
   coffee-rails (>= 4.0)
+  debugger
   email_spec
   execjs
   fixture_builder
@@ -264,4 +273,5 @@ DEPENDENCIES
   thin
   turbolinks
   uglifier (>= 1.0.3)
+  user-agent
   wat_catcher

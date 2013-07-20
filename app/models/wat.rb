@@ -40,6 +40,10 @@ class Wat < ActiveRecord::Base
     end
   end
 
+  def user_agent
+    return Agent.new(request_headers["HTTP_USER_AGENT"]) if request_headers.present? && request_headers["HTTP_USER_AGENT"]
+  end
+
   def construct_groupings!
     self.groupings = [Grouping.get_or_create_from_wat!(self)]
   end

@@ -53,6 +53,18 @@ describe Wat do
     end
   end
 
+  describe "#user_agent" do
+    subject {wat.user_agent}
+    context "without any user_agent available" do
+      let(:wat) {wats(:default)}
+      it {should be_nil}
+    end
+    context "with an HTTP_USER_AGENT header" do
+      let(:wat) {wats(:with_user_agent)}
+      it {should be_instance_of Agent}
+    end
+  end
+
   describe "#key_line" do
     subject {wat.key_line}
     let(:wat) { wats(:default)}

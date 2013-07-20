@@ -23,6 +23,7 @@ gem 'kaminari'
 gem 'omniauth-gplus'
 gem 'secrets', :github => "austinfromboston/secrets"
 gem 'state_machine'
+gem 'user-agent'
 
 gem 'sass-rails',   '>= 4.0'
 gem 'coffee-rails', '>= 4.0'

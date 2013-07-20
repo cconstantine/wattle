@@ -10,6 +10,10 @@
       %dd= wat.page_url
     %dt Occurred at
     %dd= wat.created_at
+    -if agent = wat.user_agent
+      %dt Browser
+      %dd
+        #{agent.name} #{agent.version} running on #{agent.os}
     %dt Key Line
     %dd= wat.key_line
     - if wat.session.present?
