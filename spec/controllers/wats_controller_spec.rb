@@ -49,6 +49,7 @@ describe WatsController do
       its(:message) {should == "hi"}
       its(:page_url) {should == "somefoo"}
       its(:sidekiq_msg) {should == {"retry" => true, "class" => "FooClass"}}
+      its(:request_headers) {should == Hash[*request.headers.select { |x| x.first !~ /\./ }.sort_by(&:first).flatten]}
     end
   end
 end
