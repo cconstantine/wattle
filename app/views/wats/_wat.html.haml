@@ -13,7 +13,10 @@
     -if agent = wat.user_agent
       %dt Browser
       %dd
-        #{agent.name} #{agent.version} running on #{agent.os}
+        - if agent.name == :Unknown
+          = agent.string
+        - else
+          #{agent.name} #{agent.version} running on #{agent.os}
     %dt Key Line
     %dd= wat.key_line
     - if wat.session.present?
