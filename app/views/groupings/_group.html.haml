@@ -10,7 +10,7 @@
     = render partial: "state", locals: {group: group}
 
   .grouping_body<>
-    - if wat_heading(wat) != wat.message
+    - if wat_heading(wat) != wat.message && wat.message.present?
       %h5.muted= wat.message.truncate(100)
     .env
       = wat.app_name
