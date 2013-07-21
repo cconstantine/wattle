@@ -16,6 +16,7 @@ Wattle::Application.routes.draw do
   constraints LoginConstraint do
     mount Sidekiq::Web => '/sidekiq'
   end
+  mount WatCatcher::Engine => '/wat_catcher'
 
   resources :wats
   get '/create/wat' => 'wats#create'

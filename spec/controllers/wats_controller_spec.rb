@@ -38,7 +38,14 @@ describe WatsController do
   end
 
   describe "POST #create" do
-    let(:das_post) {post :create, format: :json , wat: {page_url: "somefoo", message: "hi", error_class: "ErrFoo", backtrace: ["a", "b", "c"], sidekiq_msg: {retry: true, class: "FooClass"}}}
+    let(:das_post) {post :create, format: :json , wat: {
+        page_url: "somefoo",
+        message: "hi",
+        error_class: "ErrFoo",
+        backtrace: ["a", "b", "c"],
+        sidekiq_msg: {retry: true, class: "FooClass"},
+        session: {imakey: true, imastring: "stringer"}
+      }}
     subject {das_post }
 
     it {should be_success}
@@ -50,6 +57,7 @@ describe WatsController do
       its(:page_url) {should == "somefoo"}
       its(:sidekiq_msg) {should == {"retry" => true, "class" => "FooClass"}}
       its(:request_headers) {should == Hash[*request.headers.select { |x| x.first !~ /\./ }.sort_by(&:first).flatten]}
+      its(:session) {should == {"imakey" => true, "imastring" => "stringer"}}
     end
   end
 end

@@ -43,6 +43,7 @@ end
 
 group :development do
   gem 'mailcatcher'
+  gem 'debugger'
 end
 
 group :test, :development do

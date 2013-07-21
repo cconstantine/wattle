@@ -235,7 +235,7 @@ GEM
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
     user-agent (1.0.0)
-    wat_catcher (0.2.4)
+    wat_catcher (0.3.0)
       coffee-rails
       httpclient
       sidekiq

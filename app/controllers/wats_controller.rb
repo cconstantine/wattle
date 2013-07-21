@@ -20,9 +20,6 @@ class WatsController < ApplicationController
     wat_params.delete(:id)
     wat_params.delete(:created_at)
     wat_params.delete(:updated_at)
-    if wat_params[:session].blank? && session.as_json.class != Array
-      wat_params[:session] = session.as_json
-    end
     if wat_params[:request_headers].blank?
       wat_params[:request_headers] =  Hash[*request.headers.select { |x| x.first !~ /\./ }.sort_by(&:first).flatten]
     end
