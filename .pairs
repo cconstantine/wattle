@@ -1,10 +1,11 @@
 pairs:
   ad: Andrew DiMichele; adimichele
-  ap: Austin Putman; austinfromboston
+  ap: austinfromboston; austin
   cc: Chris Constantine; cconstantine
   mh: Matt Hassfurder; sephonicus
   mm: Matt Mckenna; mtmckenna
   vd: Vivek Dasari; vivster7
+  sp: Sam Pierson; sampierson
 email:
-  prefix: dev
+  prefix: pair
   domain: omadahealth.com
