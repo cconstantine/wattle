@@ -2,6 +2,14 @@ require 'spec_helper'
 
 describe Wat do
 
+  describe "#backtrace" do
+    it "can have a very long path" do
+      bt = (1..1000).map { |x| "#{x} long string"*1000 }
+
+      wats(:default).update_attributes(backtrace: bt)
+    end
+  end
+
   describe "#filtered" do
     let(:filter_params) {{}}
     let(:scope) {Wat.all}
