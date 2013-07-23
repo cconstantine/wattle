@@ -6,8 +6,8 @@ TIMEOUT=timeout -s SIGKILL 1200
 test: tmp
 	bundle install
 	rake log:clear
+	rake db:drop
 	rake db:create
-	rake db:structure:load
 	rake db:migrate
 	rake db:test:prepare
 	rake spec:fixture_builder:rebuild
