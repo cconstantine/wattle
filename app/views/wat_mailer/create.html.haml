@@ -5,6 +5,11 @@
     %tr
       %th
       %td= link_to "View wat",wat_url(@wat)
+    %tr
+      %th Groupings
+      %td
+        - @wat.groupings.each do |grouping|
+          = link_to grouping_url(grouping), grouping_url(grouping)
 
     %tr
       %th Application
