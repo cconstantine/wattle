@@ -43,6 +43,7 @@ describe WatsController do
         message: "hi",
         error_class: "ErrFoo",
         backtrace: ["a", "b", "c"],
+        request_headers: {a: 1, b: 2},
         sidekiq_msg: {retry: true, class: "FooClass"},
         session: {imakey: true, imastring: "stringer"}
       }}
@@ -56,7 +57,7 @@ describe WatsController do
       its(:message) {should == "hi"}
       its(:page_url) {should == "somefoo"}
       its(:sidekiq_msg) {should == {"retry" => true, "class" => "FooClass"}}
-      its(:request_headers) {should == Hash[*request.headers.select { |x| x.first !~ /\./ }.sort_by(&:first).flatten]}
+      its(:request_headers) {should == {"a" => 1, "b" => 2}}
       its(:session) {should == {"imakey" => true, "imastring" => "stringer"}}
     end
   end
