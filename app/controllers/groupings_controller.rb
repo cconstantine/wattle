@@ -4,7 +4,7 @@ class GroupingsController < ApplicationController
   before_filter :load_group, except: :index
 
   def index
-    @groupings = Grouping.filtered(filters).wat_order.reverse
+    @groupings = Grouping.filtered(filters).wat_order.reverse.page(params[:page]).per(params[:per_page] || 20)
 
     respond_with(@groupings)
   end
