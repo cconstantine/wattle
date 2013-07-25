@@ -45,10 +45,10 @@ class Wat < ActiveRecord::Base
   end
 
   def construct_groupings!
-    self.groupings = [Grouping.get_or_create_from_wat!(self)]
+    self.groupings = (Grouping.matching(self) << Grouping.get_or_create_from_wat!(self)).uniq
   end
 
   def send_emails
-    WatMailer.delay.create(self) unless groupings.acknowledged.any?
+    WatMailer.delay.create(self) if groupings.active.any?
   end
 end

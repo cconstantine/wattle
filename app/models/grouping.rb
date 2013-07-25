@@ -1,6 +1,8 @@
 class Grouping < ActiveRecord::Base
+  has_many :open_wats_groupings, -> {self.open }, class_name: "WatsGrouping"
   has_many :wats_groupings
-  has_many :wats, through: :wats_groupings
+  has_many :wats, through: :open_wats_groupings
+  has_many :all_wats, through: :wats_groupings
 
   state_machine :state, initial: :active do
     state :active, :resolved, :acknowledged
@@ -18,11 +20,11 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  scope :open,         -> {where(state: [:acknowledged, :active])}
-  scope :active,       -> {where(state: :active)}
-  scope :resolved,     -> {where(state: :resolved)}
-  scope :acknowledged, -> {where(state: :acknowledged)}
-
+  scope :open,          -> {where(state: [:acknowledged, :active])}
+  scope :active,        -> {where(state: :active)}
+  scope :resolved,      -> {where(state: :resolved)}
+  scope :acknowledged,  -> {where(state: :acknowledged)}
+  scope :matching, ->(wat) {where(error_class: wat.error_class, key_line: wat.key_line.sub(/releases\/\d+\//, ''))}
   scope :filtered, ->(opts=nil) {
     opts ||= {}
     if opts[:state]
@@ -54,7 +56,7 @@ class Grouping < ActiveRecord::Base
 
   def self.get_or_create_from_wat!(wat)
     transaction do
-      open.where(error_class: wat.error_class, key_line: wat.key_line.sub(/releases\/\d+\//, '')).first_or_create(state: "active")
+      open.matching(wat).first_or_create(state: "active")
     end
   end
 

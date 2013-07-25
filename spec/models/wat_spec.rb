@@ -141,7 +141,7 @@ describe Wat do
 
       it "should not bind to the existing grouping" do
         subject
-        wat.groupings.should_not include(grouping)
+        wat.groupings.should include(grouping)
       end
     end
     context "with an existing acknowledged duplicate error" do

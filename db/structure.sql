@@ -148,7 +148,8 @@ CREATE TABLE wats_groupings (
     wat_id integer NOT NULL,
     grouping_id integer NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    state character varying(255) NOT NULL
 );
 
 
@@ -279,6 +280,13 @@ CREATE UNIQUE INDEX index_wats_groupings_on_grouping_id_and_wat_id ON wats_group
 
 
 --
+-- Name: index_wats_groupings_on_state_and_grouping_id_and_wat_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_wats_groupings_on_state_and_grouping_id_and_wat_id ON wats_groupings USING btree (state, grouping_id, wat_id);
+
+
+--
 -- Name: index_wats_groupings_on_wat_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -343,3 +351,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130709004705');
 INSERT INTO schema_migrations (version) VALUES ('20130710213002');
 
 INSERT INTO schema_migrations (version) VALUES ('20130723165724');
+
+INSERT INTO schema_migrations (version) VALUES ('20130725184605');

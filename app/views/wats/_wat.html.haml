@@ -4,7 +4,11 @@
     %dt Application
     %dd= "#{wat.app_name} (#{wat.app_env})"
     %dt Grouping(s)
-    %dd!= wat.groupings.map {|x| link_to grouping_path(x), grouping_path(x)}.join " "
+    %dd!
+      - wat.groupings.order(:id).each do |grouping|
+        %div
+          = link_to "Grouping ##{grouping.id}", grouping_path(grouping)
+          = "on #{grouping.created_at.to_date} (#{grouping.wats.count})"
     - if wat.page_url.present?
       %dt Page URL
       %dd= wat.page_url
