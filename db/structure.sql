@@ -125,16 +125,16 @@ ALTER SEQUENCE watchers_id_seq OWNED BY watchers.id;
 CREATE TABLE wats (
     id integer NOT NULL,
     message text,
-    error_class character varying(255),
+    error_class text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     session hstore,
     request_headers hstore,
     request_params hstore,
-    page_url character varying(255),
-    app_env character varying(255) DEFAULT 'unknown'::character varying NOT NULL,
+    page_url text,
+    app_env text DEFAULT 'unknown'::character varying NOT NULL,
     sidekiq_msg hstore,
-    app_name character varying(255) DEFAULT 'unknown'::character varying NOT NULL,
+    app_name text DEFAULT 'unknown'::character varying NOT NULL,
     backtrace text[]
 );
 
@@ -353,3 +353,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130710213002');
 INSERT INTO schema_migrations (version) VALUES ('20130723165724');
 
 INSERT INTO schema_migrations (version) VALUES ('20130725184605');
+
+INSERT INTO schema_migrations (version) VALUES ('20130731211525');
