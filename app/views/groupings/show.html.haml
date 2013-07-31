@@ -28,7 +28,7 @@
         - if pages.any?
           On Pages:
           - pages.uniq.each do |page|
-            = link_to page
+            = link_to page, page, :target => "_blank"
       .item
         - envs = wats.group(:app_env).pluck(:app_env)
         In Environments:
