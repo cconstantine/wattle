@@ -2,6 +2,25 @@ require 'spec_helper'
 
 describe Wat do
 
+  describe "after_commit" do
+    let(:wat) { Wat.new_from_exception {raise RuntimeError.new 'hi'} }
+
+    subject {wat.save!}
+    it "should call the notify the wat notifier" do
+      stub.proxy(GroupingNotifier).notify
+      subject
+
+      expect(GroupingNotifier).to have_received(:notify).with wat.groupings.active.last.id
+    end
+
+    it "should call send_email" do
+      stub.proxy(wat).send_email
+      subject
+
+      expect(wat).to have_received(:send_email)
+    end
+  end
+
   describe "#backtrace" do
     it "can have a very long path" do
       bt = (1..1000).map { |x| "#{x} long string"*1000 }

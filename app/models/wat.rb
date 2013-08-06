@@ -5,7 +5,10 @@ class Wat < ActiveRecord::Base
   has_many :wats_groupings
   has_many :groupings, through: :wats_groupings
 
-  after_create :construct_groupings!, :send_emails
+  after_create :construct_groupings!
+
+  after_commit :send_email, on: :create unless Rails.env.test?
+  after_create :send_email              if     Rails.env.test?
 
   scope :filtered, ->(opts={}) {
     running_scope = all
@@ -48,7 +51,9 @@ class Wat < ActiveRecord::Base
     self.groupings = (Grouping.matching(self) << Grouping.get_or_create_from_wat!(self)).uniq
   end
 
-  def send_emails
-    WatMailer.delay.create(self) if groupings.active.any?
+  def send_email
+    groupings.active.pluck(:id).each do |grouping_id|
+      GroupingNotifier.delay.notify(grouping_id)
+    end
   end
 end

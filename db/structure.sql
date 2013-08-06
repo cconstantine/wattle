@@ -53,7 +53,8 @@ CREATE TABLE groupings (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     wats_count integer,
-    state character varying(255) DEFAULT 'active'::character varying NOT NULL
+    state character varying(255) DEFAULT 'active'::character varying NOT NULL,
+    last_emailed_at timestamp without time zone
 );
 
 
@@ -355,3 +356,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130723165724');
 INSERT INTO schema_migrations (version) VALUES ('20130725184605');
 
 INSERT INTO schema_migrations (version) VALUES ('20130731211525');
+
+INSERT INTO schema_migrations (version) VALUES ('20130806175504');
