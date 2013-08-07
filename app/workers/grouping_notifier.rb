@@ -25,15 +25,17 @@ class GroupingNotifier < Struct.new(:grouping)
   private
 
   def needs_notifying?
-    grouping.active? && grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?
+    grouping.active? && (grouping.last_emailed_at.nil? || grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?)
   end
 
   def send_email
+    Rails.logger.info("Sending email for grouping #{grouping.id}")
     GroupingMailer.delay.notify(grouping)
     grouping.update_attributes!(last_emailed_at: Time.zone.now)
   end
 
   def send_email_later
+    Rails.logger.info("Delaying notification for grouping #{grouping.id}")
     GroupingNotifier.delay_for(DEBOUNCE_DELAY).notify(grouping.id) unless Rails.env.test?
   end
 end

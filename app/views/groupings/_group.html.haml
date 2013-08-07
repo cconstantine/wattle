@@ -25,5 +25,4 @@
       = wat.key_line.truncate(100)
     .last_incident 
       Last Seen
-      = time_ago_in_words wat.updated_at
-      ago
+      = "#{time_ago_in_words wat.updated_at} ago"
