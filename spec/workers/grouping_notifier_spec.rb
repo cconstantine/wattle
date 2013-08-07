@@ -4,11 +4,12 @@ describe GroupingNotifier do
   let(:grouping_notifier) {GroupingNotifier.new(grouping)}
   let(:grouping) {groupings(:grouping1)}
 
+  before { stub(grouping_notifier).needs_notifying? {true} }
   describe "#perform" do
     subject { grouping_notifier.perform }
 
     context "send_email_now? is true" do
-      before {stub(grouping_notifier).send_email_now? {true}}
+      before { stub(grouping_notifier).send_email_now? {true} }
       it "should send_email" do
         stub.proxy(grouping_notifier).send_email
         stub.proxy(grouping_notifier).send_email_later
@@ -27,16 +28,6 @@ describe GroupingNotifier do
         expect(grouping_notifier).to have_received(:send_email_later)
       end
 
-      context "and the grouping is acknowledged" do
-        let(:grouping) {groupings(:acknowledged)}
-        it "should not send_email" do
-          stub.proxy(grouping_notifier).send_email
-          stub.proxy(grouping_notifier).send_email_later
-          subject
-          expect(grouping_notifier).to_not have_received(:send_email)
-          expect(grouping_notifier).to_not have_received(:send_email_later)
-        end
-      end
     end
   end
 

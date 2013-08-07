@@ -10,8 +10,7 @@ class GroupingNotifier < Struct.new(:grouping)
   end
 
   def perform
-    return unless grouping.active?
-    return unless grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?
+    return unless needs_notifying?
     if send_email_now?
       send_email
     else
@@ -24,6 +23,10 @@ class GroupingNotifier < Struct.new(:grouping)
   end
 
   private
+
+  def needs_notifying?
+    grouping.active? && grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?
+  end
 
   def send_email
     GroupingMailer.delay.notify(grouping)
