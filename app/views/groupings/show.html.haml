@@ -47,8 +47,7 @@
       .item
         Most Recent Incident
         %abbr{title: wat_the_last.created_at}
-          = time_ago_in_words wat_the_last.created_at
-          ago
+          = "#{time_ago_in_words wat_the_last.created_at} ago"
 
     - paged_wats = wats.order("created_at desc").page(params[:page]).per(1)
     = paginate paged_wats
