@@ -29,16 +29,8 @@
     - if wat.session.present?
       %dt Session
       %dd= wat.session.to_json
-    - if wat.request_headers.present?
-      %dt Request Headers
-      %dd
-        - wat.request_headers.sort.each do |header_name, value|
-          %div
-            %strong= header_name
-          %div
-            = value
-          %br
-
+    %dt Language
+    %dd= wat.language
     - if wat.request_params.present?
       %dt Request Parameters
       %dd= wat.request_params
@@ -61,3 +53,13 @@
           = link_to "Show Less", "#obscure_backtrace", class: "obscure_backtrace"
           
         = link_to "Show More", "#complete_backtrace", class: "complete_backtrace"
+
+    - if wat.request_headers.present?
+      %dt Request Headers
+      %dd
+        - wat.request_headers.sort.each do |header_name, value|
+          %div
+            %strong= header_name
+          %div
+            = value
+          %br

@@ -9,6 +9,8 @@ FixtureBuilder.configure do |fbuilder|
     fbuilder.name :another_watcher, Watcher.create!(name: "Super Fake Watcher", first_name: "Fakey faker", email: "test2@example.com")
 
     fbuilder.name(:default, Wat.create_from_exception!(nil, {app_env: 'production'}) {raise RuntimeError.new( "a test")})
+    fbuilder.name(:javascript, Wat.create_from_exception!(nil, {app_env: 'production', language: :javascript}) {raise RuntimeError.new( "a test")})
+    fbuilder.name(:ruby, Wat.create_from_exception!(nil, {app_env: 'production', language: :ruby}) {raise RuntimeError.new( "a test")})
     fbuilder.name(:with_user_agent, Wat.create_from_exception!(nil, {
         request_headers: {
             HTTP_USER_AGENT: "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36"

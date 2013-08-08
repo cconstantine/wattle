@@ -56,6 +56,10 @@ describe Grouping do
         subject.app_envs.should =~ ['production', 'staging']
       end
     end
+    context "with a javascript wat" do
+      let(:wat) { Wat.create_from_exception!(nil, {language: "javascript"}) {raise RuntimeError.new 'hi'} }
+      its(:message) { should == 'hi' }
+    end
   end
 
   describe "#open?" do

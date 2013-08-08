@@ -54,7 +54,8 @@ CREATE TABLE groupings (
     updated_at timestamp without time zone,
     wats_count integer,
     state character varying(255) DEFAULT 'active'::character varying NOT NULL,
-    last_emailed_at timestamp without time zone
+    last_emailed_at timestamp without time zone,
+    message text
 );
 
 
@@ -136,7 +137,8 @@ CREATE TABLE wats (
     app_env text DEFAULT 'unknown'::character varying NOT NULL,
     sidekiq_msg hstore,
     app_name text DEFAULT 'unknown'::character varying NOT NULL,
-    backtrace text[]
+    backtrace text[],
+    language character varying(255)
 );
 
 
@@ -260,6 +262,13 @@ CREATE INDEX index_groupings_on_key_line_and_error_class ON groupings USING btre
 
 
 --
+-- Name: index_groupings_on_message; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_groupings_on_message ON groupings USING btree (message);
+
+
+--
 -- Name: index_groupings_on_state; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -358,3 +367,7 @@ INSERT INTO schema_migrations (version) VALUES ('20130725184605');
 INSERT INTO schema_migrations (version) VALUES ('20130731211525');
 
 INSERT INTO schema_migrations (version) VALUES ('20130806175504');
+
+INSERT INTO schema_migrations (version) VALUES ('20130808214058');
+
+INSERT INTO schema_migrations (version) VALUES ('20130808222224');

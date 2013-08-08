@@ -2,6 +2,17 @@ require 'spec_helper'
 
 describe Wat do
 
+  describe "matching_selector" do
+    let(:wat) { wats(:default) }
+    subject { wat.matching_selector }
+    its(:keys) {should =~ [:key_line, :error_class]}
+
+    context "with a javascript wat" do
+      let(:wat) {wats(:javascript)}
+      its(:keys) { should =~ [:message] }
+    end
+  end
+
   describe "after_commit" do
     let(:wat) { Wat.new_from_exception {raise RuntimeError.new 'hi'} }
 

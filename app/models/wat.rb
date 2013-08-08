@@ -43,6 +43,18 @@ class Wat < ActiveRecord::Base
     end
   end
 
+  def matching_selector
+    case language
+      when "javascript"
+        { message: message }
+      else
+        {
+          error_class: error_class,
+          key_line: key_line.sub(/releases\/\d+\//, '')
+        }
+    end
+  end
+
   def user_agent
     return Agent.new(request_headers["HTTP_USER_AGENT"]) if request_headers.present? && request_headers["HTTP_USER_AGENT"]
   end
