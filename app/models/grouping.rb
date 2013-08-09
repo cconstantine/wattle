@@ -33,7 +33,9 @@ class Grouping < ActiveRecord::Base
       running_scope = open
     end
     running_scope = running_scope.app_name(opts[:app_name]) if opts[:app_name]
-    running_scope = running_scope.app_env(opts[:app_env])  if opts[:app_env]
+    running_scope = running_scope.app_env(opts[:app_env])   if opts[:app_env]
+    running_scope = running_scope.language(opts[:language]) if opts[:language]
+
     running_scope
   }
 
@@ -43,8 +45,9 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  scope :app_env, -> (ae) { joins(:wats).references(:wats).where('wats.app_env IN (?)', ae) }
+  scope :app_env,  -> (ae) { joins(:wats).references(:wats).where('wats.app_env IN (?)', ae) }
   scope :app_name, -> (an) { joins(:wats).references(:wats).where('wats.app_name IN (?)', an) }
+  scope :language, -> (an) { joins(:wats).references(:wats).where('wats.language IN (?)', an) }
 
   def open?
     acknowledged? || active?

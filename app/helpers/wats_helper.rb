@@ -9,10 +9,14 @@ module WatsHelper
   end
 
   def app_envs
-    Wat.select(:app_env).uniq.load.map &:app_env
+    Wat.all.uniq.pluck(:app_env)
   end
 
   def app_names
-    Wat.select(:app_name).uniq.load.map &:app_name
+    Wat.all.uniq.pluck(:app_name)
+  end
+
+  def languages
+    Wat.where('language is not null').uniq.pluck(:language)
   end
 end
