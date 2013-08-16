@@ -57,6 +57,10 @@ class Grouping < ActiveRecord::Base
     wats.select(:app_env).uniq.map &:app_env
   end
 
+  def is_javascript?
+    wats.javascript.any?
+  end
+
   def self.get_or_create_from_wat!(wat)
     transaction do
       open.matching(wat).first_or_create(state: "active")

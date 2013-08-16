@@ -19,6 +19,15 @@ class Wat < ActiveRecord::Base
     running_scope
   }
 
+  scope :open,          -> {joins(:groupings).where("groupings.state" => [:acknowledged, :active]) }
+  scope :active,        -> {joins(:groupings).where("groupings.state" => :active)}
+  scope :resolved,      -> {joins(:groupings).where("groupings.state" => :resolved)}
+  scope :acknowledged,  -> {joins(:groupings).where("groupings.state" => :acknowledged)}
+
+  scope :after, -> (start_time) {where('wats.created_at > ?', start_time)}
+  scope :javascript, -> {where(language: :javascript)}
+  scope :ruby,       -> {where(language: :ruby)}
+
   def self.new_from_exception(e=nil, metadata={}, &block)
     if block_given?
       begin

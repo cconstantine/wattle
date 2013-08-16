@@ -4,8 +4,8 @@ describe GroupingNotifier do
   let(:grouping_notifier) {GroupingNotifier.new(grouping)}
   let(:grouping) {groupings(:grouping1)}
 
-  before { stub(grouping_notifier).needs_notifying? {true} }
   describe "#perform" do
+    before { stub(grouping_notifier).needs_notifying? {true} }
     subject { grouping_notifier.perform }
 
     context "send_email_now? is true" do
@@ -31,7 +31,46 @@ describe GroupingNotifier do
     end
   end
 
+  describe "#needs_notifying?" do
+    subject {grouping_notifier}
+    context "with a blank last_emailed_at" do
+      before { grouping.update_column :last_emailed_at, nil }
+      context "when the grouping is resolved" do
+        let(:grouping) {groupings(:resolved)}
+        it {should_not be_needs_notifying}
+      end
+      context "when the grouping is acknowledged" do
+        let(:grouping) {groupings(:acknowledged)}
+        it {should_not be_needs_notifying}
+      end
+      context "when the grouping is active" do
+        let(:grouping) {groupings(:grouping1)}
+        it {should be_needs_notifying}
+
+        context "with a js grouping" do
+          before { stub(grouping).is_javascript? { true } }
+
+          context "with an average of 1000 wats per hour in the last 24 hours" do
+            before { stub(grouping_notifier).js_wats_per_hour_in_previous_day { 1000 } }
+
+            context "with 2000 wats in the last hour" do
+              before { stub(grouping_notifier).js_wats_in_previous_hour { 2000 } }
+
+              it {should be_needs_notifying}
+            end
+            context "with 1000 wats in the last hour" do
+              before { stub(grouping_notifier).js_wats_in_previous_hour { 1000 } }
+
+              it {should_not be_needs_notifying}
+            end
+          end
+        end
+      end
+    end
+  end
+
   describe "#send_email_now?" do
+    before { stub(grouping_notifier).needs_notifying? {true} }
     subject {grouping_notifier.send_email_now?}
     context "when the grouping was never notified" do
       before { grouping.update_column(:last_emailed_at, nil)}

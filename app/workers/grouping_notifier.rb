@@ -22,11 +22,24 @@ class GroupingNotifier < Struct.new(:grouping)
     grouping.active? && (grouping.last_emailed_at.nil? ||  grouping.last_emailed_at <= Time.zone.now - DEBOUNCE_DELAY)
   end
 
-  private
+  def wats
+    grouping.wats
+  end
 
   def needs_notifying?
+    return false if grouping.is_javascript? && js_wats_per_hour_in_previous_day > js_wats_in_previous_hour / 2
     grouping.active? && (grouping.last_emailed_at.nil? || grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?)
   end
+
+  def js_wats_per_hour_in_previous_day
+    Wat.javascript.open.after(24.day.ago).count / 24
+  end
+
+  def js_wats_in_previous_hour
+    Wat.javascript.open.after(1.day.ago).count
+  end
+
+  private
 
   def send_email
     Rails.logger.info("Sending email for grouping #{grouping.id}")

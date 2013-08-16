@@ -26,6 +26,10 @@ FixtureBuilder.configure do |fbuilder|
       Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
+    @normal_javascripts = 5.times.map do |i|
+      Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production', language: :javascript})  {raise RuntimeError.new( "a test")}
+    end.first.groupings.first
+
     @demo_grouping = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'demo'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
