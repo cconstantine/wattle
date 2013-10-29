@@ -38,7 +38,7 @@ gem 'sinatra', '>= 1.3.0', :require => false
 
 
 group :production do
-  gem 'passenger'
+  gem 'unicorn'
 end
 
 group :development do
