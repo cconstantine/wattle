@@ -8,7 +8,7 @@ describe Grouping do
   let(:error_class) {error.class.to_s}
   let(:backtrace) { error.backtrace }
   let(:app_env) { 'production' }
-  let(:metadata) { { app_env: app_env } }
+  let(:metadata) { { app_env: app_env, language: :ruby } }
 
   let(:wat) {Wat.new_from_exception(error, metadata) }
 

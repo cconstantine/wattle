@@ -37,6 +37,7 @@ class Wat < ActiveRecord::Base
       end
     end
 
+    metadata[:language] ||= "ruby"
     new(metadata.merge(message: e.message, error_class: e.class.to_s, backtrace: e.backtrace))
   end
 

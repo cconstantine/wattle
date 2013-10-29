@@ -24,7 +24,7 @@ class Grouping < ActiveRecord::Base
   scope :active,        -> {where(state: :active)}
   scope :resolved,      -> {where(state: :resolved)}
   scope :acknowledged,  -> {where(state: :acknowledged)}
-  scope :matching, ->(wat) {where(wat.matching_selector)}
+  scope :matching, ->(wat) {distinct('groupings.id').language(wat.language).where(wat.matching_selector)}
   scope :filtered, ->(opts=nil) {
     opts ||= {}
     if opts[:state]
