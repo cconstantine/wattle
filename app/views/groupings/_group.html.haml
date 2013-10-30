@@ -24,7 +24,7 @@
         = link_to wat.page_url.truncate(50), wat.page_url
     .backtrace_key_line
       Backtrace:
-      = wat.key_line.truncate(100)
+      = (wat.key_line || "").truncate(100)
     .last_incident 
       Last Seen
       = "#{time_ago_in_words wat.updated_at} ago"
