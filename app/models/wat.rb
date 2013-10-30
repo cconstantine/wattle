@@ -61,7 +61,7 @@ class Wat < ActiveRecord::Base
       else
         {
           error_class: error_class,
-          key_line: key_line.sub(/releases\/\d+\//, '')
+          key_line: (key_line || backtrance.try(:first) || "").sub(/releases\/\d+\//, '')
         }
     end
   end
