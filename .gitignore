@@ -4,4 +4,3 @@ spec/fixtures
 tmp
 tags
 *.swp
-config/secrets.yml
