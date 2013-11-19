@@ -8,6 +8,6 @@ class GroupingMailer < ActionMailer::Base
     @new_count = grouping.last_emailed_at.present? ? grouping.wats.where('wats.created_at > ?', grouping.last_emailed_at).count : grouping.wats.count
 
     @app_envs = @grouping.wats.pluck(:app_env).uniq
-    mail :to => Watcher.pluck(:email), :subject => "[#{@wat.app_name} #{@app_envs.map {|x| "##{x[0..3]}"}.join(" ")}]"
+    mail :to => Watcher.pluck(:email), :subject => "[#{@wat.app_name} #{@app_envs.map {|x| "##{x[0..3]}"}.join(" ")}] #{@wat.message}"
   end
 end
