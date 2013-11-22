@@ -49,18 +49,6 @@
         .span7
           = yield
 
-        -#.span3
-          %ul.nav.nav-stacked.nav-tabs
-            - if content_for?(:sidebar)
-              = content_for :sidebar
-            - else
-              %li.nav-header
-                Top Wats
-              - top_wats.each do |group|
-                %li
-                  = link_to group do
-                    .badge=group.wats.count
-                    = wat_heading(representative_wat(group.wats))
 
     /
       Javascripts

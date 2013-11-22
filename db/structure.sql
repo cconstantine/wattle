@@ -52,7 +52,6 @@ CREATE TABLE groupings (
     error_class character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    wats_count integer,
     state character varying(255) DEFAULT 'active'::character varying NOT NULL,
     last_emailed_at timestamp without time zone,
     message text
@@ -371,3 +370,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130806175504');
 INSERT INTO schema_migrations (version) VALUES ('20130808214058');
 
 INSERT INTO schema_migrations (version) VALUES ('20130808222224');
+
+INSERT INTO schema_migrations (version) VALUES ('20131122175708');

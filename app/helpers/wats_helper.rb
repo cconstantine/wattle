@@ -4,10 +4,6 @@ module WatsHelper
     wat.error_class.gsub("::", ":: ")
   end
 
-  def top_wats
-    Grouping.open.order("wats_count desc").limit(3)
-  end
-
   def app_envs
     Wat.all.uniq.pluck(:app_env)
   end
