@@ -12,7 +12,8 @@ class ExceptionalsController < ApplicationController
 
 
   def an_exception
-    raise ExpectedError.new "Help I'm being oppressed!"
+    @exception = ExpectedError.new "Help I'm being oppressed!"
+    raise @exception
   end
 
   def rendered_exception

@@ -18,10 +18,14 @@ describe Wat do
 
     subject {wat.save!}
     it "should call the notify the wat notifier" do
-      stub.proxy(GroupingNotifier).notify
-      subject
+      Sidekiq::Testing.inline! do
 
-      expect(GroupingNotifier).to have_received(:notify).with wat.groupings.active.last.id
+        stub.proxy(GroupingNotifier).notify
+        subject
+
+        expect(GroupingNotifier).to have_received(:notify).with wat.groupings.active.last.id
+          # Some other tests
+      end
     end
 
     it "should call send_email" do

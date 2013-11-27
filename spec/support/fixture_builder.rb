@@ -26,6 +26,25 @@ FixtureBuilder.configure do |fbuilder|
       Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
+    @grouping3 = 5.times.map do |i|
+      # These two need to be on the same line
+      Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}; Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'demo'})  {raise RuntimeError.new( "a test")}
+    end.first.groupings.first
+
+    grouping_users = [
+        { "id" => 1 },
+        { "id" => 2 },
+        { "id" => 2 },
+        { "id" => nil },
+        { "id" => nil }
+    ]
+    @grouping4 = grouping_users.map do |grouping_user|
+      puts "newly created wat"
+      p Wat.create_from_exception!(nil, {app_user: grouping_user, app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}
+      puts "wat from db"
+      p Wat.last
+    end.first.groupings.first
+
     @normal_javascripts = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production', language: :javascript})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
@@ -38,10 +57,6 @@ FixtureBuilder.configure do |fbuilder|
       Wat.create_from_exception!(nil, {app_name: :app3, app_env: 'staging'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
-    @grouping3 = 5.times.map do |i|
-      # These two need to be on the same line
-      Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}; Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'demo'})  {raise RuntimeError.new( "a test")}
-    end.first.groupings.first
 
     # Create some wats without groupings
     @resolved = 5.times.map do |i|

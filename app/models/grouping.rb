@@ -61,6 +61,18 @@ class Grouping < ActiveRecord::Base
     wats.javascript.any?
   end
 
+  def app_user_stats(key_name: :id, limit: nil)
+    wats
+      .select("app_user -> '#{key_name}' as #{key_name}, count(*) as count")
+      .group("app_user -> '#{key_name}'")
+      .order('wats.count desc')
+      .limit(limit).count
+  end
+
+  def app_user_count(key_name: :id)
+    wats.select('distinct app_user -> \'id\'').count
+  end
+
   def self.get_or_create_from_wat!(wat)
     transaction do
       open.matching(wat).first_or_create(state: "active")

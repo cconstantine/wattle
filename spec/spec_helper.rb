@@ -30,6 +30,7 @@ def capture_error &block
 end
 
 require 'support/fixture_builder'
+Sidekiq::Testing.fake!
 
 RSpec.configure do |config|
   # ## Mock Framework

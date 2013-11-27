@@ -137,7 +137,8 @@ CREATE TABLE wats (
     sidekiq_msg hstore,
     app_name text DEFAULT 'unknown'::character varying NOT NULL,
     backtrace text[],
-    language character varying(255)
+    language character varying(255),
+    app_user hstore DEFAULT '"id"=>NULL'::hstore
 );
 
 
@@ -324,6 +325,13 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: wats_user_index; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX wats_user_index ON wats USING gin (app_user);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -372,3 +380,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130808214058');
 INSERT INTO schema_migrations (version) VALUES ('20130808222224');
 
 INSERT INTO schema_migrations (version) VALUES ('20131122175708');
+
+INSERT INTO schema_migrations (version) VALUES ('20131126191956');

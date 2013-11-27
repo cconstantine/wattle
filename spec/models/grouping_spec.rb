@@ -12,6 +12,33 @@ describe Grouping do
 
   let(:wat) {Wat.new_from_exception(error, metadata) }
 
+  describe "#app_user_stats" do
+    subject {grouping.app_user_stats()}
+    context "with no app_user info" do
+      let(:grouping) {groupings(:grouping1)}
+      it {should == {nil => 5}}
+    end
+
+    context "with some interesting app_user info" do
+      let(:grouping) {groupings(:grouping4)}
+      it {should == {nil => 2, "2" => 2, "1" => 1}}
+    end
+  end
+
+  describe "#app_user_count" do
+    subject {grouping.app_user_count()}
+    context "with no app_user info" do
+      let(:grouping) {groupings(:grouping1)}
+      it {should == 0}
+    end
+
+    context "with some interesting app_user info" do
+      let(:grouping) {groupings(:grouping4)}
+      it {should == 2}
+    end
+  end
+
+
   describe "#filtered" do
     let(:filter_params) {{}}
     let(:scope) {Grouping.all}

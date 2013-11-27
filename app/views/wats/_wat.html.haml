@@ -29,6 +29,8 @@
     - if wat.session.present?
       %dt Session
       %dd= wat.session.to_json
+    %dt User affected
+    %dd= wat.app_user
     %dt Language
     %dd= wat.language
     - if wat.request_params.present?
