@@ -1,2 +1,6 @@
 development:
   host: "//localhost:3001"
+  disabled: true
+
+test:
+  disabled: true

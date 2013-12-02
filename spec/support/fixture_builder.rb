@@ -39,10 +39,7 @@ FixtureBuilder.configure do |fbuilder|
         { "id" => nil }
     ]
     @grouping4 = grouping_users.map do |grouping_user|
-      puts "newly created wat"
-      p Wat.create_from_exception!(nil, {app_user: grouping_user, app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}
-      puts "wat from db"
-      p Wat.last
+      Wat.create_from_exception!(nil, {app_user: grouping_user, app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
     @normal_javascripts = 5.times.map do |i|
