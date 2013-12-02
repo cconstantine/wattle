@@ -233,7 +233,7 @@ GEM
       rack
       raindrops (~> 0.7)
     user-agent (1.0.0)
-    wat_catcher (0.5.1)
+    wat_catcher (0.5.2)
       coffee-rails
       httpclient
       sidekiq

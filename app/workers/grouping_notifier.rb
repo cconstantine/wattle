@@ -7,6 +7,10 @@ class GroupingNotifier < Struct.new(:grouping)
     def notify(grouping_id)
       GroupingNotifier.new(Grouping.find(grouping_id)).perform
     end
+
+    def wat_user(grouping_id)
+      {id: "grouping_#{grouping_id}"}
+    end
   end
 
   def perform
