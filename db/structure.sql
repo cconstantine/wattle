@@ -78,6 +78,39 @@ ALTER SEQUENCE groupings_id_seq OWNED BY groupings.id;
 
 
 --
+-- Name: notes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE notes (
+    id integer NOT NULL,
+    watcher_id integer,
+    grouping_id integer,
+    message text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: notes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE notes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: notes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE notes_id_seq OWNED BY notes.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -205,6 +238,13 @@ ALTER TABLE ONLY groupings ALTER COLUMN id SET DEFAULT nextval('groupings_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY notes ALTER COLUMN id SET DEFAULT nextval('notes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY watchers ALTER COLUMN id SET DEFAULT nextval('watchers_id_seq'::regclass);
 
 
@@ -228,6 +268,14 @@ ALTER TABLE ONLY wats_groupings ALTER COLUMN id SET DEFAULT nextval('wats_groupi
 
 ALTER TABLE ONLY groupings
     ADD CONSTRAINT groupings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY notes
+    ADD CONSTRAINT notes_pkey PRIMARY KEY (id);
 
 
 --
@@ -273,6 +321,20 @@ CREATE INDEX index_groupings_on_message ON groupings USING btree (message);
 --
 
 CREATE INDEX index_groupings_on_state ON groupings USING btree (state);
+
+
+--
+-- Name: index_notes_on_grouping_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_notes_on_grouping_id ON notes USING btree (grouping_id);
+
+
+--
+-- Name: index_notes_on_watcher_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_notes_on_watcher_id ON notes USING btree (watcher_id);
 
 
 --
@@ -382,3 +444,5 @@ INSERT INTO schema_migrations (version) VALUES ('20130808222224');
 INSERT INTO schema_migrations (version) VALUES ('20131122175708');
 
 INSERT INTO schema_migrations (version) VALUES ('20131126191956');
+
+INSERT INTO schema_migrations (version) VALUES ('20131210221143');
