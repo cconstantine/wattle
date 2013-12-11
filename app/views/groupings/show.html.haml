@@ -58,9 +58,25 @@
       %abbr{title: wat_the_last.created_at}
         = "#{time_ago_in_words wat_the_last.created_at} ago"
 
+  %br
+  .media-list
+    - @grouping.notes.find_each do |note|
+      .media
+        %h4.media-heading
+          = note.watcher.display_name
+        .media-body
+          = markdown note.message
+        %small
+          = "#{time_ago_in_words note.created_at} ago"
+
+  = form_for Note.new, url: grouping_notes_url(@grouping.id) do |f|
+    %br
+    = f.label :message, "Leave a message"
+    = f.text_area :message
+    = f.button "Post", class: "btn btn-primary"
+
   - paged_wats = wats.order("created_at desc").page(params[:page]).per(1)
   = paginate paged_wats
-
   .grouping_details
     = render paged_wats
 

@@ -3,6 +3,7 @@ class Grouping < ActiveRecord::Base
   has_many :wats_groupings
   has_many :wats, through: :open_wats_groupings
   has_many :all_wats, through: :wats_groupings
+  has_many :notes
 
   state_machine :state, initial: :active do
     state :active, :resolved, :acknowledged

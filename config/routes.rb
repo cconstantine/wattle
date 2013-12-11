@@ -22,6 +22,7 @@ Wattle::Application.routes.draw do
   get '/create/wat' => 'wats#create'
 
   resources :groupings do
+    resources :notes, only: :create
     resources :wats, only: [:show, :index]
     member do
       post :resolve
