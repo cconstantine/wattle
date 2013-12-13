@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   def create
     @watcher = Watcher.find_or_create_from_auth_hash(auth_hash)
     session[:watcher_id] = @watcher.to_param
-    redirect_to root_path
+    redirect_to session[:redirect_to] || root_path
   end
 
   protected
