@@ -1,0 +1,5 @@
+= form_for note, url: grouping_notes_url(note.grouping) do |f|
+  %br
+  = f.label :message, "Leave a note"
+  = f.text_area :message
+  = f.button "Post", class: "btn btn-primary"

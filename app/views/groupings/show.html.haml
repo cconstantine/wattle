@@ -1,79 +1,12 @@
+- wats = wats(@grouping)
+- wat = representative_wat(wats)
 .grouping_data
-  - wats = wats(@grouping)
-  - wat = representative_wat(wats)
-  %h2
-    .pull-right.alert.alert-info
-      = @grouping.state.capitalize
-    - if wat
-      = wat_heading(wat)
-      .pull-right
-        - @grouping.app_envs.each do |app_env|
-          .alert.alert-info= app_env
-
-
-  - if wat
-    = render partial: "state", locals: {group: @grouping}
-    %p= wat.message
-
-  .grouping_summary
-    .item
-      .badge.badge-warning
-        = wats.count
-      Incidents,
-      .badge.badge-warning
-        = @grouping.app_user_count
-      users affected
-      .badge.badge-warning
-        = "+ #{@grouping.app_user_stats[nil]}"
-      unknowns
-
-    .item
-      IDs of most affected users
-      = @grouping.app_user_stats(limit: 10)
-
-    %br
-    .item
-      - pages = wats.group(:page_url).pluck(:page_url)
-      - if pages.any?
-        On Pages:
-        - pages.uniq.each do |page|
-          = link_to page, page, :target => "_blank"
-    .item
-      - envs = wats.group(:app_env).pluck(:app_env)
-      In Environments:
-      = envs.join ", "
-    .item
-      - apps = wats.group(:app_name).pluck(:app_name)
-      In Applications:
-      = apps.join ", "
-    .item
-      - wat_the_first = wats.order(:created_at).first
-      - wat_the_last = wats.order(:created_at).last
-      First Incident
-      %abbr{title: wat_the_first.created_at}
-        = time_ago_in_words wat_the_first.created_at
-        ago
-    .item
-      Most Recent Incident
-      %abbr{title: wat_the_last.created_at}
-        = "#{time_ago_in_words wat_the_last.created_at} ago"
+  = render @grouping, wats: wats, wat: wat
 
   %br
-  .media-list
-    - @grouping.notes.find_each do |note|
-      .media
-        %h4.media-heading
-          = note.watcher.display_name
-        .media-body
-          = markdown note.message
-        %small
-          = "#{time_ago_in_words note.created_at} ago"
+  = render @grouping.notes
 
-  = form_for Note.new, url: grouping_notes_url(@grouping.id) do |f|
-    %br
-    = f.label :message, "Leave a note"
-    = f.text_area :message
-    = f.button "Post", class: "btn btn-primary"
+  = render "notes/new", note: @grouping.notes.build
 
   - paged_wats = wats.order("created_at desc").page(params[:page]).per(1)
   = paginate paged_wats
