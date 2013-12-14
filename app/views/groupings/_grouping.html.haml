@@ -30,9 +30,9 @@
     .item
       %dl.dl-horizontal
         %dt
-          %strong User
+          %em User
         %dd
-          %strong Count
+          %em Count
         - grouping.app_user_stats(limit: 10).each do |user, count|
           %dt= user
           %dd= count
@@ -46,7 +46,7 @@
       - pages.uniq.each do |page|
         = link_to page, page, :target => "_blank"
   .item
-    - envs = wats.group(:app_env).pluck(:app_env)
+    - envs = wats.group(:app_env).pluck(:app_env).map {|env| "#{env} (#{wats.where(:app_env => env).count})" }
     In Environments:
     = envs.join ", "
   .item

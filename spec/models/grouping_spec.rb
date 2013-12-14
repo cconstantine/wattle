@@ -12,6 +12,24 @@ describe Grouping do
 
   let(:wat) {Wat.new_from_exception(error, metadata) }
 
+  describe "#new_wats" do
+    let(:grouping) {groupings(:grouping1)}
+    subject {grouping.new_wats}
+    context "with a nil last_emailed_at" do
+      before { grouping.update_column(:last_emailed_at, nil)}
+      it { should have(5).items }
+    end
+    context "with a last_emailed_at between the latest and 2nd to lastest wat" do
+      before {grouping.update_column(:last_emailed_at, grouping.wats.order('id desc').limit(2).last.created_at)}
+      it {should have(1).item}
+    end
+    context "with a last_emailed_at before the latest wat" do
+      before {grouping.update_column(:last_emailed_at, grouping.wats.minimum(:created_at) - 1.second)}
+      it {should have(5).item}
+    end
+
+  end
+
   describe "#app_user_stats" do
     subject {grouping.app_user_stats()}
     context "with no app_user info" do
