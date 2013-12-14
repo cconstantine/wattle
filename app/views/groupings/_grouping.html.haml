@@ -27,15 +27,12 @@
       unknowns
 
   - if grouping.app_user_count > 0
-    .item
-      %dl.dl-horizontal
-        %dt
-          %em User
-        %dd
-          %em Count
-        - grouping.app_user_stats(limit: 10).each do |user, count|
-          %dt= user
-          %dd= count
+    %ul.plain.unstyled
+      - grouping.app_user_stats(limit: 10).each do |user, count|
+        %li
+          .badge.badge-info=  count
+          User:
+          =  user
 
 
   %br
