@@ -13,8 +13,12 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  def use_developer_auth?
+    !Rails.env.production? && !google_auth_enabled?
+  end
+
   def auth_path
-    return "/auth/developer" if !Rails.env.production? && !google_auth_enabled?
+    return "/auth/developer" if use_developer_auth?
     "/auth/gplus"
   end
 

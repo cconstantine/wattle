@@ -11,9 +11,12 @@ describe GroupingsController do
 
   describe "GET #index" do
     subject { get :index, format: :json }
+    context "using real auth" do
+      before { stub(controller).use_developer_auth? {false } }
 
-    it "should require login" do
-      subject.should redirect_to auth_path
+      it "should require login" do
+        subject.should redirect_to auth_path
+      end
     end
 
     context "when logged in" do
