@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe WatsController do
+  render_views
+
   let!(:wat) do
     Wat.create_from_exception!(capture_error {raise RuntimeError.enw 'hi'})
   end

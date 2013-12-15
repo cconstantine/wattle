@@ -1,18 +1,19 @@
-- if !group.active?
-  = link_to activate_grouping_path(group), method: :post do
-    .icon-refresh
-    %span.text-info
-      Reactivate
-- else
-  = link_to acknowledge_grouping_path(group), method: :post do
-    .icon-check
-    %span.text-info
-      Acknowledge
-&nbsp;
-&nbsp;
-- unless group.resolved?
-  = link_to resolve_grouping_path(group), method: :post do
-    .icon-thumbs-up
-    %span.text-success
-      Resolve
+.states
+  - if !group.active?
+    = link_to activate_grouping_path(group), method: :post do
+      .icon-refresh
+      %span.text-info
+        Reactivate
+  - else
+    = link_to acknowledge_grouping_path(group), method: :post do
+      .icon-check
+      %span.text-info
+        Acknowledge
+  &nbsp;
+  &nbsp;
+  - unless group.resolved?
+    = link_to resolve_grouping_path(group), method: :post do
+      .icon-thumbs-up
+      %span.text-success
+        Resolve
 

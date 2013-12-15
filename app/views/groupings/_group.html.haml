@@ -1,0 +1,30 @@
+- wat = wats(group).last
+%article.group_listing{class: "group_state_#{group.state}"}
+  %h4<>
+    .incident_language.pull-right= wat.language
+
+    = link_to group, class: "grouping_detail_link" do
+      .incident_count
+        = wats(group).count
+      .incident_heading
+        = wat_heading(wat).truncate(50)
+  .group_state.pull-right
+    = render partial: "state", locals: {group: group}
+
+  .grouping_body<>
+    - if wat_heading(wat) != wat.message && wat.message.present?
+      %h5.muted= wat.message.truncate(100)
+    .env
+      = wat.app_name
+      \::
+      = wat.app_env
+    - if wat.page_url.present?
+      .page_url
+        Page URL:
+        = link_to wat.page_url.truncate(50), wat.page_url
+    .backtrace_key_line
+      Backtrace:
+      = (wat.key_line || "").truncate(100)
+    .last_incident 
+      Last Seen
+      = "#{time_ago_in_words wat.updated_at} ago"

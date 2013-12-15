@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def auth_path
-    return "/auth/developer" if Rails.env.development? && !google_auth_enabled?
+    return "/auth/developer" if !Rails.env.production? && !google_auth_enabled?
     "/auth/gplus"
   end
 

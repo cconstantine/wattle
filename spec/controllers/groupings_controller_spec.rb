@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe GroupingsController do
+  render_views
+
   let(:error) { capture_error {raise RuntimeError.new "test message"} }
 
   let(:message) {error.message}

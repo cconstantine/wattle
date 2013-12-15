@@ -7,6 +7,11 @@ require 'rspec/autorun'
 require 'rr'
 require 'sidekiq/testing/inline'
 require 'email_spec'
+require 'capybara/rspec'
+require 'capybara/rails'
+require 'capybara/poltergeist'
+
+
 
 load Rails.root.join("db", "seeds.rb")
 
@@ -18,6 +23,8 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 require "email_spec"
+
+Capybara.javascript_driver = :poltergeist
 
 def capture_error &block
   err = nil
