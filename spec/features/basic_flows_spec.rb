@@ -2,6 +2,31 @@ require 'spec_helper'
 
 feature "Interacting with wats", js: true do
 
+
+  context "with an invalid email" do
+    it "should give an error" do
+      visit "/"
+
+      fill_in 'name', :with => 'Jim Bob'
+      fill_in 'email', :with => 'user@not_valid_domain.com'
+      click_on 'Sign In'
+      page.should have_content "Unable to find or create user"
+    end
+  end
+
+  context "when going to a grouping directly" do
+    let(:grouping) {groupings(:grouping1)}
+    scenario "redirects you back to that grouping after logging in" do
+      visit grouping_path(grouping)
+
+      fill_in 'name', :with => 'Jim Bob'
+      fill_in 'email', :with => 'user@example.com'
+      click_on 'Sign In'
+
+      current_path.should == grouping_path(grouping)
+    end
+  end
+
   context "logged in" do
     before do
       visit "/auth/developer"
@@ -16,10 +41,10 @@ feature "Interacting with wats", js: true do
       page.should have_content "RuntimeError"
     end
 
-    context "viewing a wat" do
+    context "viewing a grouping" do
+      let(:grouping) {groupings(:grouping1)}
       before do
-        visit "/"
-        first(".incident_heading").click
+        visit grouping_path(grouping)
       end
 
       scenario "clicking on the header takes you to the exception" do
@@ -54,22 +79,18 @@ feature "Interacting with wats", js: true do
           page.should have_content "Resolved"
         end
       end
+      context "with a resolved grouping" do
+        let(:grouping) {groupings(:resolved)}
+        scenario "reactivating" do
+          within ".states" do
+            click_on "Reactivate"
+          end
 
-      scenario "reactivating" do
-        within ".states" do
-          click_on "Resolve"
-          click_on "Reactivate"
+          within ".current_state" do
+            page.should have_content "Active"
+          end
         end
-
-        within ".current_state" do
-          page.should have_content "Active"
-        end
-
       end
-
-
-
     end
   end
-
 end

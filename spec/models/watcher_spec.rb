@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Watcher do
   describe "#find_or_create_from_auth_hash" do
     subject do
-      Watcher.find_or_create_from_auth_hash auth_data
+      Watcher.find_or_create_from_auth_hash! auth_data
     end
     context "when a matching user exists" do
       let(:auth_data) {{ email: "test@example.com" }}
@@ -25,7 +25,7 @@ describe Watcher do
     context "when creating a non @example.com user" do
       let(:auth_data) {{email: "mallory@scoobilydoo.com", first_name: "Mallory"}}
       it "should refuse to make the watcher" do
-        expect { subject }.not_to change(Watcher, :count)
+        expect { subject }.to raise_error ActiveRecord::RecordInvalid
       end
     end
     context "when the hash is bad" do

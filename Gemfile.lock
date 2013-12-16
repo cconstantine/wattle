@@ -61,6 +61,7 @@ GEM
     columnize (0.3.6)
     connection_pool (1.2.0)
     daemons (1.1.9)
+    database_cleaner (1.2.0)
     debugger (1.6.2)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
@@ -265,6 +266,7 @@ DEPENDENCIES
   bootstrap-sass (~> 2)
   capybara
   coffee-rails (>= 4.0)
+  database_cleaner
   debugger
   email_spec
   execjs
