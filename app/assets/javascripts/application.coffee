@@ -18,8 +18,10 @@
 #= require bootstrap-scrollspy
 #= require bootstrap-modal
 #= require bootstrap-dropdown
-
 #= require underscore
 #= require backbone
+#= require highcharts
+
 #= require ./groupings
 #= require ./filters
+#= require ./chart

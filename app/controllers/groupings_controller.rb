@@ -5,6 +5,21 @@ class GroupingsController < ApplicationController
 
   def index
     @groupings = Grouping.filtered(filters).wat_order.reverse.page(params[:page]).per(params[:per_page] || 20)
+    @chart = {
+      title: {
+        text: 'Daily Stats',
+      },
+      xAxis: {
+        type: 'datetime'
+      },
+      series: [{
+          name: 'All Wats',
+          data: Wat.group('date(created_at)').order('DATE(created_at) DESC').count.map {|k, v| [k.to_time.to_i*1000, v]}.sort {|x, y| x[0] <=> y[0]}
+      },{
+        name: 'Groupings',
+        data: Grouping.group('date(created_at)').order('DATE(created_at) DESC').count.map {|k, v| [k.to_time.to_i*1000, v]}.sort {|x, y| x[0] <=> y[0]}
+      }]
+    }
 
     respond_with(@groupings)
   end

@@ -33,7 +33,7 @@ gem 'therubyracer'
 gem 'sidekiq'
 gem 'slim', ">= 1.3.0", :require => false
 gem 'sinatra', '>= 1.3.0', :require => false
-
+gem 'highcharts-rails'
 
 group :production do
   gem 'unicorn'
@@ -56,5 +56,4 @@ group :test do
   gem 'capybara'
   gem 'poltergeist'
   gem 'launchy'
-  gem 'database_cleaner'
 end
