@@ -28,6 +28,8 @@ class Wat < ActiveRecord::Base
   scope :javascript, -> {where(language: :javascript)}
   scope :ruby,       -> {where(language: :ruby)}
 
+  scope :distinct_users, -> {select('distinct app_user -> \'id\'')}
+
   def self.new_from_exception(e=nil, metadata={}, &block)
     if block_given?
       begin

@@ -2,11 +2,12 @@
 - wat = representative_wat(wats)
 .grouping_data
   = render @grouping, wats: wats, wat: wat
-
   %br
+
   = render @grouping.notes
 
   = render "notes/new", note: @grouping.notes.build
+  .highchart{data: {chart: @chart.to_json}}
 
   - paged_wats = wats.order("created_at desc").page(params[:page]).per(1)
   = paginate paged_wats

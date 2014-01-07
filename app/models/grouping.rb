@@ -49,6 +49,7 @@ class Grouping < ActiveRecord::Base
   scope :app_name, -> (an) { joins(:wats).references(:wats).where('wats.app_name IN (?)', an) }
   scope :language, -> (an) { joins(:wats).references(:wats).where('wats.language IN (?)', an) }
 
+
   def open?
     acknowledged? || active?
   end
@@ -70,13 +71,30 @@ class Grouping < ActiveRecord::Base
   end
 
   def app_user_count(key_name: :id)
-    wats.select('distinct app_user -> \'id\'').count
+    wats.distinct_users.count
   end
 
   def self.get_or_create_from_wat!(wat)
     transaction do
       open.matching(wat).first_or_create(state: "active")
     end
+  end
+
+  def chart_data
+    wat_chart_data = wats.group('date_trunc(\'day\',  wats.created_at)').count.inject({}) do |doc, values|
+      doc[values[0]] = values[1]
+      doc
+    end
+    start_time = wat_chart_data.keys.min
+    end_time   = wat_chart_data.keys.max
+
+    wat_chart_values = []
+    while start_time <= end_time
+      wat_chart_values << [start_time.to_i*1000, wat_chart_data[start_time] || 0]
+
+      start_time = start_time.advance(days: 1)
+    end
+    wat_chart_values
   end
 
 end

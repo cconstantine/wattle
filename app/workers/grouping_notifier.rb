@@ -30,8 +30,14 @@ class GroupingNotifier < Struct.new(:grouping)
     grouping.wats
   end
 
+  def is_interesting?
+    return true if !grouping.is_javascript?
+
+    grouping.wats.after(1.hour.ago).distinct_users.count > grouping.wats.after(24.hour.ago).distinct_users.count * 2
+  end
+
   def needs_notifying?
-    return false if grouping.is_javascript? && js_wats_per_hour_in_previous_day > js_wats_in_previous_hour / 2
+    return false unless is_interesting?
     grouping.active? && (grouping.last_emailed_at.nil? || grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?)
   end
 

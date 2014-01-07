@@ -24,7 +24,9 @@ Wattle::Application.routes.draw do
   resources :groupings do
     resources :notes, only: :create
     resources :wats, only: [:show, :index]
+
     member do
+      get  :chart
       post :resolve
       post :acknowledge
       post :activate
