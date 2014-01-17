@@ -58,36 +58,6 @@ describe GroupingsController do
 
   end
 
-  describe "GET #index_chart" do
-    subject { get :index_chart, format: :json }
-
-    it {should_not be_success}
-
-    context "when logged in" do
-      before do
-        login watchers(:default)
-      end
-      it {should be_success}
-
-    end
-  end
-
-
-  describe "GET #chart" do
-    let(:grouping) {groupings(:grouping3)}
-
-    subject {get :chart, id: grouping.to_param, format: :json }
-
-    it {should_not be_success}
-
-    context "when logged in" do
-      before do
-        login watchers(:default)
-      end
-      it {should be_success}
-    end
-  end
-
   describe "GET #show" do
     let(:wat) { grouping.wats.last}
     let(:grouping) {groupings(:grouping3)}
