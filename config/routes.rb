@@ -20,6 +20,7 @@ Wattle::Application.routes.draw do
 
   resources :wats
   get '/create/wat' => 'wats#create'
+  resources :stats, only: :index
 
   resources :groupings do
     resources :notes, only: :create

@@ -27,6 +27,8 @@ class Wat < ActiveRecord::Base
   scope :after, -> (start_time) {where('wats.created_at > ?', start_time)}
   scope :javascript, -> {where(language: :javascript)}
   scope :ruby,       -> {where(language: :ruby)}
+  scope :app_name,   -> (name) {where(:app_name => name) }
+  scope :app_env,   -> (name) {where(:app_env => name) }
 
   scope :distinct_users, -> {select('distinct app_user -> \'id\'')}
 
