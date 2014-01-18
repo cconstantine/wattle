@@ -1,3 +1,9 @@
+%ul.nav.nav-tabs
+  %li{class: ("active" if @order == :hot)}
+    = link_to 'Hot', groupings_path(order: "hot")
+  %li{class: ("active" if @order == :new)}
+    = link_to 'New', groupings_path(order: "new")
+
 = paginate @groupings
 %ul
   = render :partial => 'group', :collection => @groupings

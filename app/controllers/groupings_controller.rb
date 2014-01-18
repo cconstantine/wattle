@@ -4,7 +4,15 @@ class GroupingsController < ApplicationController
   before_filter :load_group, except: [:index, :index_chart]
 
   def index
-    @groupings = Grouping.filtered(filters).wat_order.reverse.page(params[:page]).per(params[:per_page] || 20)
+    @groupings = Grouping.filtered(filters)
+    @order = params[:order].try(:to_sym) || :hot
+    if @order == :new
+      @groupings = @groupings.wat_order.reverse
+    else
+      @groupings = @groupings.order('popularity desc')
+    end
+
+    @groupings = @groupings.page(params[:page]).per(params[:per_page] || 20)
 
     respond_with(@groupings)
   end

@@ -3,6 +3,7 @@
 --
 
 SET statement_timeout = 0;
+SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -54,7 +55,8 @@ CREATE TABLE groupings (
     updated_at timestamp without time zone,
     state character varying(255) DEFAULT 'active'::character varying NOT NULL,
     last_emailed_at timestamp without time zone,
-    message text
+    message text,
+    popularity numeric(1000,1)
 );
 
 
@@ -317,6 +319,13 @@ CREATE INDEX index_groupings_on_message ON groupings USING btree (message);
 
 
 --
+-- Name: index_groupings_on_popularity; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_groupings_on_popularity ON groupings USING btree (popularity);
+
+
+--
 -- Name: index_groupings_on_state; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -446,3 +455,5 @@ INSERT INTO schema_migrations (version) VALUES ('20131122175708');
 INSERT INTO schema_migrations (version) VALUES ('20131126191956');
 
 INSERT INTO schema_migrations (version) VALUES ('20131210221143');
+
+INSERT INTO schema_migrations (version) VALUES ('20140117210801');

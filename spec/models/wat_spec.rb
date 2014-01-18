@@ -34,6 +34,20 @@ describe Wat do
 
       expect(wat).to have_received(:send_email)
     end
+
+    it "should upvote the groupings" do
+      stub.proxy(wat).upvote_groupings
+      subject
+      expect(wat).to have_received(:upvote_groupings)
+    end
+  end
+
+  describe "#upvote_groupings" do
+    let(:wat) { wats(:default) }
+    subject { wat.upvote_groupings }
+    it "should upvote all of the open groupings" do
+      expect { subject}.to change {wat.groupings.open.first.popularity}
+    end
   end
 
   describe "#backtrace" do

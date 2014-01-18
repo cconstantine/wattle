@@ -49,7 +49,6 @@ class Grouping < ActiveRecord::Base
   scope :app_name, -> (an) { joins(:wats).references(:wats).where('wats.app_name IN (?)', an) }
   scope :language, -> (an) { joins(:wats).references(:wats).where('wats.language IN (?)', an) }
 
-
   def open?
     acknowledged? || active?
   end
@@ -97,4 +96,30 @@ class Grouping < ActiveRecord::Base
     wat_chart_values
   end
 
+  def self.epoch
+    Wat.order(:id).first.created_at || Date.new(2015, 10, 1).to_time
+  end
+
+  def self.rescore
+    Grouping.find_each do |grouping|
+      grouping.rescore!
+    end
+  end
+
+  def rescore!
+    transaction do
+      self.popularity = nil
+      self.wats.where("wats_groupings.state != ?", :resolved).find_each do |wat|
+        self.upvote wat.created_at
+      end
+      self.save!
+    end
+  end
+
+  def upvote(effective_time=nil)
+    effective_time = Time.zone.now unless effective_time
+    self.popularity = 0.1 unless self.popularity
+
+    self.popularity += 0.1 * (2 ** ((effective_time.to_i - Grouping.epoch.to_i) / 1.day.to_i))
+  end
 end

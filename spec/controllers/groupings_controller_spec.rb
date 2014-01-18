@@ -52,6 +52,40 @@ describe GroupingsController do
                 should =~ ['staging']
           end
         end
+        context "ordering" do
+          subject { get :index, order: order }
+          let(:hotest) { Grouping.order(:popularity).last}
+          let(:newest) { Grouping.wat_order.reverse.first }
+
+          #sanity check
+          it "should not be that hottest and newest are the same grouping" do
+            hotest.should_not == newest
+          end
+
+          context "without a specified order, page is hot" do
+            let(:order) {nil}
+            it "should show the hottest groupings first" do
+              subject
+              assigns[:groupings].first.should == hotest
+            end
+          end
+
+          context "page is hot" do
+            let(:order) {:hot}
+            it "should show the hottest groupings first" do
+              subject
+              assigns[:groupings].first.should == hotest
+            end
+          end
+
+          context "page is new" do
+            let(:order) {:new}
+            it "should show the newest groupings first" do
+              subject
+              assigns[:groupings].first.should == newest
+            end
+          end
+        end
       end
 
     end

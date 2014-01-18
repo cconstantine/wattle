@@ -10,6 +10,8 @@ class Wat < ActiveRecord::Base
   after_commit :send_email, on: :create unless Rails.env.test?
   after_create :send_email              if     Rails.env.test?
 
+  after_create :upvote_groupings
+
   scope :filtered, ->(opts={}) {
     running_scope = all
     running_scope = running_scope.joins(:groupings).where("groupings.state" => opts[:state]) if opts[:state]
@@ -81,6 +83,14 @@ class Wat < ActiveRecord::Base
   def send_email
     groupings.active.pluck(:id).each do |grouping_id|
       GroupingNotifier.delay.notify(grouping_id)
+    end
+  end
+
+
+  def upvote_groupings
+    groupings.open.find_each do |grouping|
+      grouping.upvote(self.created_at)
+      grouping.save!
     end
   end
 end

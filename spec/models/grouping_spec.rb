@@ -138,4 +138,19 @@ describe Grouping do
       end
     end
   end
+
+  describe "#upvote" do
+    let(:grouping) {groupings(:grouping1)}
+    subject { grouping.upvote }
+
+    it "should change the popularity score" do
+      expect { subject }.to change {grouping.popularity}
+    end
+
+    it "should make the popularity score go up" do
+      old_pop = grouping.popularity
+      subject
+      old_pop.should be < grouping.popularity
+    end
+  end
 end
