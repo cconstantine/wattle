@@ -39,9 +39,9 @@ class Grouping < ActiveRecord::Base
     running_scope
   }
 
-  scope( :wat_order, -> { joins(:wats).group(:"groupings.id").reorder("max(wats.id) asc") } ) do
+  scope( :wat_order, -> { reorder("latest_wat_at asc") } ) do
     def reverse
-      reorder("max(wats.id) desc")
+      reorder("latest_wat_at desc")
     end
   end
 
@@ -116,10 +116,15 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  def upvote(effective_time=nil)
+  def popularity_addin(effective_time=nil)
+    0.1 * (2 ** ((effective_time.to_i - Grouping.epoch.to_i) / 1.day.to_i))
+  end
+
+  def update_sorting(effective_time=nil)
     effective_time = Time.zone.now unless effective_time
     self.popularity = 0.1 unless self.popularity
 
-    self.popularity += 0.1 * (2 ** ((effective_time.to_i - Grouping.epoch.to_i) / 1.day.to_i))
+    self.popularity += popularity_addin(effective_time)
+    self.latest_wat_at = effective_time
   end
 end

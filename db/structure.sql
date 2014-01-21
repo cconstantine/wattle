@@ -56,7 +56,8 @@ CREATE TABLE groupings (
     state character varying(255) DEFAULT 'active'::character varying NOT NULL,
     last_emailed_at timestamp without time zone,
     message text,
-    popularity numeric(1000,1)
+    popularity numeric(1000,1),
+    latest_wat_at timestamp without time zone
 );
 
 
@@ -312,6 +313,13 @@ CREATE INDEX index_groupings_on_key_line_and_error_class ON groupings USING btre
 
 
 --
+-- Name: index_groupings_on_latest_wat_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_groupings_on_latest_wat_at ON groupings USING btree (latest_wat_at);
+
+
+--
 -- Name: index_groupings_on_message; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -457,3 +465,5 @@ INSERT INTO schema_migrations (version) VALUES ('20131126191956');
 INSERT INTO schema_migrations (version) VALUES ('20131210221143');
 
 INSERT INTO schema_migrations (version) VALUES ('20140117210801');
+
+INSERT INTO schema_migrations (version) VALUES ('20140121232448');

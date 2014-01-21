@@ -89,7 +89,7 @@ class Wat < ActiveRecord::Base
 
   def upvote_groupings
     groupings.open.find_each do |grouping|
-      grouping.upvote(self.created_at)
+      grouping.update_sorting(self.created_at)
       grouping.save!
     end
   end
