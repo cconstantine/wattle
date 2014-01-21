@@ -31,6 +31,7 @@ class GroupingNotifier < Struct.new(:grouping)
   end
 
   def needs_notifying?
+    return false if grouping.app_env == 'honeypot'
     return false if grouping.is_javascript? && js_wats_per_hour_in_previous_day > js_wats_in_previous_hour / 2
     grouping.active? && (grouping.last_emailed_at.nil? || grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?)
   end
