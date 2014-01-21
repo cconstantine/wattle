@@ -65,7 +65,7 @@ describe Grouping do
 
     context "with an app_name" do
       let(:filter_params) {{app_name: "app1"}}
-      it {should have(Grouping.open.app_name(:app1).count).items}
+      it {should have(3).items}
     end
 
     context "with an app_env" do

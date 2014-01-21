@@ -20,10 +20,10 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  scope :open,          -> {where(state: [:acknowledged, :active])}
-  scope :active,        -> {where(state: :active)}
-  scope :resolved,      -> {where(state: :resolved)}
-  scope :acknowledged,  -> {where(state: :acknowledged)}
+  scope :open,          -> {distinct('groupings.id').where(state: [:acknowledged, :active])}
+  scope :active,        -> {distinct('groupings.id').where(state: :active)}
+  scope :resolved,      -> {distinct('groupings.id').where(state: :resolved)}
+  scope :acknowledged,  -> {distinct('groupings.id').where(state: :acknowledged)}
   scope :matching, ->(wat) {distinct('groupings.id').language(wat.language).where(wat.matching_selector)}
   scope :filtered, ->(opts=nil) {
     opts ||= {}
