@@ -2,6 +2,74 @@ require 'spec_helper'
 
 describe Wat do
 
+  describe "#create" do
+    let(:wat) do
+      Wat.create!(
+        "session" => {
+          "derpy" => "\u0000"
+        },
+        "request_headers" => {
+          "HTTP_ACCEPT" => "\u0000",
+        },
+        "request_params" => {
+          "nulls" => "\u0000",
+        },
+        "backtrace" => [
+          "bob",
+          "\u0000"
+        ],
+        "app_user" => {
+          "derpy" => "\u0000"
+        }
+      )
+    end
+
+    subject {wat}
+
+    it "should create" do
+      expect { subject }.to change {Wat.count}.by 1
+    end
+
+    its(:session) {should == {"derpy" => "\\u0000"}}
+    its(:request_headers) {should == {"HTTP_ACCEPT" => "\\u0000"}}
+    its(:request_params) {should == {"nulls" => "\\u0000"}}
+    its(:backtrace) {should == ["bob", "\\u0000"]}
+    its(:app_user) {should == {"derpy" => "\\u0000"}}
+  end
+
+  describe "clean_hstore" do
+    context "with a hash" do
+      subject {Wat.new.clean_hstore(hash)}
+      context "that is normal" do
+        let(:hash) { {a: 1, b: "laksjdf"} }
+        it {should == hash}
+      end
+
+      context "with a null value" do
+        let(:hash)  { {a: "\u0000", b: 1} }
+        it {should == {a: "\\u0000", b: 1}}
+      end
+
+      context "with a null key" do
+        let(:hash)  { {"\u0000" => "a", :b => 1} }
+        it {should == {"\\u0000" => "a", :b => 1}}
+      end
+    end
+
+    context "with an array" do
+      subject {Wat.new.clean_hstore(array)}
+      context "that is normal" do
+        let(:array) {[1, 2, "bob"]}
+        it {should == array}
+      end
+
+      context "with a null value" do
+        let(:array)  { ["\u0000", 1] }
+        it {should == ["\\u0000", 1] }
+      end
+
+    end
+  end
   describe "matching_selector" do
     let(:wat) { wats(:default) }
     subject { wat.matching_selector }

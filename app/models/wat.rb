@@ -5,6 +5,7 @@ class Wat < ActiveRecord::Base
   has_many :wats_groupings
   has_many :groupings, through: :wats_groupings
 
+  before_save :cleanup_hstore_columns
   after_create :construct_groupings!
 
   after_commit :send_email, on: :create unless Rails.env.test?
@@ -91,6 +92,35 @@ class Wat < ActiveRecord::Base
     groupings.open.find_each do |grouping|
       grouping.update_sorting(self.created_at)
       grouping.save!
+    end
+  end
+
+  def cleanup_hstore_columns
+    self.app_user = clean_hstore(app_user) if app_user
+    self.request_headers = clean_hstore(request_headers) if request_headers
+    self.request_params = clean_hstore(request_params) if request_params
+    self.session = clean_hstore(session) if session
+    self.backtrace = clean_hstore(backtrace) if backtrace
+  end
+
+
+  def clean_hstore(values)
+
+    if values.is_a? Array
+      values.map do |elem|
+        elem.respond_to?(:gsub) ? elem.gsub("\u0000", "\\u0000") : elem
+      end
+    else
+      new_values = {}
+      values.each do |key, value|
+        cleaned_key = key.to_s.gsub("\u0000", "\\u0000")
+        cleaned_key = cleaned_key.to_sym if key.is_a? Symbol
+        if value.respond_to? :gsub
+          value = value.gsub("\u0000", "\\u0000")
+        end
+        new_values[cleaned_key] = value
+      end
+      new_values
     end
   end
 end
