@@ -61,11 +61,11 @@ class Grouping < ActiveRecord::Base
     wats.javascript.any?
   end
 
-  def app_user_stats(key_name: :id, limit: nil)
+  def app_user_stats(key_name: :id, limit: 10)
     wats
       .select("app_user -> '#{key_name}' as #{key_name}, count(*) as count")
       .group("app_user -> '#{key_name}'")
-      .order('wats.count desc')
+      .order("count(app_user -> '#{key_name}') desc")
       .limit(limit).count
   end
 
