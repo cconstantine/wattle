@@ -30,8 +30,8 @@
             Wattle
           .container.nav-collapse
             %ul.nav
-              %li= link_to "Reports", groupings_path
-              %li= link_to "Stats", stats_path
+              %li= link_to "Reports", groupings_path(params.slice(:utf8, :filters))
+              %li= link_to "Stats", stats_path(params.slice(:utf8, :filters))
 
             .pull-right.hidden-phone
               %ul.nav

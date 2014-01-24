@@ -1,9 +1,9 @@
 - wat = wats(group).last
-%article.group_listing{class: "group_state_#{group.state}"}
+%article.group_listing{class: ["group_state_#{group.state}", "group_#{group_counter}"]}
   %h4<>
     .incident_language.pull-right= wat.language
 
-    = link_to group, class: "grouping_detail_link" do
+    = link_to grouping_path(group, params.slice(:utf8, :filters)), class: "grouping_detail_link" do
       .incident_count
         = wats(group).count
       .incident_heading
