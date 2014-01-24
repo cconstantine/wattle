@@ -61,16 +61,16 @@ class Grouping < ActiveRecord::Base
     wats.javascript.any?
   end
 
-  def app_user_stats(key_name: :id, limit: 10)
-    wats
+  def app_user_stats(filters: {}, key_name: :id, limit: nil)
+    wats.filtered(filters)
       .select("app_user -> '#{key_name}' as #{key_name}, count(*) as count")
       .group("app_user -> '#{key_name}'")
       .order("count(app_user -> '#{key_name}') desc")
       .limit(limit).count
   end
 
-  def app_user_count(key_name: :id)
-    wats.distinct_users.count
+  def app_user_count(filters: {}, key_name: :id)
+    wats.filtered(filters).distinct_users.count
   end
 
   def self.get_or_create_from_wat!(wat)
@@ -79,8 +79,8 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  def chart_data
-    wat_chart_data = wats.group('date_trunc(\'day\',  wats.created_at)').count.inject({}) do |doc, values|
+  def chart_data(filters)
+    wat_chart_data = wats.filtered(filters).group('date_trunc(\'day\',  wats.created_at)').count.inject({}) do |doc, values|
       doc[values[0]] = values[1]
       doc
     end

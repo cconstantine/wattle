@@ -18,7 +18,7 @@ class GroupingsController < ApplicationController
   end
 
   def show
-    wat_chart_values = @grouping.chart_data
+    wat_chart_values = @grouping.chart_data(filters)
 
     @chart = {
       title: {
