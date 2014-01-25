@@ -1,2 +1,17 @@
-.media-list.notes
-  = render notes
+.panel.panel-default.widget
+  .panel-heading
+    %span.glyphicon.glyphicon-comment
+    %h3.panel-title
+      Notes
+    %span.label.label-info
+      =notes.count
+  .panel-body
+    %ul.list-group
+
+
+
+    .media-list.notes
+      = render notes
+
+
+    = render "notes/new", note: @grouping.notes.build

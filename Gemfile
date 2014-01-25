@@ -17,6 +17,7 @@ gem 'jbuilder', '~> 1.0.1'
 gem 'httpclient'
 gem 'wat_catcher'
 gem 'kaminari'
+gem 'kaminari-bootstrap'
 gem 'omniauth-gplus'
 gem 'secrets', :github => "austinfromboston/secrets"
 gem 'state_machine'
@@ -25,7 +26,7 @@ gem 'redcarpet'
 
 gem 'sass-rails',   '>= 4.0'
 gem 'coffee-rails', '>= 4.0'
-gem 'bootstrap-sass', '~> 2'
+gem 'bootstrap-sass-rails'
 gem "backbone-on-rails"
 gem 'uglifier', '>= 1.0.3'
 gem 'execjs'
@@ -42,6 +43,7 @@ end
 group :development do
   gem 'mailcatcher'
   gem 'debugger'
+  gem 'pivotal_git_scripts'
 end
 
 group :test, :development do

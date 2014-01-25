@@ -2,6 +2,43 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.grouping_data{
+  position: relative;
+}
+
+.page-title{
+  width: 50%;
+}
+
+.states-and-environments-container{
+  @extend .clearfix;
+  position: absolute;
+  top: 0;
+  right: 0;
+  max-width: 350px;
+
+  .current_state{
+    max-width: 150px;
+  }
+
+  .active-tag{
+    @extend .alert;
+    @extend .alert-danger;
+  }
+  .acknowledged-tag{
+    @extend .alert;
+    @extend .alert-info;
+  }
+  .resolved-tag{
+    @extend .alert;
+    @extend .alert-success;
+  }
+
+  .alert{
+    margin: 5px 5px 0;
+  }
+}
+
 .group_listing.group_state_active {
   h4 {
     background: rgba( 248, 148, 6, 0.7);
@@ -122,8 +159,6 @@
 
   }
 
-  
-
   .incident_heading {
     padding-left: 20px;
     display: inline;
@@ -154,5 +189,23 @@
   height: auto;
   .obscure_backtrace {
     display: inline;
+  }
+}
+
+.on-pages-link{
+  line-height: 24px;
+}
+
+
+@media screen and (max-width: 1300px) {
+  .page-title{
+    width: 100%;
+  }
+  .states-and-environments-container{
+    position: relative;
+    clear: both;
+    float: none;
+    max-width: 100%;
+    margin-bottom: 30px;
   }
 }

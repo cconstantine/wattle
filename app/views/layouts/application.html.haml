@@ -18,37 +18,33 @@
     = javascript_wat_catcher
 
   %body
-    .navbar.navbar-fluid-top
-      .navbar-inner
-        .container-fluid
-          %a.btn.btn-navbar(data-target=".nav-collapse" data-toggle="collapse")
-            %span.icon-bar
-            %span.icon-bar
-            %span.icon-bar
-          %a.brand(href="/")
-            .label.label-warning.logo-label ?!
-            Wattle
-          .container.nav-collapse
-            %ul.nav
-              %li= link_to "Reports", groupings_path(params.slice(:utf8, :filters))
-              %li= link_to "Stats", stats_path(params.slice(:utf8, :filters))
+    %nav.navbar.navbar-fixed-top.navbar-default{role: "navigation"}
+      .navbar-header
+        %button.navbar-toggle{"data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", type: "button"}
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+        %a.navbar-brand(href="/")
+          .label.label-warning.logo-label ?!
+          Wattle
+      / Collect the nav links, forms, and other content for toggling
+      #bs-example-navbar-collapse-1.collapse.navbar-collapse
+        %ul.nav.navbar-nav
+          %li= link_to "Reports", groupings_path(params.slice(:utf8, :filters))
+          %li= link_to "Stats", stats_path(params.slice(:utf8, :filters))
+        %ul.navbar-right.nav.navbar-nav
+          %li
+            %a{href: "#settings"}
+              .pull-left= image_tag gravatar_url(current_user), class: "watcher-avatar"
+              = current_user.display_name
 
-            .pull-right.hidden-phone
-              %ul.nav
-                %li
-                  = image_tag gravatar_url(current_user), class: "watcher-avatar"
-                %li
-                  %a{href: "#settings"}
-                    = current_user.display_name
+    .row
+      .col-lg-2
+        =render 'layouts/filters'
 
-    .container-fluid
-
-      .row-fluid
-        .span2
-          =render 'layouts/filters'
-
-        .span7
-          = yield
+      .col-lg-7
+        = yield
 
 
     /

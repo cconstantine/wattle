@@ -1,8 +1,40 @@
+body{
+  padding-top: 80px;
+}
+
+ul{
+  padding: 0;
+}
+
+li{
+  list-style: none;
+}
+
 .logo-label {
   font-size: $size3;
   line-height: $size3;
 }
 
 .watcher-avatar {
-  margin-top: 5px;
+  position: relative;
+  top: -5px;
+  right: 5px;
+}
+
+.navbar-nav.navbar-right:last-child {
+  margin-right: 0;
+}
+
+
+// Misc Classes
+.badge-warning {
+  background-color: #f89406;
+}
+
+.badge-info {
+  background-color: #3a87ad;
+}
+
+.mb20{
+  margin-bottom: 20px;
 }

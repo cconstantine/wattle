@@ -2,10 +2,15 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-@import "bootstrap";
-@import "bootstrap-responsive";
+@import "twitter/bootstrap";
+//@import "bootstrap-responsive";
 @import "config";
 @import "widgets";
 @import "groupings";
 @import "layout";
 @import "filters";
+@import "notes";
+
+dd, td{
+  word-break: break-word;
+}

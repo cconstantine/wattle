@@ -1,8 +1,10 @@
-.row-fluid
+.row
   %dl.dl-horizontal
     %dd= link_to "View wat", wat_path(wat)
     %dt Application
     %dd= "#{wat.app_name} (#{wat.app_env})"
+    %dt Language
+    %dd= wat.language
     %dt Grouping(s)
     %dd!
       - wat.groupings.order(:id).each do |grouping|
@@ -28,17 +30,20 @@
     %dd= wat.key_line
     - if wat.session.present?
       %dt Session
-      %dd= wat.session.to_json
+      %dd
+        %pre~ JSON.pretty_generate wat.session
     %dt User affected
-    %dd= wat.app_user
-    %dt Language
-    %dd= wat.language
+    %dd
+      %pre~ JSON.pretty_generate wat.app_user
     - if wat.request_params.present?
       %dt Request Parameters
-      %dd= wat.request_params
+      %dd
+        %pre~ JSON.pretty_generate wat.request_params
+
     - if wat.sidekiq_msg.present?
       %dt Sidekiq Message
-      %dd= wat.sidekiq_msg
+      %dd
+        %pre~ JSON.pretty_generate wat.sidekiq_msg
     - if wat.message.present?
       %dt Message
       %dd= wat.message
@@ -48,13 +53,21 @@
     - if wat.backtrace.present?
       %dt Backtrace
       %dd
-        .backtrace_container
-          - wat.backtrace.each do |bt|
-            %div{class: (bt == wat.key_line ? "text-error" : "muted")}
-              = bt
-          = link_to "Show Less", "#obscure_backtrace", class: "obscure_backtrace"
-          
-        = link_to "Show More", "#complete_backtrace", class: "complete_backtrace"
+        - backtrace_chunked = wat.backtrace.each_slice(10)
+        - backtrace_top = backtrace_chunked.first
+        - backtrace_rest = backtrace_chunked.to_a[1..-1]
+
+        - backtrace_top.each do |line|
+          %div{class: (line == wat.key_line ? "text-error" : "text-muted")}
+            = line
+        #collapse-backtrace.collapse
+          - backtrace_rest.each do |chunk|
+            - chunk.each do |line|
+              %div{class: (line == wat.key_line ? "text-error" : "text-muted")}
+                = line
+        - if backtrace_rest.present?
+          %a{ "data" => {"toggle" => "collapse"}, "href" => "#collapse-backtrace" }
+            Show / Hide
 
     - if wat.request_headers.present?
       %dt Request Headers

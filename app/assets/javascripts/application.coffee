@@ -14,10 +14,7 @@
 #= require jquery_ujs
 
 # Loads all Bootstrap javascripts
-#= require bootstrap
-#= require bootstrap-scrollspy
-#= require bootstrap-modal
-#= require bootstrap-dropdown
+#= require twitter/bootstrap
 #= require underscore
 #= require backbone
 #= require highcharts
