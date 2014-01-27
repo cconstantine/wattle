@@ -46,7 +46,8 @@
         %pre~ JSON.pretty_generate wat.sidekiq_msg
     - if wat.message.present?
       %dt Message
-      %dd= wat.message
+      %dd
+        %pre= wat.message
     - if wat.error_class.present?
       %dt Error Class
       %dd= wat.error_class

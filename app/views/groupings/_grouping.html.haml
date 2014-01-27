@@ -1,19 +1,17 @@
 .clearfix
-  %h2.pull-left.page-title
-    - if wat
-      = wat_heading(wat)
-  .pull-right.states-and-environments-container
-    .clearfix
-      .current_state.pull-right{class: "#{grouping.state}-tag"}
-        = grouping.state.capitalize
-
+  .states-and-environments-container.pull-left
+    .current_state{class: "#{grouping.state}-tag"}
+      = grouping.state.capitalize
     - grouping.app_envs.each do |app_env|
-      .pull-right.alert.alert-info
+      .alert.alert-info
         = app_env
+  .pull-right.action-items
+    = render partial: "state", locals: {group: grouping}
 
 - if wat
-  = render partial: "state", locals: {group: grouping}
-  %p= wat.message
+  %h2
+    = wat_heading(wat)
+  %pre= wat.message
 
 .grouping_summary
   .item

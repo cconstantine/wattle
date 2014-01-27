@@ -6,20 +6,12 @@
   position: relative;
 }
 
-.page-title{
-  width: 50%;
+.action-items{
+  margin-top: 20px;
 }
 
 .states-and-environments-container{
   @extend .clearfix;
-  position: absolute;
-  top: 0;
-  right: 0;
-  max-width: 350px;
-
-  .current_state{
-    max-width: 150px;
-  }
 
   .active-tag{
     @extend .alert;
@@ -35,7 +27,12 @@
   }
 
   .alert{
-    margin: 5px 5px 0;
+    display: inline-block;
+    margin: 5px 5px;
+    padding: 7px 15px;
+    text-align: center;
+    text-transform: capitalize;
+
   }
 }
 
@@ -194,18 +191,4 @@
 
 .on-pages-link{
   line-height: 24px;
-}
-
-
-@media screen and (max-width: 1300px) {
-  .page-title{
-    width: 100%;
-  }
-  .states-and-environments-container{
-    position: relative;
-    clear: both;
-    float: none;
-    max-width: 100%;
-    margin-bottom: 30px;
-  }
 }
