@@ -32,9 +32,10 @@
       %dt Session
       %dd
         %pre~ JSON.pretty_generate wat.session
-    %dt User affected
-    %dd
-      %pre~ JSON.pretty_generate wat.app_user
+    -if wat.app_user.present?
+      %dt User affected
+      %dd
+        %pre~ JSON.pretty_generate wat.app_user
     - if wat.request_params.present?
       %dt Request Parameters
       %dd

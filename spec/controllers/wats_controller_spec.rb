@@ -8,7 +8,7 @@ describe WatsController do
   end
 
   describe "GET #index" do
-    subject { get :index, format: :json, per_page: 100}
+    subject { get :index, per_page: 100}
     context 'when logged in' do
       before do
         login watchers(:default)
@@ -25,7 +25,7 @@ describe WatsController do
   end
 
   describe "GET #show" do
-    subject { get :show, id:  wat.to_param, format: :json}
+    subject { get :show, id: wat.to_param }
 
     context 'when logged in' do
       before do
@@ -35,6 +35,12 @@ describe WatsController do
       it "should give the wat" do
         subject
         assigns[:wat].should == wat
+      end
+
+      context "with a super-empty wat" do
+        let(:wat) { Wat.create!(app_user: nil, sidekiq_msg: nil, request_params: nil, request_headers: nil, session: nil) }
+
+        it {should be_success}
       end
     end
   end
