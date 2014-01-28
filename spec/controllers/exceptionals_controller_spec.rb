@@ -11,11 +11,8 @@ describe ExceptionalsController do
     end
 
     it "should register a wat" do
-      stub.proxy(WatCatcher::Report).new
-
       expect {subject}.to raise_error(ExpectedError)
-
-      expect(WatCatcher::Report).to have_received(:new).with assigns[:exception], user: nil, request: request
+      controller.should be_report_wat
     end
 
     context "when logged in" do
@@ -25,11 +22,8 @@ describe ExceptionalsController do
       end
 
       it "should pass the user hash" do
-        stub.proxy(WatCatcher::Report).new
-
         expect {subject}.to raise_error(ExpectedError)
-
-        expect(WatCatcher::Report).to have_received(:new).with assigns[:exception], user: user, request: request
+        controller.env["wat_report"][:user].should == user
       end
     end
   end

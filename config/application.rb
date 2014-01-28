@@ -35,6 +35,8 @@ module Wattle
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = { :address => "localhost", :port => 25 }
 
+    config.middleware.use(WatCatcher::RackMiddleware)
+
     ::Sidekiq.configure_server do |config|
       config.server_middleware do |chain|
         chain.add ::WatCatcher::SidekiqMiddleware
