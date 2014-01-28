@@ -81,6 +81,16 @@ describe Grouping do
     context "with a state" do
       let(:filter_params) {{state: :acknowledged}}
       it {should have(1).item}
+      context "with an app_name" do
+        let(:filter_params) {{state: :acknowledged, app_name: :app1}}
+        it {should have(1).item}
+      end
+
+      context "with an app_env" do
+        let(:filter_params) {{state: :acknowledged, app_env: :production}}
+        it {should have(1).item}
+      end
+
     end
   end
 

@@ -20,23 +20,21 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  scope :open,          -> {distinct('groupings.id').where(state: [:acknowledged, :active])}
-  scope :active,        -> {distinct('groupings.id').where(state: :active)}
-  scope :resolved,      -> {distinct('groupings.id').where(state: :resolved)}
-  scope :acknowledged,  -> {distinct('groupings.id').where(state: :acknowledged)}
-  scope :matching, ->(wat) {distinct('groupings.id').language(wat.language).where(wat.matching_selector)}
+  scope :open,          -> {where(state: [:acknowledged, :active])}
+  scope :active,        -> {where(state: :active)}
+  scope :resolved,      -> {where(state: :resolved)}
+  scope :acknowledged,  -> {where(state: :acknowledged)}
+  scope :state,         -> (state) {where(state: state)}
+  scope :matching, ->(wat) {language(wat.language).where(wat.matching_selector)}
   scope :filtered, ->(opts=nil) {
     opts ||= {}
-    if opts[:state]
-      running_scope = where(state: opts[:state])
-    else
-      running_scope = open
-    end
+
+    running_scope = opts[:state] ? state(opts[:state]) : open
     running_scope = running_scope.app_name(opts[:app_name]) if opts[:app_name]
     running_scope = running_scope.app_env(opts[:app_env])   if opts[:app_env]
     running_scope = running_scope.language(opts[:language]) if opts[:language]
 
-    running_scope
+    running_scope.distinct('groupings.id')
   }
 
   scope( :wat_order, -> { reorder("latest_wat_at asc") } ) do
@@ -45,9 +43,9 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  scope :app_env,  -> (ae) { joins(:wats).references(:wats).where('wats.app_env IN (?)', ae) }
-  scope :app_name, -> (an) { joins(:wats).references(:wats).where('wats.app_name IN (?)', an) }
-  scope :language, -> (an) { joins(:wats).references(:wats).where('wats.language IN (?)', an) }
+  scope :app_env,  -> (ae) { distinct('groupings.id').joins(:wats).references(:wats).where('wats.app_env IN (?)', ae) }
+  scope :app_name, -> (an) { distinct('groupings.id').joins(:wats).references(:wats).where('wats.app_name IN (?)', an) }
+  scope :language, -> (an) { distinct('groupings.id').joins(:wats).references(:wats).where('wats.language IN (?)', an) }
 
   def open?
     acknowledged? || active?
