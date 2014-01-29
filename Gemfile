@@ -35,6 +35,7 @@ gem 'sidekiq'
 gem 'slim', ">= 1.3.0", :require => false
 gem 'sinatra', '>= 1.3.0', :require => false
 gem 'highcharts-rails'
+gem 'moment_ago', git: "git@github.com:omadahealth/moment_ago.git"
 
 group :production do
   gem 'unicorn'

@@ -48,14 +48,11 @@
       - wat_the_last = wats.order(:created_at).last
       %em
         First Incident:
-      %abbr{title: wat_the_first.created_at}
-        = time_ago_in_words wat_the_first.created_at
-        ago
+      %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat_the_first.created_at}}
     .item
       %em
         Most Recent Incident:
-      %abbr{title: wat_the_last.created_at}
-        = "#{time_ago_in_words wat_the_last.created_at} ago"
+      %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat_the_last.created_at}}
     .item
       - pages = wats.group(:page_url).pluck(:page_url)
       - if pages.any?

@@ -18,6 +18,7 @@
 #= require underscore
 #= require backbone
 #= require highcharts
+#= require moment_ago
 
 #= require ./groupings
 #= require ./filters

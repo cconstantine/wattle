@@ -27,4 +27,4 @@
       = (wat.key_line || "").truncate(100)
     .last_incident 
       Last Seen
-      = "#{time_ago_in_words wat.updated_at} ago"
+      %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ",time: wat.created_at}}
