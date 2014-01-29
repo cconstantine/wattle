@@ -13,6 +13,8 @@ class Wat < ActiveRecord::Base
 
   after_create :upvote_groupings
 
+  validates :language, inclusion: { in: %w(ruby javascript) }, allow_nil: true
+
   scope :filtered, ->(opts={}) {
     running_scope = all
     running_scope = running_scope.joins(:groupings).where("groupings.state" => opts[:state]) if opts[:state]
@@ -122,5 +124,9 @@ class Wat < ActiveRecord::Base
       end
       new_values
     end
+  end
+
+  def language=(lang)
+    super lang.to_s.downcase
   end
 end

@@ -22,6 +22,8 @@ class WatsController < ApplicationController
     wat_params.delete(:updated_at)
 
     @wat = Wat.create!(wat_params)
+  rescue ActiveRecord::RecordInvalid
+  ensure
     response.headers['Content-Type'] = "image/png; charset=utf-8"
     head :ok
   end

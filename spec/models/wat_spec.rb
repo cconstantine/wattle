@@ -35,6 +35,14 @@ describe Wat do
     its(:request_params) {should == {"nulls" => "\\u0000"}}
     its(:backtrace) {should == ["bob", "\\u0000"]}
     its(:app_user) {should == {"derpy" => "\\u0000"}}
+
+    context "with a crazy-long language" do
+      let(:wat) {Wat.create!(:language => "visual basic")}
+
+      it "should throw a record invalid error" do
+        expect {subject}.to raise_error ActiveRecord::RecordInvalid
+      end
+    end
   end
 
   describe "clean_hstore" do
