@@ -77,11 +77,13 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  def chart_data(filters)
+  def chart_data(filters
+)
     wat_chart_data = wats.filtered(filters).group('date_trunc(\'day\',  wats.created_at)').count.inject({}) do |doc, values|
       doc[values[0]] = values[1]
       doc
     end
+    return [] if wat_chart_data.empty?
     start_time = wat_chart_data.keys.min
     end_time   = wat_chart_data.keys.max
 
