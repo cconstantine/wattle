@@ -37,6 +37,8 @@ gem 'sinatra', '>= 1.3.0', :require => false
 gem 'highcharts-rails'
 gem 'moment_ago', git: "git@github.com:omadahealth/moment_ago.git"
 
+gem 'multi_grep', require: false, git: 'git@github.com:omadahealth/multi_grep.git'
+
 group :production do
   gem 'unicorn'
 end
