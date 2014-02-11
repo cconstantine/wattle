@@ -2,6 +2,37 @@ require 'spec_helper'
 
 describe Wat do
 
+  describe "#destroy" do
+    let(:wat) {wats(:default)}
+    subject {wat.destroy}
+
+    it "it should go away" do
+      subject
+      expect {wat.reload}.should raise_error ActiveRecord::RecordNotFound
+    end
+
+    it "removes the associated wat grouping" do
+      wg = wat.wats_groupings.to_a
+      wg.should_not be_empty
+
+      subject
+      wg.each do |x|
+        expect {x.reload}.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    it "removes the grouping if we are the last wat" do
+      groupings = wat.groupings.to_a
+      subject
+      groupings.should_not be_empty
+
+      subject
+      groupings.each do |x|
+        expect {x.reload}.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+  end
+
   describe "#create" do
     let(:wat) do
       Wat.create!(

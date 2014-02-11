@@ -33,4 +33,9 @@ class WatsGrouping < ActiveRecord::Base
   def set_state
     self.state = grouping.state
   end
+
+  def destroy
+    super
+    grouping.destroy if grouping.reload.wats.empty?
+  end
 end

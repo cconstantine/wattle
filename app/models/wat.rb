@@ -2,7 +2,7 @@ class Wat < ActiveRecord::Base
   #before_save :clean_backtrace
   EXCLUDES = [/\/gems\//]
 
-  has_many :wats_groupings
+  has_many :wats_groupings, dependent: :destroy
   has_many :groupings, through: :wats_groupings
 
   before_save :cleanup_hstore_columns

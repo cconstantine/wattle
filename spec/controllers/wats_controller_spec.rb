@@ -83,7 +83,7 @@ describe WatsController do
 
       it { should be_success }
 
-      it "shouldn't make a way" do
+      it "shouldn't make a wat" do
         expect {subject}.to_not change(Wat, :count)
       end
     end
