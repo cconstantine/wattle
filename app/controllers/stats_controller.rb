@@ -42,9 +42,6 @@ class StatsController < ApplicationController
       xAxis: {
         type: 'datetime'
       },
-      yAxis: {
-        type: 'logarithmic',
-      },
       chart: {
         type: 'spline',
         zoomType: 'xy'
@@ -62,15 +59,6 @@ class StatsController < ApplicationController
     step = 1.day
     current_date = Wat.order(:id).first.created_at.beginning_of_day
     end_date   = Wat.order(:id).last.created_at.beginning_of_day
-
-    avg_per_grouping = []
-    while current_date <= end_date
-      counting = Wat.filtered(filters).where("wats.created_at between ? AND ?", current_date, current_date + step).count
-
-      avg_per_grouping << [current_date.to_i*1000,
-                           counting]
-      current_date += step
-    end
 
     user_wats = []
     while current_date <= end_date
@@ -99,10 +87,10 @@ class StatsController < ApplicationController
       },
       series: [{
                  name: 'Wats',
-                 data: avg_per_grouping
+                 data: user_wats
                }, {
                  name: 'Wats (smoothed)',
-                 data: smoothing(avg_per_grouping)
+                 data: smoothing(user_wats)
                }]
     }
 

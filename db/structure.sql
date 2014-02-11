@@ -397,6 +397,13 @@ CREATE INDEX index_wats_on_app_name ON wats USING btree (app_name);
 
 
 --
+-- Name: index_wats_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_wats_on_created_at ON wats USING btree (created_at);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -467,3 +474,5 @@ INSERT INTO schema_migrations (version) VALUES ('20131210221143');
 INSERT INTO schema_migrations (version) VALUES ('20140117210801');
 
 INSERT INTO schema_migrations (version) VALUES ('20140121232448');
+
+INSERT INTO schema_migrations (version) VALUES ('20140211190623');
