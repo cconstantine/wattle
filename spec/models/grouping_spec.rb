@@ -132,6 +132,10 @@ describe Grouping do
       let(:grouping) {groupings(:resolved)}
       it {should_not be_open}
     end
+    context "with a muffled wat" do
+      let(:grouping) {groupings(:muffled)}
+      it {should be_open}
+    end
   end
 
   describe "#wat_order" do

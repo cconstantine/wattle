@@ -5,22 +5,26 @@ class Grouping < ActiveRecord::Base
   has_many :notes
 
   state_machine :state, initial: :active do
-    state :active, :resolved, :acknowledged
+    state :active, :resolved, :acknowledged, :muffled
 
     event :activate do
-      transition [:resolved, :acknowledged] => :active
+      transition [:resolved, :acknowledged, :muffled] => :active
     end
 
     event :resolve do
-      transition [:acknowledged, :active] => :resolved
+      transition [:acknowledged, :active, :muffled] => :resolved
     end
 
     event :acknowledge do
-      transition :active => :acknowledged
+      transition [:active, :muffled] => :acknowledged
+    end
+
+    event :muffle do
+      transition [:acknowledged, :active] => :muffled
     end
   end
 
-  scope :open,          -> {where(state: [:acknowledged, :active])}
+  scope :open,          -> {where(state: [:acknowledged, :active, :muffled])}
   scope :active,        -> {where(state: :active)}
   scope :resolved,      -> {where(state: :resolved)}
   scope :acknowledged,  -> {where(state: :acknowledged)}
@@ -48,7 +52,7 @@ class Grouping < ActiveRecord::Base
   scope :language, -> (an) { distinct('groupings.id').joins(:wats).references(:wats).where('wats.language IN (?)', an) }
 
   def open?
-    acknowledged? || active?
+    acknowledged? || active? || muffled?
   end
 
   def app_envs

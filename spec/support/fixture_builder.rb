@@ -62,10 +62,14 @@ FixtureBuilder.configure do |fbuilder|
 
     @resolved.resolve!
 
-    # Create some wats without groupings
     @acknowledged = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
     @acknowledged.acknowledge!
+
+    @muffled = 5.times.map do |i|
+      Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}
+    end.first.groupings.first
+    @muffled.muffle!
   end
 end
