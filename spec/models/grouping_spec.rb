@@ -65,7 +65,7 @@ describe Grouping do
 
     context "with an app_name" do
       let(:filter_params) {{app_name: "app1"}}
-      it {should have(3).items}
+      it {should have(4).items}
     end
 
     context "with an app_env" do
