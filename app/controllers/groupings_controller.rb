@@ -54,6 +54,11 @@ class GroupingsController < ApplicationController
     redirect_to request.referer
   end
 
+  def muffle
+    @grouping.muffle!
+    redirect_to request.referer
+  end
+
   def load_group
     @grouping = Grouping.find(params.require(:id))
   end

@@ -194,4 +194,25 @@ describe GroupingsController do
     end
   end
 
+  describe "POST #muffle" do
+    let(:wat) { grouping.wats.first}
+    let(:grouping) {groupings(:grouping2)}
+
+    subject do
+      @request.env['HTTP_REFERER'] = '/something'
+      post :muffle, id: grouping.to_param, format: :json
+    end
+
+    context "when logged in" do
+      before do
+        login watchers(:default)
+      end
+
+      it {should redirect_to '/something'}
+      it "should muffle the grouping" do
+        expect {subject}.to change {grouping.reload.muffled?}.from(false).to(true)
+      end
+    end
+  end
+
 end
