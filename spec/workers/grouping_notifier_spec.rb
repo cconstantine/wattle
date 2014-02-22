@@ -43,6 +43,24 @@ describe GroupingNotifier do
         let(:grouping) {groupings(:acknowledged)}
         it {should_not be_needs_notifying}
       end
+      context "when the grouping is muffled" do
+        let(:grouping) {groupings(:muffled)}
+
+        context "with 1000 wats per hour in the last weeks" do
+          before { stub(grouping_notifier).similar_wats_per_hour_in_previous_weeks { 1000 } }
+          context "with 1000 wats in the last day" do
+            before { stub(grouping_notifier).similar_wats_in_previous_day { 1000 } }
+
+            it {should_not be_needs_notifying}
+          end
+
+          context "with 2000 wats in the last hour" do
+            before { stub(grouping_notifier).similar_wats_in_previous_day { 2000 } }
+
+            it {should be_needs_notifying}
+          end
+        end
+      end
       context "when the grouping is active" do
         let(:grouping) {groupings(:grouping1)}
         it {should be_needs_notifying}
@@ -51,15 +69,15 @@ describe GroupingNotifier do
           before { stub(grouping).is_javascript? { true } }
 
           context "with an average of 1000 wats per hour in the last 24 hours" do
-            before { stub(grouping_notifier).js_wats_per_hour_in_previous_day { 1000 } }
+            before { stub(grouping_notifier).js_wats_per_hour_in_previous_weeks { 1000 } }
 
             context "with 2000 wats in the last hour" do
-              before { stub(grouping_notifier).js_wats_in_previous_hour { 2000 } }
+              before { stub(grouping_notifier).js_wats_in_previous_day { 2000 } }
 
               it {should be_needs_notifying}
             end
             context "with 1000 wats in the last hour" do
-              before { stub(grouping_notifier).js_wats_in_previous_hour { 1000 } }
+              before { stub(grouping_notifier).js_wats_in_previous_day { 1000 } }
 
               it {should_not be_needs_notifying}
             end

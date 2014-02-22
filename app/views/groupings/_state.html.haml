@@ -9,6 +9,11 @@
       .glyphicon.glyphicon-check
       %span.text-info
         Acknowledge
+  - if group.active? || group.acknowledged?
+    = link_to muffle_grouping_path(group), method: :post do
+      .glyphicon.glyphicon.glyphicon-volume-down
+      %span.text-info
+        Muffle
   &nbsp;
   &nbsp;
   - unless group.resolved?

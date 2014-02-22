@@ -71,6 +71,15 @@ feature "Interacting with wats", js: true do
         end
       end
 
+      scenario "muffling" do
+        within ".states" do
+          click_on "Muffle"
+        end
+        within ".current_state" do
+          page.should have_content "Muffled"
+        end
+      end
+
       scenario "resolving" do
         within ".states" do
           click_on "Resolve"

@@ -8,7 +8,7 @@ describe Wat do
 
     it "it should go away" do
       subject
-      expect {wat.reload}.should raise_error ActiveRecord::RecordNotFound
+      expect {wat.reload}.to raise_error ActiveRecord::RecordNotFound
     end
 
     it "removes the associated wat grouping" do

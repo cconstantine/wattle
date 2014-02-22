@@ -1,7 +1,7 @@
 class GroupingNotifier < Struct.new(:grouping)
   include Sidekiq::Worker
 
-  DEBOUNCE_DELAY = 10.minutes
+  DEBOUNCE_DELAY = 60.minutes
 
   class << self
     def notify(grouping_id)
@@ -32,15 +32,24 @@ class GroupingNotifier < Struct.new(:grouping)
 
   def needs_notifying?
     return false if grouping.app_envs.include? 'honeypot'
-    return false if grouping.is_javascript? && js_wats_per_hour_in_previous_day > js_wats_in_previous_hour / 2
-    grouping.active? && (grouping.last_emailed_at.nil? || grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?)
+    return false if grouping.is_javascript? && js_wats_per_hour_in_previous_weeks > js_wats_in_previous_day / 2
+    return false if grouping.muffled? && similar_wats_per_hour_in_previous_weeks > similar_wats_in_previous_day / 2
+    (grouping.active? || grouping.muffled?) && (grouping.last_emailed_at.nil? || grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?)
   end
 
-  def js_wats_per_hour_in_previous_day
+  def similar_wats_per_hour_in_previous_weeks()
+    Wat.language(grouping.languages).open.after(24.day.ago).count / 24
+  end
+
+  def similar_wats_in_previous_day()
+    Wat.language(grouping.languages).open.after(1.day.ago).count
+  end
+
+  def js_wats_per_hour_in_previous_weeks
     Wat.javascript.open.after(24.day.ago).count / 24
   end
 
-  def js_wats_in_previous_hour
+  def js_wats_in_previous_day
     Wat.javascript.open.after(1.day.ago).count
   end
 

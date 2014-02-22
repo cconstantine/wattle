@@ -30,8 +30,9 @@ class Wat < ActiveRecord::Base
   scope :acknowledged,  -> {joins(:groupings).where("groupings.state" => :acknowledged)}
 
   scope :after, -> (start_time) {where('wats.created_at > ?', start_time)}
-  scope :javascript, -> {where(language: :javascript)}
-  scope :ruby,       -> {where(language: :ruby)}
+  scope :language, -> (language) {where(language: language)}
+  scope :javascript, -> {language(:javascript)}
+  scope :ruby,       -> {language(:ruby)}
   scope :app_name,   -> (name) {where(:app_name => name) }
   scope :app_env,   -> (name) {where(:app_env => name) }
 

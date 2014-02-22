@@ -59,6 +59,10 @@ class Grouping < ActiveRecord::Base
     wats.select(:app_env).uniq.map &:app_env
   end
 
+  def languages
+    wats.select(:language).uniq.map &:language
+  end
+
   def is_javascript?
     wats.javascript.any?
   end
