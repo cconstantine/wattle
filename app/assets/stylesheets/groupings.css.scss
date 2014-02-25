@@ -45,6 +45,15 @@
   }
 }
 
+.group_listing.group_state_muffled {
+  h4 {
+    background: rgba(255, 149, 6, 0.43);
+    &:hover {
+      background: rgba( 248, 148, 6, 0.5);
+    }
+  }
+}
+
 .group_listing.group_state_resolved {
   h4 {
     background: rgba( 70, 165, 70, 0.7);
