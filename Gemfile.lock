@@ -14,9 +14,9 @@ GIT
 
 GIT
   remote: git@github.com:omadahealth/multi_grep.git
-  revision: 169de6f1158532aed598d319d63fd19b438a1186
+  revision: 05982c2f9c63aac9b07938d0bf2bf0e12628cc67
   specs:
-    multi_grep (0.0.1)
+    multi_grep (0.0.2)
       awesome_print
 
 GEM
