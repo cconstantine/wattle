@@ -24,7 +24,10 @@
     - if grouping.app_user_stats(filters: filters)[nil].present?
       .badge.badge-warning
         = "+ #{grouping.app_user_stats(filters: filters)[nil]}"
-      unknowns
+      unknowns,
+    .badge.badge-warning
+      = grouping.browser_count(filters: filters)
+    browsers affected
 
   - if grouping.app_user_count(filters: filters) > 0
     %ul.plain.unstyled
@@ -34,6 +37,13 @@
           User:
           =  user
 
+  - if grouping.browser_count(filters: filters) > 0
+    %ul.plain.unstyled
+      - grouping.browser_agent_stats(filters: filters, limit: 10).each do |browser, count|
+        %li
+          .badge.badge-info=  count
+          UserAgent:
+          = browser
 
   %br
   .well

@@ -79,6 +79,28 @@ class Grouping < ActiveRecord::Base
     wats.filtered(filters).distinct_users.count
   end
 
+  def browser_stats(filters: {}, key_name: :HTTP_USER_AGENT, limit: nil)
+    wats.filtered(filters)
+    .select("request_headers -> '#{key_name}' as #{key_name}, count(*) as count")
+    .group("request_headers -> '#{key_name}'")
+    .order("count(request_headers -> '#{key_name}') desc")
+    .limit(limit).count
+  end
+
+  def browser_agent_stats(filters: {}, key_name: :HTTP_USER_AGENT, limit: nil)
+    agents = Hash.new {0}
+    browser_stats(filters: filters, key_name: key_name, limit: limit).each do |browser, count|
+      agent = Agent.new(browser)
+      browser = "#{agent.name} #{agent.version}" if agent.name != :Unknown
+      agents[browser] += count
+    end
+    agents.sort_by {|k, v| -v}
+  end
+
+  def browser_count(filters: {}, key_name: :HTTP_USER_AGENT)
+    wats.filtered(filters).distinct_browsers.count
+  end
+
   def self.get_or_create_from_wat!(wat)
     transaction do
       open.matching(wat).first_or_create(state: "active")

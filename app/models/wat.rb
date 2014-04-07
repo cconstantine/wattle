@@ -37,6 +37,7 @@ class Wat < ActiveRecord::Base
   scope :app_env,   -> (name) {where(:app_env => name) }
 
   scope :distinct_users, -> {select('distinct app_user -> \'id\'')}
+  scope :distinct_browsers, -> {select('distinct request_headers -> \'HTTP_USER_AGENT\'')}
 
   def self.new_from_exception(e=nil, metadata={}, &block)
     if block_given?

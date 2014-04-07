@@ -32,14 +32,16 @@ FixtureBuilder.configure do |fbuilder|
     end.first.groupings.first
 
     grouping_users = [
-        { "id" => 1 },
-        { "id" => 2 },
-        { "id" => 2 },
-        { "id" => nil },
-        { "id" => nil }
+        { "user" => {"id" => 1 }, "browser" => nil},
+        { "user" => { "id" => 2 }, "browser" => nil},
+        { "user" => { "id" => 2 }, "browser" => "FooBrowser"},
+        { "user" => { "id" => nil }, "browser" => "FooBrowser"},
+        { "user" => { "id" => nil }, "browser" => "Barser"}
     ]
-    @grouping4 = grouping_users.map do |grouping_user|
-      Wat.create_from_exception!(nil, {app_user: grouping_user, app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}
+
+    @grouping4 = grouping_users.map do |grouping_info|
+      headers = { "HTTP_USER_AGENT" => grouping_info["browser"] }
+      Wat.create_from_exception!(nil, {app_user: grouping_info["user"], request_headers: headers, app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
     @normal_javascripts = 5.times.map do |i|

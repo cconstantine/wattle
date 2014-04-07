@@ -56,6 +56,32 @@ describe Grouping do
     end
   end
 
+  describe "#browser_stats" do
+    subject {grouping.browser_stats()}
+    context "with no browser info" do
+      let(:grouping) {groupings(:grouping1)}
+      it {should == {nil => 5}}
+    end
+
+    context "with some interesting browser info" do
+      let(:grouping) {groupings(:grouping4)}
+      it {should == {nil => 2, "FooBrowser" => 2, "Barser" => 1}}
+    end
+  end
+
+  describe "#browser_count" do
+    subject {grouping.browser_count()}
+    context "with no browser info" do
+      let(:grouping) {groupings(:grouping1)}
+      it {should == 0}
+    end
+
+    context "with some interesting browser info" do
+      let(:grouping) {groupings(:grouping4)}
+      it {should == 2}
+    end
+  end
+
 
   describe "#filtered" do
     let(:filter_params) {{}}
