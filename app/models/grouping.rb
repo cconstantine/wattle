@@ -90,7 +90,7 @@ class Grouping < ActiveRecord::Base
   def browser_agent_stats(filters: {}, key_name: :HTTP_USER_AGENT, limit: nil)
     agents = Hash.new {0}
     browser_stats(filters: filters, key_name: key_name, limit: limit).each do |browser, count|
-      agent = Agent.new(browser)
+      agent = Agent.new(browser || "Unknown")
       browser = "#{agent.name} #{agent.version}" if agent.name != :Unknown
       agents[browser] += count
     end
