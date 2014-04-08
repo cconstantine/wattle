@@ -64,10 +64,10 @@ feature "Interacting with wats", js: true do
 
       scenario "acknowledging" do
         within ".states" do
-          click_on "Acknowledge"
+          click_on "Won't Fix"
         end
         within ".current_state" do
-          page.should have_content "Acknowledged"
+          page.should have_content "Wontfix"
         end
       end
 

@@ -138,13 +138,13 @@ describe GroupingsController do
     end
   end
 
-  describe "POST #acknowledge" do
+  describe "POST #wontfix" do
     let(:wat) { grouping.wats.first}
     let(:grouping) {groupings(:grouping2)}
 
     subject do
       @request.env['HTTP_REFERER'] = '/something'
-      post :acknowledge, id: grouping.to_param, format: :json
+      post :wontfix, id: grouping.to_param, format: :json
     end
 
     context "when logged in" do
@@ -154,11 +154,11 @@ describe GroupingsController do
 
       it {should redirect_to '/something'}
       it "should resolve the grouping" do
-        expect {subject}.to change {grouping.reload.acknowledged?}.from(false).to(true)
+        expect {subject}.to change {grouping.reload.wontfix?}.from(false).to(true)
       end
 
-      context "with a acknowledged grouping" do
-        let(:grouping) {groupings(:acknowledged)}
+      context "with a wontfix grouping" do
+        let(:grouping) {groupings(:wontfix)}
         it "should raise and error" do
           expect{subject}.to raise_error StateMachine::InvalidTransition
         end
@@ -168,7 +168,7 @@ describe GroupingsController do
 
   describe "POST #activate" do
     let(:wat) { grouping.wats.first}
-    let(:grouping) {groupings(:acknowledged)}
+    let(:grouping) {groupings(:wontfix)}
 
     subject do
       @request.env['HTTP_REFERER'] = '/something'
@@ -185,7 +185,7 @@ describe GroupingsController do
         expect {subject}.to change {grouping.reload.active?}.from(false).to(true)
       end
 
-      context "with a acknowledged grouping" do
+      context "with a wontfix grouping" do
         let(:grouping) {groupings(:grouping1)}
         it "should raise and error" do
           expect{subject}.to raise_error StateMachine::InvalidTransition

@@ -64,10 +64,10 @@ FixtureBuilder.configure do |fbuilder|
 
     @resolved.resolve!
 
-    @acknowledged = 5.times.map do |i|
+    @wontfix = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
-    @acknowledged.acknowledge!
+    @wontfix.wontfix!
 
     @muffled = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}

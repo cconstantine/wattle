@@ -5,11 +5,11 @@
       %span.text-info
         Reactivate
   - else
-    = link_to acknowledge_grouping_path(group), method: :post do
+    = link_to wontfix_grouping_path(group), method: :post do
       .glyphicon.glyphicon-check
       %span.text-info
-        Acknowledge
-  - if group.active? || group.acknowledged?
+        Won't Fix
+  - if group.active? || group.wontfix?
     = link_to muffle_grouping_path(group), method: :post do
       .glyphicon.glyphicon.glyphicon-volume-down
       %span.text-info

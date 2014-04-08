@@ -39,8 +39,8 @@ describe GroupingNotifier do
         let(:grouping) {groupings(:resolved)}
         it {should_not be_needs_notifying}
       end
-      context "when the grouping is acknowledged" do
-        let(:grouping) {groupings(:acknowledged)}
+      context "when the grouping is wontfix" do
+        let(:grouping) {groupings(:wontfix)}
         it {should_not be_needs_notifying}
       end
       context "when the grouping is muffled" do
@@ -101,8 +101,8 @@ describe GroupingNotifier do
     context "when the grouping was not notified recently" do
       before { grouping.update_column(:last_emailed_at, 1.day.ago)}
       it {should be_true}
-      context "with an acknowledged grouping" do
-        let(:grouping) {groupings(:acknowledged)}
+      context "with a wontfix grouping" do
+        let(:grouping) {groupings(:wontfix)}
 
         it {should be_false}
       end

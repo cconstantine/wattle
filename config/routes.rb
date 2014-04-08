@@ -29,7 +29,7 @@ Wattle::Application.routes.draw do
     member do
       get  :chart
       post :resolve
-      post :acknowledge
+      post :wontfix
       post :activate
       post :muffle
     end

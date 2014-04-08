@@ -187,7 +187,7 @@ describe Wat do
     end
 
     context "with a state" do
-      let(:filter_params) {{state: :acknowledged}}
+      let(:filter_params) {{state: :wontfix}}
       it {should have(5).item}
     end
   end
@@ -299,8 +299,8 @@ describe Wat do
         wat.groupings.should include(grouping)
       end
     end
-    context "with an existing acknowledged duplicate error" do
-      let!(:grouping) { Grouping.where(key_line: wat.key_line, error_class: wat.error_class).first_or_create!.tap {|g| g.acknowledge!} }
+    context "with an existing wontfix duplicate error" do
+      let!(:grouping) { Grouping.where(key_line: wat.key_line, error_class: wat.error_class).first_or_create!.tap {|g| g.wontfix!} }
 
       it "should create a grouping" do
         expect {subject}.to change {Grouping.count}.by 0

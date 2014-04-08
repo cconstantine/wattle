@@ -49,8 +49,8 @@ class GroupingsController < ApplicationController
     redirect_to request.referer
   end
 
-  def acknowledge
-    @grouping.acknowledge!
+  def wontfix
+    @grouping.wontfix!
     redirect_to request.referer
   end
 

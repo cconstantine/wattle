@@ -7,8 +7,8 @@
         Active
     %li
       =label_tag do
-        = check_box_tag 'filters[state][]', 'acknowledged', checked?(:state, 'acknowledged')
-        Acknowledged
+        = check_box_tag 'filters[state][]', 'wontfix', checked?(:state, 'wontfix')
+        Won't Fix
     %li
       =label_tag do
         = check_box_tag 'filters[state][]', 'resolved', checked?(:state, 'resolved')

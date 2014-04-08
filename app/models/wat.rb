@@ -24,10 +24,10 @@ class Wat < ActiveRecord::Base
     running_scope
   }
 
-  scope :open,          -> {joins(:groupings).where("groupings.state" => [:acknowledged, :active]) }
+  scope :open,          -> {joins(:groupings).where("groupings.state" => [:wontfix, :active]) }
   scope :active,        -> {joins(:groupings).where("groupings.state" => :active)}
   scope :resolved,      -> {joins(:groupings).where("groupings.state" => :resolved)}
-  scope :acknowledged,  -> {joins(:groupings).where("groupings.state" => :acknowledged)}
+  scope :wontfix,       -> {joins(:groupings).where("groupings.state" => :wontfix)}
 
   scope :after, -> (start_time) {where('wats.created_at > ?', start_time)}
   scope :language, -> (language) {where(language: language)}

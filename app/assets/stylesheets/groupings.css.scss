@@ -17,7 +17,7 @@
     @extend .alert;
     @extend .alert-danger;
   }
-  .acknowledged-tag{
+  .wontfix-tag{
     @extend .alert;
     @extend .alert-info;
   }
@@ -62,7 +62,7 @@
     }
   }
 }
-.group_listing.group_state_acknowledged {
+.group_listing.group_state_wontfix {
   h4 {
     background: rgba( 180, 180, 180, 0.7);
     &:hover {

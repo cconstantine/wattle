@@ -9,25 +9,25 @@ class WatsGrouping < ActiveRecord::Base
 
 
   state_machine :state, initial: :active do
-    state :active, :resolved, :acknowledged
+    state :active, :resolved, :wontfix
 
     event :activate do
-      transition [:resolved, :acknowledged] => :active
+      transition [:resolved, :wontfix] => :active
     end
 
     event :resolve do
-      transition [:acknowledged, :active] => :resolved
+      transition [:wontfix, :active] => :resolved
     end
 
-    event :acknowledge do
-      transition :active => :acknowledged
+    event :wontfix do
+      transition :active => :wontfix
     end
   end
 
-  scope :open,          -> {where(state: [:acknowledged, :active])}
+  scope :open,          -> {where(state: [:wontfix, :active])}
   scope :active,        -> {where(state: :active)}
   scope :resolved,      -> {where(state: :resolved)}
-  scope :acknowledged,  -> {where(state: :acknowledged)}
+  scope :wontfix,       -> {where(state: :wontfix)}
 
 
   def set_state
