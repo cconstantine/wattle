@@ -15,7 +15,7 @@
     %link(href="images/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72")
     %link(href="/wattle_logo.png" rel="apple-touch-icon")
     %link(href="/favicon.ico" rel="shortcut icon")
-    = javascript_wat_catcher
+    = javascript_bugsnag_catcher
 
   %body
     %nav.navbar.navbar-fixed-top.navbar-default{role: "navigation"}
@@ -34,10 +34,11 @@
           %li= link_to "Reports", groupings_path(params.slice(:utf8, :filters))
           %li= link_to "Stats", stats_path(params.slice(:utf8, :filters))
         %ul.navbar-right.nav.navbar-nav
-          %li
-            %a{href: "#settings"}
-              .pull-left= image_tag gravatar_url(current_user), class: "watcher-avatar"
-              = current_user.display_name
+          - if current_user
+            %li
+              %a{href: "#settings"}
+                .pull-left= image_tag gravatar_url(current_user), class: "watcher-avatar"
+                = current_user.display_name
 
     .row
       .col-lg-2
