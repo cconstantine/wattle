@@ -1,8 +1,13 @@
 module ApplicationHelper
 
   def checked? param, key
+    return false unless has_filter?(param)
+    params[:filters][param].include?(key)
+  end
+
+  def has_filter? param
     return false unless params[:filters].present?
-    params[:filters][param].present? && params[:filters][param].include?(key)
+    params[:filters][param].present?
   end
 
   def wats(grouping)

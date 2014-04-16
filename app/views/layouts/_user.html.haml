@@ -1,0 +1,9 @@
+-if has_filter? :app_user
+  %li.nav-header.mb20
+    Users
+    %ul.filter#users
+      - filters[:app_user].each do |user_id|
+        %li
+          =label_tag do
+            = check_box_tag 'filters[app_user][]', user_id, true
+            = user_id

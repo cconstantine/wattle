@@ -2,6 +2,13 @@ require 'spec_helper'
 
 describe Wat do
 
+  describe ".by_user" do
+    subject {Wat.by_user(user_id)}
+
+    let(:user_id) {"2"}
+    it {should have(2).items}
+  end
+
   describe "#destroy" do
     let(:wat) {wats(:default)}
     subject {wat.destroy}
@@ -170,6 +177,12 @@ describe Wat do
     let(:scope) {Wat.all}
     subject {scope.filtered(filter_params)}
     it {should have(Wat.count).items}
+
+
+    context "with an app_user" do
+      let(:filter_params) {{app_user: "2"}}
+      it {should have(2).items}
+    end
 
     context "with an app_name" do
       let(:filter_params) {{app_name: "app1"}}

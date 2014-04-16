@@ -2,7 +2,7 @@
   .states-and-environments-container.pull-left
     .current_state{class: "#{grouping.state}-tag"}
       = grouping.state.capitalize
-    - grouping.app_envs.each do |app_env|
+    - grouping.app_envs(filters).each do |app_env|
       .alert.alert-info
         = app_env
   .pull-right.action-items
@@ -32,17 +32,20 @@
   - if grouping.app_user_count(filters: filters) > 0
     %ul.plain.unstyled
       - grouping.app_user_stats(filters: filters, limit: 10).each do |user, count|
-        %li
-          .badge.badge-info=  count
-          User:
-          =  user
+        %li.row
+          .col-md-1
+            .badge.badge-info.pull-right=  count
+          = link_to 'Groupings', groupings_path( filters: filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
+          = link_to 'Wats', wats_path( filters: filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
+          = link_to 'Filter', grouping_path(grouping, filters: filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
+          = user
 
   - if grouping.browser_count(filters: filters) > 0
     %ul.plain.unstyled
       - grouping.browser_agent_stats(filters: filters, limit: 10).each do |browser, count|
-        %li
-          .badge.badge-info=  count
-          UserAgent:
+        %li.row
+          .col-md-1
+            .badge.pull-right.badge-info=  count
           = browser
 
   %br

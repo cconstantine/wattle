@@ -37,6 +37,7 @@ class Grouping < ActiveRecord::Base
     running_scope = running_scope.app_name(opts[:app_name]) if opts[:app_name]
     running_scope = running_scope.app_env(opts[:app_env])   if opts[:app_env]
     running_scope = running_scope.language(opts[:language]) if opts[:language]
+    running_scope = running_scope.by_user(opts[:app_user])  if opts[:app_user]
 
     running_scope.distinct('groupings.id')
   }
@@ -50,13 +51,14 @@ class Grouping < ActiveRecord::Base
   scope :app_env,  -> (ae) { distinct('groupings.id').joins(:wats).references(:wats).where('wats.app_env IN (?)', ae) }
   scope :app_name, -> (an) { distinct('groupings.id').joins(:wats).references(:wats).where('wats.app_name IN (?)', an) }
   scope :language, -> (an) { distinct('groupings.id').joins(:wats).references(:wats).where('wats.language IN (?)', an) }
+  scope :by_user,  -> (user_id) { distinct('groupings.id').joins(:wats).references(:wats).where('wats.app_user -> \'id\' = ?', user_id) }
 
   def open?
     wontfix? || active? || muffled?
   end
 
-  def app_envs
-    wats.select(:app_env).uniq.map &:app_env
+  def app_envs(filters={})
+    wats.filtered(filters).select(:app_env).uniq.map &:app_env
   end
 
   def languages

@@ -21,6 +21,8 @@ class Wat < ActiveRecord::Base
     running_scope = running_scope.where(:app_name => opts[:app_name]) if opts[:app_name]
     running_scope = running_scope.where(:app_env  => opts[:app_env])  if opts[:app_env]
     running_scope = running_scope.where(:language => opts[:language]) if opts[:language]
+    running_scope = running_scope.by_user(opts[:app_user])            if opts[:app_user]
+
     running_scope
   }
 
@@ -35,6 +37,7 @@ class Wat < ActiveRecord::Base
   scope :ruby,       -> {language(:ruby)}
   scope :app_name,   -> (name) {where(:app_name => name) }
   scope :app_env,   -> (name) {where(:app_env => name) }
+  scope :by_user,   -> (user_id) {where('app_user -> \'id\' in (?)', user_id)}
 
   scope :distinct_users, -> {select('distinct app_user -> \'id\'')}
   scope :distinct_browsers, -> {select('distinct request_headers -> \'HTTP_USER_AGENT\'')}

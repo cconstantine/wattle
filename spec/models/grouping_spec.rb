@@ -12,6 +12,14 @@ describe Grouping do
 
   let(:wat) {Wat.new_from_exception(error, metadata) }
 
+
+  describe ".by_user" do
+    subject {Grouping.by_user(user_id)}
+
+    let(:user_id) {"2"}
+    it {should have(1).item}
+  end
+
   describe "#new_wats" do
     let(:grouping) {groupings(:grouping1)}
     subject {grouping.new_wats}
@@ -88,6 +96,11 @@ describe Grouping do
     let(:scope) {Grouping.all}
     subject {scope.filtered(filter_params)}
     it {should have(Grouping.open.count).items}
+
+    context "with an app_user" do
+      let(:filter_params) {{app_user: "2"}}
+      it {should have(1).items}
+    end
 
     context "with an app_name" do
       let(:filter_params) {{app_name: "app1"}}
