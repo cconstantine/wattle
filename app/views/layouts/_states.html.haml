@@ -7,6 +7,10 @@
         Active
     %li
       =label_tag do
+        = check_box_tag 'filters[state][]', 'muffled', checked?(:state, 'muffled')
+        Muffled
+    %li
+      =label_tag do
         = check_box_tag 'filters[state][]', 'wontfix', checked?(:state, 'wontfix')
         Won't Fix
     %li
