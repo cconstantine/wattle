@@ -28,7 +28,7 @@ module Wattle
     # config.i18n.default_locale = :de
 
 
-    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif *.js wats.css)
+    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif *.js *.woff *.ttf *.svg wats.css)
 
     config.active_record.schema_format = :sql
 
