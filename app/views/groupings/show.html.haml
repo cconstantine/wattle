@@ -1,10 +1,9 @@
 - wats = wats(@grouping)
-- wat = representative_wat(wats)
 - if wats.empty?
   %h5 Yo man, there's too many filters to show anything anymore so you might want to filter less in your filtering
 - else
   .grouping_data
-    = render @grouping, wats: wats, wat: wat
+    = render @grouping, wats: wats
     %br
 
 

@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', ">= 4.0"#, github: 'rails/rails', branch: 'v4.0.0.rc1'
 
 gem 'pg'
+gem 'postgres_ext'
 
 gem "haml-rails"
 gem 'jquery-rails'

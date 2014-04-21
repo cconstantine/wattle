@@ -42,6 +42,17 @@ class Wat < ActiveRecord::Base
   scope :distinct_users, -> {select('distinct app_user -> \'id\'')}
   scope :distinct_browsers, -> {select('distinct request_headers -> \'HTTP_USER_AGENT\'')}
 
+  # See: http://zogovic.com/post/44856908222/optimizing-postgresql-query-for-distinct-values
+  def self.distinct(column)
+    select = <<-SQL
+  SELECT MIN(#{column}) FROM wats
+UNION
+  SELECT (SELECT #{column} FROM wats WHERE #{column} > n ORDER BY #{column} LIMIT 1)
+  FROM t WHERE n IS NOT NULL
+SQL
+    with.recursive("t(n)" => select).from("t").where("n is not null").pluck("n")
+  end
+
   def self.new_from_exception(e=nil, metadata={}, &block)
     if block_given?
       begin
@@ -59,6 +70,18 @@ class Wat < ActiveRecord::Base
     new_from_exception(e, metadata, &block).tap {|w|
       w.save!
     }
+  end
+
+  def self.languages
+    distinct(:language)
+  end
+
+  def self.app_names
+    distinct(:app_name)
+  end
+
+  def self.app_envs
+    distinct(:app_env)
   end
 
   def key_line

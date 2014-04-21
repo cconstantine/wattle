@@ -7,7 +7,7 @@
         = app_env
   .pull-right.action-items
     = render partial: "state", locals: {group: grouping}
-
+- wat = grouping.representative_wat
 - if wat
   %h2
     = wat_heading(wat)
@@ -53,7 +53,7 @@
     .item
       %em
         Application:
-      = wats.group(:app_name).pluck(:app_name).first
+      = wat.app_name
       in
       = grouping_envs(grouping)
     .item

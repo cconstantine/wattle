@@ -5,14 +5,14 @@ module WatsHelper
   end
 
   def app_envs
-    Wat.all.uniq.pluck(:app_env)
+    Wat.app_envs
   end
 
   def app_names
-    Wat.all.uniq.pluck(:app_name)
+    Wat.app_names
   end
 
   def languages
-    Wat.where('language is not null').uniq.pluck(:language)
+    Wat.languages
   end
 end

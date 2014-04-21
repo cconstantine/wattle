@@ -183,6 +183,7 @@ GEM
       oauth2 (~> 0.9.3)
       omniauth (~> 1.2)
     pg (0.17.1)
+    pg_array_parser (0.0.9)
     pivotal_git_scripts (1.1.4)
     poltergeist (1.5.0)
       capybara (~> 2.1)
@@ -190,6 +191,10 @@ GEM
       multi_json (~> 1.0)
       websocket-driver (>= 0.2.0)
     polyglot (0.3.4)
+    postgres_ext (2.2.0)
+      activerecord (~> 4.0.0)
+      arel (~> 4.0.1)
+      pg_array_parser (~> 0.0.9)
     rack (1.5.2)
     rack-protection (1.5.2)
       rack
@@ -323,6 +328,7 @@ DEPENDENCIES
   pg
   pivotal_git_scripts
   poltergeist
+  postgres_ext
   rails (>= 4.0)
   redcarpet
   rr
