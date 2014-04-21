@@ -4,7 +4,7 @@ class GroupingsController < ApplicationController
   before_filter :load_group, except: [:index, :index_chart]
 
   def index
-    @groupings = Grouping.filtered(filters).includes(:representative_wat)
+    @groupings = Grouping.filtered(filters)
     @order = params[:order].try(:to_sym) || :hot
     if @order == :new
       @groupings = @groupings.wat_order.reverse
