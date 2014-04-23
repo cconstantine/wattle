@@ -11,7 +11,7 @@
 
     .highchart{data: {chart: @chart.to_json}}
 
-    - paged_wats = wats.order("created_at desc").page(params[:page]).per(1)
+    - paged_wats = wats.order("captured_at desc").page(params[:page]).per(1)
     = paginate paged_wats
     .grouping_details
       = render paged_wats

@@ -6,6 +6,8 @@ class Wat < ActiveRecord::Base
   has_many :groupings, through: :wats_groupings
 
   before_save :cleanup_hstore_columns
+  before_create :ensure_captured_at
+
   after_create :construct_groupings!
 
   after_commit :send_email, on: :create unless Rails.env.test?
@@ -31,7 +33,7 @@ class Wat < ActiveRecord::Base
   scope :resolved,      -> {joins(:groupings).where("groupings.state" => :resolved)}
   scope :wontfix,       -> {joins(:groupings).where("groupings.state" => :wontfix)}
 
-  scope :after, -> (start_time) {where('wats.created_at > ?', start_time)}
+  scope :after, -> (start_time) {where('wats.captured_at > ?', start_time)}
   scope :language, -> (language) {where(language: language)}
   scope :javascript, -> {language(:javascript)}
   scope :ruby,       -> {language(:ruby)}
@@ -156,5 +158,9 @@ SQL
 
   def language=(lang)
     super lang.to_s.downcase
+  end
+
+  def ensure_captured_at
+    self.captured_at ||= Time.zone.now
   end
 end

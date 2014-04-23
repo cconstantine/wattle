@@ -114,7 +114,7 @@ class Grouping < ActiveRecord::Base
 
   def chart_data(filters
 )
-    wat_chart_data = wats.filtered(filters).group('date_trunc(\'day\',  wats.created_at)').count.inject({}) do |doc, values|
+    wat_chart_data = wats.filtered(filters).group('date_trunc(\'day\',  wats.captured_at)').count.inject({}) do |doc, values|
       doc[values[0]] = values[1]
       doc
     end

@@ -174,7 +174,8 @@ CREATE TABLE wats (
     app_name text DEFAULT 'unknown'::character varying NOT NULL,
     backtrace text[],
     language character varying(255),
-    app_user hstore DEFAULT '"id"=>NULL'::hstore
+    app_user hstore DEFAULT '"id"=>NULL'::hstore,
+    captured_at timestamp without time zone NOT NULL
 );
 
 
@@ -397,6 +398,13 @@ CREATE INDEX index_wats_on_app_name ON wats USING btree (app_name);
 
 
 --
+-- Name: index_wats_on_captured_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_wats_on_captured_at ON wats USING btree (captured_at);
+
+
+--
 -- Name: index_wats_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -487,3 +495,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140211190623');
 INSERT INTO schema_migrations (version) VALUES ('20140408181823');
 
 INSERT INTO schema_migrations (version) VALUES ('20140417185524');
+
+INSERT INTO schema_migrations (version) VALUES ('20140423221700');

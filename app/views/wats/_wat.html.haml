@@ -16,7 +16,7 @@
       %dd= wat.page_url
     %dt Occurred at
     %dd
-      .moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat.created_at}}
+      .moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat.captured_at}}
     -if agent = wat.user_agent
       %dt Browser
       %dd

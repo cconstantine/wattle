@@ -57,15 +57,15 @@
       in
       = grouping_envs(grouping)
     .item
-      - wat_the_first = wats.order(:created_at).first
-      - wat_the_last = wats.order(:created_at).last
+      - wat_the_first = wats.order(:captured_at).first
+      - wat_the_last = wats.order(:captured_at).last
       %em
         First Incident:
-      %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat_the_first.created_at}}
+      %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat_the_first.captured_at}}
     .item
       %em
         Most Recent Incident:
-      %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat_the_last.created_at}}
+      %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat_the_last.captured_at}}
     .item
       - pages = wats.group(:page_url).pluck(:page_url)
       - if pages.any?

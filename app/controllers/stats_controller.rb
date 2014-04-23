@@ -23,12 +23,12 @@ class StatsController < ApplicationController
 
   def index
     step = 1.day
-    current_date = Wat.order(:id).first.created_at.beginning_of_day
-    end_date   = Wat.order(:id).last.created_at.beginning_of_day
+    current_date = Wat.order(:captured_at).first.captured_at.beginning_of_day
+    end_date   = Wat.order(:captured_at).last.captured_at.beginning_of_day
 
     avg_per_grouping = []
     while current_date <= end_date
-      counting = Grouping.filtered(filters).select('distinct groupings.id').joins(:wats).where("wats.created_at between ? AND ?", current_date, current_date + step).count
+      counting = Grouping.filtered(filters).select('distinct groupings.id').joins(:wats).where("wats.captured_at between ? AND ?", current_date, current_date + step).count
 
       avg_per_grouping << [current_date.to_i*1000,
                            counting]
@@ -57,12 +57,12 @@ class StatsController < ApplicationController
 
 
     step = 1.day
-    current_date = Wat.order(:id).first.created_at.beginning_of_day
-    end_date   = Wat.order(:id).last.created_at.beginning_of_day
+    current_date = Wat.order(:captured_at).first.captured_at.beginning_of_day
+    end_date   = Wat.order(:captured_at).last.captured_at.beginning_of_day
 
     user_wats = []
     while current_date <= end_date
-      counting = Wat.filtered(filters).where("wats.created_at between ? AND ?", current_date, current_date + step).count
+      counting = Wat.filtered(filters).where("wats.captured_at between ? AND ?", current_date, current_date + step).count
 
       user_wats << [current_date.to_i*1000,
                     counting]
