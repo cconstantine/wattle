@@ -29,4 +29,4 @@
       Last Seen
       %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ",time: wat.captured_at}}
     .users_affected
-      #{ group.app_user_count(filters: filters) } users affected
+      #{ pluralize(group.app_user_count(filters: filters), 'user') } affected
