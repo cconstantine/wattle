@@ -62,11 +62,11 @@ describe GroupingsController do
             hotest.should_not == newest
           end
 
-          context "without a specified order, page is hot" do
+          context "without a specified order, page is new" do
             let(:order) {nil}
-            it "should show the hottest groupings first" do
+            it "should show the newest groupings first" do
               subject
-              assigns[:groupings].first.should == hotest
+              assigns[:groupings].first.should == newest
             end
           end
 

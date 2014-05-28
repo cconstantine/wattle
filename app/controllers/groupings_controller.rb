@@ -5,7 +5,7 @@ class GroupingsController < ApplicationController
 
   def index
     @groupings = Grouping.filtered(filters)
-    @order = params[:order].try(:to_sym) || :hot
+    @order = params[:order].try(:to_sym) || :new
     if @order == :new
       @groupings = @groupings.wat_order.reverse
     else
