@@ -306,6 +306,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   backbone-on-rails
   bootstrap-sass-rails
   capybara
