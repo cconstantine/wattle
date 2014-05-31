@@ -30,16 +30,19 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  scope :open,          -> {where(state: [:wontfix, :active, :muffled])}
-  scope :active,        -> {where(state: :active)}
-  scope :resolved,      -> {where(state: :resolved)}
-  scope :wontfix,  -> {where(state: :wontfix)}
-  scope :state,         -> (state) {where(state: state)}
-  scope :matching, ->(wat) {language(wat.language).where(wat.matching_selector)}
+  scope :open,     -> { where(state: [:wontfix, :active, :muffled]) }
+  scope :active,   -> { where(state: :active) }
+  scope :resolved, -> { where(state: :resolved) }
+  scope :wontfix,  -> { where(state: :wontfix) }
+  scope :unmerged, -> { where(merged_into_grouping_id: nil) }
+  scope :state,    -> (state) { where(state: state) }
+  scope :matching, -> (wat) { language(wat.language).where(wat.matching_selector) }
+
   scope :filtered, ->(opts=nil) {
     opts ||= {}
 
     running_scope = opts[:state] ? state(opts[:state]) : open
+    running_scope = running_scope.unmerged
     running_scope = running_scope.app_name(opts[:app_name]) if opts[:app_name]
     running_scope = running_scope.app_env(opts[:app_env])   if opts[:app_env]
     running_scope = running_scope.language(opts[:language]) if opts[:language]
