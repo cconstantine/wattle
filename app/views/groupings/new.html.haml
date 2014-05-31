@@ -1,0 +1,8 @@
+%h1 Merge groupings
+
+= form_for Grouping.new do |f|
+  = label_tag :grouping_ids, "Grouping IDs"
+  = text_field_tag :grouping_ids
+  = f.label :state, "State of merged grouping"
+  = f.text_field :state
+  = f.submit

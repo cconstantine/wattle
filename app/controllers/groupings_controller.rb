@@ -1,7 +1,7 @@
 class GroupingsController < ApplicationController
   respond_to :html, :json
 
-  before_filter :load_group, except: [:index, :create]
+  before_filter :load_group, except: [:index, :create, :new]
 
   def index
     @groupings = Grouping.filtered(filters)
@@ -40,9 +40,13 @@ class GroupingsController < ApplicationController
   end
 
   def create
-    groupings = Grouping.find(params[:grouping_ids])
+    grouping_ids = params[:grouping_ids].split(',')
+    groupings = Grouping.find(grouping_ids)
     new_grouping = Grouping.merge! groupings
     redirect_to new_grouping
+  end
+
+  def new
   end
 
   def resolve
