@@ -57,7 +57,8 @@ CREATE TABLE groupings (
     last_emailed_at timestamp without time zone,
     message text,
     popularity numeric(1000,1),
-    latest_wat_at timestamp without time zone
+    latest_wat_at timestamp without time zone,
+    merged_into_grouping_id integer
 );
 
 
@@ -321,6 +322,13 @@ CREATE INDEX index_groupings_on_latest_wat_at ON groupings USING btree (latest_w
 
 
 --
+-- Name: index_groupings_on_merged_into_grouping_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_groupings_on_merged_into_grouping_id ON groupings USING btree (merged_into_grouping_id);
+
+
+--
 -- Name: index_groupings_on_message; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -497,3 +505,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140408181823');
 INSERT INTO schema_migrations (version) VALUES ('20140417185524');
 
 INSERT INTO schema_migrations (version) VALUES ('20140423221700');
+
+INSERT INTO schema_migrations (version) VALUES ('20140531203829');

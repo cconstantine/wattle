@@ -46,14 +46,13 @@ end
 
 group :development do
   gem 'mailcatcher'
-  gem 'debugger'
   gem 'pivotal_git_scripts'
 end
 
 group :test, :development do
   gem 'awesome_print'
   gem 'rr', require: false
-  gem "rspec-rails", ">= 2.0"
+  gem "rspec-rails", ">= 2.14"
   gem 'fixture_builder'
   gem 'thin'
 end

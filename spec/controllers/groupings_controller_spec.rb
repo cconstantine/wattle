@@ -110,6 +110,50 @@ describe GroupingsController do
     end
   end
 
+  describe "POST #create" do
+
+    subject { post :create, grouping_ids: grouping_ids }
+
+    context "when logged in" do
+      before do
+        login watchers(:default)
+      end
+
+      context "with valid grouping info" do
+        let(:child1) { groupings :grouping1 }
+        let(:child2) { groupings :grouping2 }
+        let(:grouping_ids) { [child1.id, child2.id] }
+
+        it "merges the groupings" do
+          pending "`receive' apparently is bonkers"
+          # WAT
+          expect(Grouping).to receive(:merge!)#.with([child1, child2])
+          subject
+        end
+
+        it "creates a new grouping" do
+          expect{ subject }.to change(Grouping, :count).by(1)
+        end
+
+        it "redirects to the new grouping" do
+          expect(subject).to redirect_to Grouping.last
+        end
+      end
+
+      context "with invalid grouping info" do
+        let(:grouping_ids) { [-2, -1] }
+
+        it "does not create a new grouping" do
+          expect{ begin; subject; rescue; end }.not_to change(Grouping, :count)
+        end
+
+        it "raises an error" do
+          expect { subject }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+    end
+  end
+
   describe "POST #resolve" do
     let(:wat) { grouping.wats.first}
     let(:grouping) {groupings(:grouping2)}
@@ -214,5 +258,4 @@ describe GroupingsController do
       end
     end
   end
-
 end

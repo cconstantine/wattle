@@ -20,6 +20,25 @@ describe Grouping do
     it {should have(1).item}
   end
 
+  describe ".merge!" do
+    let(:child1) { groupings(:grouping1) }
+    let(:child2) { groupings(:grouping2) }
+    let(:child_groupings) { [child1, child2] }
+    let(:new_grouping) { Grouping.last }
+
+    subject { Grouping.merge! child_groupings }
+
+    describe "the new grouping" do
+      it "has the expected child groupings" do
+        subject
+        expect(new_grouping.subgroupings).to match_array [child1, child2]
+        expected_wats_count = (child1.wats + child2.wats).uniq.count
+        expect(new_grouping.wats.count).to eq expected_wats_count
+        expect(child1.merged_into_grouping).to eq new_grouping
+      end
+    end
+  end
+
   describe "#new_wats" do
     let(:grouping) {groupings(:grouping1)}
     subject {grouping.new_wats}
