@@ -1,8 +1,11 @@
 %h1 Merge groupings
 
-= form_for Grouping.new do |f|
-  = label_tag :grouping_ids, "Grouping IDs"
-  = text_field_tag :grouping_ids
-  = f.label :state, "State of merged grouping"
-  = f.text_field :state
-  = f.submit
+= form_for @grouping do |f|
+  .input
+    = label_tag :grouping_ids, "Grouping IDs (comma-separated)"
+    = text_field_tag :grouping_ids
+  .input
+    = f.label :state, "State of merged grouping"
+    - select_options = options_for_select Grouping.state_machine.states.keys.map { |state| [state.to_s, state] }
+    = f.select :state, select_options
+  = f.submit "Merge", class: "btn btn-primary"

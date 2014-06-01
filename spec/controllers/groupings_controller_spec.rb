@@ -112,7 +112,7 @@ describe GroupingsController do
 
   describe "POST #create" do
 
-    subject { post :create, grouping_ids: grouping_ids }
+    subject { post :create, grouping_ids: grouping_ids, grouping: { state: "active" } }
 
     context "when logged in" do
       before do

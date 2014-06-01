@@ -33,6 +33,7 @@
         %ul.nav.navbar-nav
           %li= link_to "Reports", groupings_path(params.slice(:utf8, :filters))
           %li= link_to "Stats", stats_path(params.slice(:utf8, :filters))
+          %li= link_to "Merge groupings", new_grouping_path
         %ul.navbar-right.nav.navbar-nav
           - if current_user
             %li

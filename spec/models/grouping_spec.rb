@@ -24,9 +24,10 @@ describe Grouping do
     let(:child1) { groupings(:grouping1) }
     let(:child2) { groupings(:grouping2) }
     let(:child_groupings) { [child1, child2] }
+    let(:new_grouping_attributes) { { state: "muffled" } }
     let(:new_grouping) { Grouping.last }
 
-    subject { Grouping.merge! child_groupings }
+    subject { Grouping.merge! child_groupings, new_grouping_attributes }
 
     describe "the new grouping" do
       it "has the expected child groupings" do
@@ -35,6 +36,11 @@ describe Grouping do
         expected_wats_count = (child1.wats + child2.wats).uniq.count
         expect(new_grouping.wats.count).to eq expected_wats_count
         expect(child1.merged_into_grouping).to eq new_grouping
+      end
+
+      it "has the expected state" do
+        subject
+        expect(new_grouping.state).to eq "muffled"
       end
     end
   end

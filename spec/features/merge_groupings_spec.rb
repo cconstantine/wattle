@@ -24,7 +24,7 @@ feature "Merging groupings", js: true do
       before do
         visit new_grouping_path
         fill_in "grouping_ids", with: "#{child1.id}, #{child2.id}"
-        click_button "Create Grouping"
+        click_button "Merge"
       end
 
       it "shows the new grouping" do

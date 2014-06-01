@@ -42,11 +42,12 @@ class GroupingsController < ApplicationController
   def create
     grouping_ids = params[:grouping_ids].split(',')
     groupings = Grouping.find(grouping_ids)
-    new_grouping = Grouping.merge! groupings
+    new_grouping = Grouping.merge! groupings, grouping_attributes
     redirect_to new_grouping
   end
 
   def new
+    @grouping ||= Grouping.new
   end
 
   def resolve
@@ -81,6 +82,10 @@ class GroupingsController < ApplicationController
 
   def load_group
     @grouping = Grouping.find(params.require(:id))
+  end
+
+  def grouping_attributes
+    params.require(:grouping).permit(:state)
   end
 
 end
