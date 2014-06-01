@@ -69,6 +69,16 @@ class GroupingsController < ApplicationController
     redirect_to request.referer
   end
 
+  def destroy
+    if @grouping.subgroupings.any? && @grouping.destroy!
+      redirect_to groupings_path
+    else
+      redirect_to(@grouping, alert: "Please only delete manually merged groupings")
+    end
+  end
+
+  private
+
   def load_group
     @grouping = Grouping.find(params.require(:id))
   end

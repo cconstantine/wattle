@@ -15,10 +15,15 @@
       %span.text-info
         Muffle
   &nbsp;
-  &nbsp;
   - unless group.resolved?
     = link_to resolve_grouping_path(group), method: :post do
       .glyphicon.glyphicon-thumbs-up
       %span.text-success
         Resolve
+  - if group.subgroupings.any?
+    - confirmation = "Are you sure you want to delete this grouping? Child groupings will remain intact."
+    = link_to group, method: :delete, data: { confirm: confirmation } do
+      .glyphicon.glyphicon-remove
+      %span.text-info
+        Unmerge
 

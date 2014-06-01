@@ -1,5 +1,5 @@
 class Grouping < ActiveRecord::Base
-  has_many :wats_groupings
+  has_many :wats_groupings, dependent: :destroy
   has_many :new_wats, ->(grouping) { grouping.last_emailed_at.present? ? where('wats.created_at > ?', grouping.last_emailed_at) : self }, class_name: "Wat", through: :wats_groupings, source: :wat
   has_many :wats, through: :wats_groupings
   has_many :notes
@@ -9,6 +9,8 @@ class Grouping < ActiveRecord::Base
 
   has_many :subgroupings, class_name: "Grouping", foreign_key: "merged_into_grouping_id"
   belongs_to :merged_into_grouping, class_name: "Grouping"
+
+  after_destroy :mark_subgroupings_as_unmerged
 
   state_machine :state, initial: :active do
     state :active, :resolved, :wontfix, :muffled
@@ -74,14 +76,19 @@ class Grouping < ActiveRecord::Base
   end
 
   def self.merge!(groupings, new_grouping_attrs = {})
-    merged_grouping = Grouping.create! new_grouping_attrs
-    wat_ids = WatsGrouping.where(grouping_id: groupings.map(&:id)).map(&:wat_id).uniq
-    merged_grouping.wats << Wat.find(wat_ids)
-    groupings.each do |grouping|
-      grouping.merged_into_grouping = merged_grouping
-      grouping.save!
+    transaction do
+      merged_grouping = Grouping.create! new_grouping_attrs
+      wat_ids = WatsGrouping.where(grouping_id: groupings.map(&:id)).map(&:wat_id).uniq
+      merged_grouping.wats << Wat.find(wat_ids)
+      groupings.each do |grouping|
+        raise "cannot merge already merged grouping" if grouping.merged?
+        grouping.merged_into_grouping = merged_grouping
+        grouping.save!
+      end
+      merged_grouping.update_sorting(merged_grouping.wats.maximum(:created_at))
+      merged_grouping.save!
+      merged_grouping
     end
-    merged_grouping
   end
 
   def self.rescore
@@ -183,5 +190,11 @@ class Grouping < ActiveRecord::Base
 
     self.popularity += popularity_addin(effective_time)
     self.latest_wat_at = effective_time
+  end
+
+  private
+
+  def mark_subgroupings_as_unmerged
+    subgroupings.update_all merged_into_grouping_id: nil
   end
 end

@@ -6,8 +6,7 @@
     = render @grouping, wats: wats
     %br
 
-
-    = render partial: "notes/index", locals: {notes: @grouping.notes }
+    = render "notes/index", notes: @grouping.notes
 
     .highchart{data: {chart: @chart.to_json}}
 

@@ -6,7 +6,7 @@
       .alert.alert-info
         = app_env
   .pull-right.action-items
-    = render partial: "state", locals: {group: grouping}
+    = render "state", group: grouping
 - wat = grouping.representative_wat
 - if wat
   %h2

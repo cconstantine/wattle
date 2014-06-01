@@ -34,7 +34,7 @@ describe GroupingsController do
 
         it "should include unfiltered groupings" do
           subject
-          assigns[:groupings].to_a.should have(Grouping.open.count).items
+          assigns[:groupings].to_a.should have(Grouping.open.unmerged.count).items
           assigns[:groupings].to_a.map(&:app_envs).flatten.uniq.should =~ ['demo', 'production', 'staging']
         end
 
@@ -54,12 +54,12 @@ describe GroupingsController do
         end
         context "ordering" do
           subject { get :index, order: order }
-          let(:hotest) { Grouping.order(:popularity).last}
+          let(:hottest) { Grouping.order(:popularity).last }
           let(:newest) { Grouping.wat_order.reverse.first }
 
           #sanity check
           it "should not be that hottest and newest are the same grouping" do
-            hotest.should_not == newest
+            hottest.should_not == newest
           end
 
           context "without a specified order, page is new" do
@@ -74,7 +74,7 @@ describe GroupingsController do
             let(:order) {:hot}
             it "should show the hottest groupings first" do
               subject
-              assigns[:groupings].first.should == hotest
+              assigns[:groupings].first.should == hottest
             end
           end
 
@@ -255,6 +255,50 @@ describe GroupingsController do
       it {should redirect_to '/something'}
       it "should muffle the grouping" do
         expect {subject}.to change {grouping.reload.muffled?}.from(false).to(true)
+      end
+    end
+  end
+
+  describe "DELETE #destroy" do
+
+    subject { delete :destroy, id: grouping.id }
+
+    context "when logged in" do
+      before do
+        login watchers(:default)
+      end
+
+      context "with a manually created (merged) grouping" do
+        let!(:grouping) { groupings :merged_grouping }
+        let!(:subgrouping_ids) { grouping.subgroupings.map(&:id) }
+
+        it "destroys the grouping" do
+          subject
+          expect{ grouping.reload }.to raise_error ActiveRecord::RecordNotFound
+        end
+
+        it "marks subgroupings as unmerged" do
+          subject
+          expect(Grouping.find(subgrouping_ids).map(&:merged_into_grouping_id)).to match_array [nil,nil]
+        end
+
+        it { should redirect_to groupings_path }
+      end
+
+      context "with a normal grouping" do
+        let!(:grouping) { groupings :grouping1 }
+
+        it "doesn't destroy the grouping" do
+          subject
+          expect{ grouping.reload }.not_to raise_error
+        end
+
+        it "displays an error message" do
+          subject
+          expect(flash[:alert]).to be_present
+        end
+
+        it { should redirect_to grouping }
       end
     end
   end

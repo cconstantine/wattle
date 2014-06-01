@@ -18,6 +18,16 @@ FixtureBuilder.configure do |fbuilder|
         app_env: 'production'}
     ) {raise RuntimeError.new( "a test")})
 
+    @child1 = 2.times.map do |i|
+      Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "I will be merged")}
+    end.first.groupings.first
+
+    @child2 = 2.times.map do |i|
+      Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "I shall be merged")}
+    end.first.groupings.first
+    #
+    @merged_grouping = Grouping.merge! [ @child1, @child2 ]
+
     @grouping1 = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
@@ -55,6 +65,7 @@ FixtureBuilder.configure do |fbuilder|
     @staging_grouping = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app3, app_env: 'staging'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
+
 
 
     # Create some wats without groupings
