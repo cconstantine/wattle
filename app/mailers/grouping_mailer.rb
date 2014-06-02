@@ -1,7 +1,7 @@
 require 'digest/sha1'
 
 class GroupingMailer < ActionMailer::Base
-  default :from => Proc.new { Secret.mailer[:from] }
+  default :from => Proc.new { ENV['MAILER_FROM'] || Secret.mailer[:from] }
   layout "mailer"
 
   def notify(grouping)

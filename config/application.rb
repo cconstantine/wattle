@@ -9,7 +9,16 @@ module Wattle
   class ConfigureMailer < Rails::Railtie
     initializer "configure_mailer.set_config", after: "secrets.load" do |app|
 
-      url_options = ::Secret.respond_to?(:default_url_options) ? ::Secret.default_url_options.to_h.symbolize_keys : { host: 'localhost', port: 3001 }
+      #Default url options from environment variables if availble
+      if ENV['DEFAULT_URL_OPTIONS_HOST'].present? || ENV['DEFAULT_URL_OPTIONS_PORT'].present?
+        url_options = {
+          host: ENV['DEFAULT_URL_OPTIONS_HOST'] || 'localhost',
+          port: ENV['DEFAULT_URL_OPTIONS_PORT'] || 3001
+        }
+      else
+        url_options = ::Secret.default_url_options.to_h.symbolize_keys
+      end
+
       app.config.action_mailer.default_url_options = url_options
     end
   end
@@ -33,7 +42,7 @@ module Wattle
     config.active_record.schema_format = :sql
 
     config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = { :address => "localhost", :port => 25 }
+    config.action_mailer.smtp_settings = { :address => ENV["SMTP_HOST"] || "localhost", :port => ENV["SMTP_PORT"] || 25 }
 
     config.middleware.use(WatCatcher::RackMiddleware)
 

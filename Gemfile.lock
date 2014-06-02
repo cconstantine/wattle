@@ -139,7 +139,6 @@ GEM
     kaminari-bootstrap (3.0.1)
       kaminari (>= 0.13.0)
       rails
-    kgio (2.9.2)
     launchy (2.4.2)
       addressable (~> 2.3)
     libv8 (3.16.14.3)
@@ -195,6 +194,8 @@ GEM
       activerecord (~> 4.0.0)
       arel (~> 4.0.1)
       pg_array_parser (~> 0.0.9)
+    puma (2.8.2)
+      rack (>= 1.1, < 2.0)
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
@@ -210,12 +211,16 @@ GEM
       sprockets-rails (~> 2.0.0)
     rails-observers (0.1.2)
       activemodel (~> 4.0)
+    rails_12factor (0.0.2)
+      rails_serve_static_assets
+      rails_stdout_logging
+    rails_serve_static_assets (0.0.2)
+    rails_stdout_logging (0.0.3)
     railties (4.0.4)
       actionpack (= 4.0.4)
       activesupport (= 4.0.4)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    raindrops (0.13.0)
     rake (10.3.1)
     redcarpet (3.1.1)
     redis (3.0.7)
@@ -289,10 +294,6 @@ GEM
     uglifier (2.5.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
-    unicorn (4.8.2)
-      kgio (~> 2.6)
-      rack
-      raindrops (~> 0.7)
     user-agent (1.0.0)
     wat_catcher (0.7.1)
       coffee-rails
@@ -330,7 +331,9 @@ DEPENDENCIES
   pivotal_git_scripts
   poltergeist
   postgres_ext
+  puma
   rails (>= 4.0)
+  rails_12factor
   redcarpet
   rr
   rspec-rails (>= 2.0)
@@ -343,6 +346,5 @@ DEPENDENCIES
   therubyracer
   thin
   uglifier (>= 1.0.3)
-  unicorn
   user-agent
   wat_catcher

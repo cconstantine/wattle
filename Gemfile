@@ -40,9 +40,8 @@ gem 'moment_ago', git: "git@github.com:omadahealth/moment_ago.git"
 
 gem 'multi_grep', require: false, git: 'git@github.com:omadahealth/multi_grep.git'
 
-group :production do
-  gem 'unicorn'
-end
+gem 'puma'
+gem 'rails_12factor'
 
 group :development do
   gem 'mailcatcher'

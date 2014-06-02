@@ -4,3 +4,7 @@
 require File.expand_path('../config/application', __FILE__)
 
 Wattle::Application.load_tasks
+
+
+#Make sure db:migrate and db:seed runs
+task "assets:precompile" => ["db:migrate", "db:seed"]

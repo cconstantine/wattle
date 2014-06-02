@@ -15,5 +15,11 @@ Create a file in config/secrets.yml, with your Google API key:
       google_key: YOUR_GOOGLE_KEY
       google_secret: YOUR_GOOGLE_SECRET
 
+Or set the environment variables:
+
+  GOOGLE_KEY=YOUR_GOOGLE_KEY
+  GOOGLE_SECRET=YOUR_GOOGLE_SECRET
+
+
 Google Auth is required for production mode.  *Do not check secrets.yml into the repository.*
 

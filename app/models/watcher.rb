@@ -1,7 +1,7 @@
 class Watcher < ActiveRecord::Base
-  EMAIL_REGEX = /@#{Regexp.escape(Secret.restrict_domain || "")}\z/
+  EMAIL_REGEX = /@#{Regexp.escape(ENV['RESTRICT_DOMAIN'] || Secret.restrict_domain || "")}\z/
 
-  validates :email, :format => {:with => EMAIL_REGEX }, :if => Proc.new {Secret.restrict_domain.present? }, :on => :create
+  validates :email, :format => {:with => EMAIL_REGEX }, :unless => Proc.new {EMAIL_REGEX.blank? }, :on => :create
   has_many :notes
 
   class << self
