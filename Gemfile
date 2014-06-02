@@ -50,6 +50,7 @@ group :development do
 end
 
 group :test, :development do
+  gem 'awesome_print'
   gem 'rr', require: false
   gem "rspec-rails", ">= 2.0"
   gem 'fixture_builder'

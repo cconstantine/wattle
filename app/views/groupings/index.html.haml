@@ -1,8 +1,8 @@
 %ul.nav.nav-tabs
-  %li{class: ("active" if @order == :hot)}
-    = link_to 'Hot', groupings_path(params.slice(:utf8, :filters).merge(order: "hot"))
   %li{class: ("active" if @order == :new)}
     = link_to 'New', groupings_path(params.slice(:utf8, :filters).merge(order: "new"))
+  %li{class: ("active" if @order == :hot)}
+    = link_to 'Hot', groupings_path(params.slice(:utf8, :filters).merge(order: "hot"))
 
 = paginate @groupings
 %ul
