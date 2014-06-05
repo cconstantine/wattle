@@ -39,8 +39,6 @@ module Wattle
 
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif *.js *.woff *.ttf *.svg wats.css)
 
-    config.active_record.schema_format = :sql
-
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = { :address => ENV["SMTP_HOST"] || "localhost", :port => ENV["SMTP_PORT"] || 25 }
 

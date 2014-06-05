@@ -46,7 +46,6 @@ gem 'rails_12factor'
 
 group :development do
   gem 'mailcatcher'
-  gem 'debugger'
   gem 'pivotal_git_scripts'
 end
 
