@@ -43,7 +43,6 @@ gem 'puma'
 gem 'rails_12factor'
 
 group :development do
-  gem 'mailcatcher'
   gem 'pivotal_git_scripts'
 end
 
@@ -52,7 +51,6 @@ group :test, :development do
   gem 'rr', require: false
   gem "rspec-rails", ">= 2.0"
   gem 'fixture_builder'
-  gem 'thin'
 end
 
 group :test do
