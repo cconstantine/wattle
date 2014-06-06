@@ -17,7 +17,7 @@ gem 'jbuilder', '~> 1.0.1'
 
 
 gem 'httpclient'
-gem 'wat_catcher'
+gem 'wat_catcher'#, path: "../wat_catcher"
 gem 'kaminari'
 gem 'kaminari-bootstrap'
 gem 'omniauth-gplus'
