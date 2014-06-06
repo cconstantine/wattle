@@ -5,19 +5,12 @@ GIT
     secrets (1.0.0)
 
 GIT
-  remote: git@github.com:omadahealth/moment_ago.git
+  remote: https://github.com/omadahealth/moment_ago.git
   revision: f23cc1c485e35307d16328b6ce81cce57f815cae
   specs:
     moment_ago (0.0.2)
       coffee-rails
       momentjs-rails
-
-GIT
-  remote: git@github.com:omadahealth/multi_grep.git
-  revision: 05982c2f9c63aac9b07938d0bf2bf0e12628cc67
-  specs:
-    multi_grep (0.0.2)
-      awesome_print
 
 GEM
   remote: https://rubygems.org/
@@ -151,7 +144,7 @@ GEM
     mime-types (1.25.1)
     mini_portile (0.5.3)
     minitest (4.7.5)
-    momentjs-rails (2.5.1)
+    momentjs-rails (2.6.0)
       railties (>= 3.1)
     multi_json (1.9.2)
     multi_xml (0.5.5)
@@ -318,7 +311,6 @@ DEPENDENCIES
   launchy
   mailcatcher
   moment_ago!
-  multi_grep!
   omniauth-gplus
   pg
   pivotal_git_scripts
