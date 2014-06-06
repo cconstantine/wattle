@@ -5,8 +5,6 @@ class SessionsController < ApplicationController
     @watcher = Watcher.find_or_create_from_auth_hash!(auth_hash)
     session[:watcher_id] = @watcher.to_param
     redirect_to session.delete(:redirect_to) || root_path
-  rescue ActiveRecord::RecordInvalid
-    render text: "Unable to find or create user"
   end
 
   protected

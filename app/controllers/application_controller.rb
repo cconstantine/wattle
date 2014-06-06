@@ -5,6 +5,11 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
   before_filter :require_login
+  #before_filter :require_omadanet
+  #
+  #def require_omadanet
+  #  redirect_to "https://wattle.omadahealth.net#{request.path}#{"?#{request.query_string}" if request.query_string.present?}", status: 301# if Rails.env.production?
+  #end
 
   def filters
     params[:filters].present? ? params.require("filters").permit! : {}
