@@ -80,5 +80,5 @@ Wattle::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   # Force ssl for production
-  config.force_ssl = true
+  config.force_ssl = false
 end
