@@ -5,7 +5,7 @@ GIT
     secrets (1.0.0)
 
 GIT
-  remote: https://github.com/omadahealth/moment_ago.git
+  remote: git@github.com:omadahealth/moment_ago.git
   revision: f23cc1c485e35307d16328b6ce81cce57f815cae
   specs:
     moment_ago (0.0.2)
