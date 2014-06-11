@@ -11,10 +11,9 @@ module Wattle
 
       #Default url options from environment variables if availble
       if ENV['DEFAULT_URL_OPTIONS_HOST'].present? || ENV['DEFAULT_URL_OPTIONS_PORT'].present?
-        url_options = {
-          host: ENV['DEFAULT_URL_OPTIONS_HOST'] || 'localhost',
-          port: ENV['DEFAULT_URL_OPTIONS_PORT'] || 3001
-        }
+        url_options = { }
+        url_options[:host] = ENV['DEFAULT_URL_OPTIONS_HOST'] if ENV['DEFAULT_URL_OPTIONS_HOST'].present?
+        url_options[:port] = ENV['DEFAULT_URL_OPTIONS_PORT'] if ENV['DEFAULT_URL_OPTIONS_PORT'].present?
       else
         url_options = ::Secret.default_url_options.to_h.symbolize_keys
       end
