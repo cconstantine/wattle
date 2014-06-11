@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def use_developer_auth?
-    !Rails.env.production? && !google_auth_enabled?
+    !google_auth_enabled?
   end
 
   def auth_path
