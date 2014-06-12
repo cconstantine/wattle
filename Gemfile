@@ -41,6 +41,8 @@ gem 'moment_ago', git: "git@github.com:omadahealth/moment_ago.git"
 
 gem 'puma'
 gem 'rails_12factor'
+gem 'skylight'
+
 
 group :development do
   gem 'pivotal_git_scripts'
