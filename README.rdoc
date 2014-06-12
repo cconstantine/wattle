@@ -5,6 +5,35 @@ Wattle is a self-hosted open source project to help your team collect, manage an
 
 == Configuration
 
+=== General application configuration
+
+There are 2 ways of configuring wattle.  You can either edit the config/secrets.yml file or set environment variables.  Configurations names given in all caps are environment variables.
+*Do not check secrets.yml into the repository.*
+
+=== Configuring email
+You must specify the following config parameters
+
+  SMTP_HOST (or DOKKU_HOST): Specifies the SMTP host to use when trying to deliver email.  defaults to localhost
+  SMTP_PORT: Specifies to the port to use when connecting to the SMTP_HOST.  defaults to 25.
+  MAILER_FROM (mailer => :from in secrets.yml): This specifies what the 'from' field of all emails from wattle should contain.
+  DEFAULT_URL_OPTIONS_HOST (default_url_options => :host in secrets.yml): This specifies what the host of links pointing back to your wattle deploy generated in emails should be.
+  DEFAULT_URL_OPTIONS_PORT (default_url_options => :port in secrets.yml): This specifies what port to use in your urls.  Unless you're using a non-standard port there is no need to set this
+
+=== Puma
+Wattle uses Puma as it's webserver.  For the most part this is just ready to go, but there is some configuration you can do
+
+  PUMA_WORKERS: Number of child puma processes to spawn
+  MIN_THREADS: Puma dynamically creates/destroys threads for request handling.  What is the minimum number of those you want
+  MAX_THREADS: Don't make more than these many threads
+  PORT: Listen for incoming connections on this port
+  RACK_ENV: what environment are we running in?
+
+
+=== Configuring the wat_catcher
+Wattle uses wattle to report errors!  Configure the wat_catcher as you would in your app:
+
+  WATTLE_HOST ('host' in config/wat_catcher.yml): The host that errors should be posted to
+
 === To enable Google+ Oauth
 
 You will need to acquire a Google API key to run your local instance. 
@@ -21,5 +50,8 @@ Or set the environment variables:
   GOOGLE_KEY=YOUR_GOOGLE_KEY
   GOOGLE_SECRET=YOUR_GOOGLE_SECRET
 
-Google Auth is required for production mode.  *Do not check secrets.yml into the repository.*
+To limit emails to be from a particular domain (like, say, your corporate email domain) you can set the
+  RESTRICT_DOMAIN (restrict_domain in config/secrets.yml)
+
+to everything after the @ in your email addresses.
 
