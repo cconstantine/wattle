@@ -8,16 +8,10 @@ Bundler.require(*Rails.groups(assets: %w(development test)))
 module Wattle
   class ConfigureMailer < Rails::Railtie
     initializer "configure_mailer.set_config", after: "secrets.load" do |app|
+      url_options = ::Secret.default_url_options.to_h.symbolize_keys || {}
 
-      #Default url options from environment variables if availble
-      if ENV['DEFAULT_URL_OPTIONS_HOST'].present? || ENV['DEFAULT_URL_OPTIONS_PORT'].present?
-        url_options = { }
-        url_options[:host] = ENV['DEFAULT_URL_OPTIONS_HOST'] if ENV['DEFAULT_URL_OPTIONS_HOST'].present?
-        url_options[:port] = ENV['DEFAULT_URL_OPTIONS_PORT'] if ENV['DEFAULT_URL_OPTIONS_PORT'].present?
-      else
-        url_options = ::Secret.default_url_options.to_h.symbolize_keys
-      end
-
+      url_options[:host] ||= ENV['DEFAULT_URL_OPTIONS_HOST'] || WatCatcher.configuration.host || "localhost"
+      url_options[:port] ||= ENV['DEFAULT_URL_OPTIONS_PORT'] if ENV['DEFAULT_URL_OPTIONS_PORT'].present?
       app.config.action_mailer.default_url_options = url_options
     end
   end
