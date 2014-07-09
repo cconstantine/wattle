@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.1.1'
+ruby File.read(".ruby-version").strip#'2.1.1'
 gem 'rails', ">= 4.0"#, github: 'rails/rails', branch: 'v4.0.0.rc1'
 
 gem 'pg'
