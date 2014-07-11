@@ -25,6 +25,10 @@ require "email_spec"
 
 Capybara.javascript_driver = :poltergeist
 
+RSpec.configure do |rspec|
+  rspec.deprecation_stream = 'log/deprecations.log'
+end
+
 def capture_error &block
   err = nil
   begin
