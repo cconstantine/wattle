@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140423221700) do
+ActiveRecord::Schema.define(version: 20140711195031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,31 @@ ActiveRecord::Schema.define(version: 20140423221700) do
   add_index "notes", ["grouping_id"], name: "index_notes_on_grouping_id", using: :btree
   add_index "notes", ["watcher_id"], name: "index_notes_on_watcher_id", using: :btree
 
+  create_table "stream_events", force: true do |t|
+    t.datetime "happened_at",  null: false
+    t.integer  "grouping_id",  null: false
+    t.integer  "context_id",   null: false
+    t.string   "context_type", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "stream_events", ["context_id", "context_type"], name: "index_stream_events_on_context_id_and_context_type", using: :btree
+  add_index "stream_events", ["grouping_id"], name: "index_stream_events_on_grouping_id", using: :btree
+  add_index "stream_events", ["happened_at", "grouping_id"], name: "index_stream_events_on_happened_at_and_grouping_id", using: :btree
+
+  create_table "versions", force: true do |t|
+    t.string   "type",       null: false
+    t.string   "item_type",  null: false
+    t.integer  "item_id",    null: false
+    t.string   "event",      null: false
+    t.string   "whodunnit"
+    t.text     "object"
+    t.datetime "created_at"
+  end
+
+  add_index "versions", ["item_type", "item_id", "type"], name: "index_versions_on_item_type_and_item_id_and_type", using: :btree
+
   create_table "watchers", force: true do |t|
     t.string   "first_name"
     t.string   "name"
@@ -63,13 +88,13 @@ ActiveRecord::Schema.define(version: 20140423221700) do
     t.hstore   "request_headers"
     t.hstore   "request_params"
     t.text     "page_url"
-    t.text     "app_env",         default: "unknown",      null: false
+    t.text     "app_env",         default: "unknown",   null: false
     t.hstore   "sidekiq_msg"
-    t.text     "app_name",        default: "unknown",      null: false
-    t.text     "backtrace",                                             array: true
+    t.text     "app_name",        default: "unknown",   null: false
+    t.text     "backtrace",                                          array: true
     t.string   "language"
-    t.hstore   "app_user",        default: "\"id\"=>NULL"
-    t.datetime "captured_at",                              null: false
+    t.hstore   "app_user",        default: {"id"=>nil}
+    t.datetime "captured_at",                           null: false
   end
 
   add_index "wats", ["app_env"], name: "index_wats_on_app_env", using: :btree

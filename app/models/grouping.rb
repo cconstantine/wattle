@@ -1,8 +1,11 @@
 class Grouping < ActiveRecord::Base
+  has_paper_trail class_name: "GroupingVersion", :only => [:state]
+
   has_many :wats_groupings
   has_many :new_wats, ->(grouping) { grouping.last_emailed_at.present? ? where('wats.created_at > ?', grouping.last_emailed_at) : self }, class_name: "Wat", through: :wats_groupings, source: :wat
   has_many :wats, through: :wats_groupings
   has_many :notes
+  has_many :stream_events
 
   has_one :representative_wat_grouping, -> {order("id desc")}, class_name: "WatsGrouping"
   has_one :representative_wat, class_name: "Wat", through: :representative_wat_grouping, source: :wat

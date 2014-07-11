@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GroupingsController do
+describe GroupingsController, versioning: true do
   render_views
 
   let(:error) { capture_error {raise RuntimeError.new "test message"} }
@@ -8,6 +8,7 @@ describe GroupingsController do
   let(:message) {error.message}
   let(:error_class) {error.class.to_s}
   let(:backtrace) { error.backtrace }
+  let(:watcher) {watchers :default}
 
   describe "GET #index" do
     subject { get :index, format: :json }
@@ -21,7 +22,7 @@ describe GroupingsController do
 
     context "when logged in" do
       before do
-        login watchers(:default)
+        login watcher
       end
 
       it {should be_success}
@@ -100,12 +101,24 @@ describe GroupingsController do
     subject {get :show, id: grouping.to_param, filters: filters, format: :json }
     context "when logged in" do
       before do
-        login watchers(:default)
+        login watcher
       end
       it {should be_success}
       it "should load the grouping" do
         subject
         assigns[:grouping].should == grouping
+      end
+
+      context "when it is muffled with a note" do
+        before do
+          grouping.muffle!
+          grouping.notes.create!(watcher: watcher, message: "Derpy dper dperkjdf")
+        end
+
+        it "should have some stream_events" do
+          subject
+          assigns[:stream_events].should have(2).items
+        end
       end
     end
   end
@@ -120,8 +133,14 @@ describe GroupingsController do
     end
 
     context "when logged in" do
+      let(:watcher) {watchers(:default)}
       before do
-        login watchers(:default)
+        login watcher
+      end
+
+      it "should save the papertrail" do
+        expect {subject}.to change {grouping.versions.count}.by 1
+        grouping.reload.versions.last.watcher.should == watcher
       end
 
       it {should redirect_to '/something'}
@@ -149,7 +168,12 @@ describe GroupingsController do
 
     context "when logged in" do
       before do
-        login watchers(:default)
+        login watcher
+      end
+
+      it "should save the papertrail" do
+        expect {subject}.to change {grouping.versions.count}.by 1
+        grouping.reload.versions.last.watcher.should == watcher
       end
 
       it {should redirect_to '/something'}
@@ -177,7 +201,12 @@ describe GroupingsController do
 
     context "when logged in" do
       before do
-        login watchers(:default)
+        login watcher
+      end
+
+      it "should save the papertrail" do
+        expect {subject}.to change {grouping.versions.count}.by 1
+        grouping.reload.versions.last.watcher.should == watcher
       end
 
       it {should redirect_to '/something'}
@@ -203,9 +232,15 @@ describe GroupingsController do
       post :muffle, id: grouping.to_param, format: :json
     end
 
+
     context "when logged in" do
       before do
-        login watchers(:default)
+        login watcher
+      end
+
+      it "should save the papertrail" do
+        expect {subject}.to change {grouping.versions.count}.by 1
+        grouping.reload.versions.last.watcher.should == watcher
       end
 
       it {should redirect_to '/something'}

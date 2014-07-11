@@ -42,6 +42,8 @@ gem 'moment_ago', git: "git@github.com:omadahealth/moment_ago.git"
 gem 'puma'
 gem 'skylight'
 
+gem 'paper_trail'
+
 group :production do
   gem 'rails_12factor'
 end

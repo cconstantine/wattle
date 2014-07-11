@@ -7,7 +7,7 @@
     %br
 
 
-    = render partial: "notes/index", locals: {notes: @grouping.notes }
+    = render partial: "stream_events/index", locals: {stream_events: @stream_events }
 
     .highchart{data: {chart: @chart.to_json}}
 

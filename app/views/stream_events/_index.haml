@@ -2,16 +2,16 @@
   .panel-heading
     %span.glyphicon.glyphicon-comment
     %h3.panel-title
-      Notes
+      Stream Events
     %span.label.label-info
-      =notes.count
+      =stream_events.count
   .panel-body
     %ul.list-group
 
 
 
     .media-list.notes
-      = render notes
+      = render stream_events.map(&:context)
 
 
     = render "notes/new", note: @grouping.notes.build
