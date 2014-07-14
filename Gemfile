@@ -40,7 +40,7 @@ gem 'highcharts-rails'
 gem 'moment_ago'
 
 gem 'puma'
-gem 'skylight'
+gem 'newrelic_rpm'
 
 gem 'paper_trail'
 
