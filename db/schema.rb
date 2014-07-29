@@ -11,11 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140729182145) do
+ActiveRecord::Schema.define(version: 20140729212622) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+
+  create_table "grouping_unsubscribes", force: true do |t|
+    t.integer  "watcher_id"
+    t.integer  "grouping_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "grouping_unsubscribes", ["watcher_id", "grouping_id"], name: "index_grouping_unsubscribes_on_watcher_id_and_grouping_id", unique: true, using: :btree
 
   create_table "groupings", force: true do |t|
     t.string   "key_line"

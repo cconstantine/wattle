@@ -13,6 +13,15 @@
     = wat_heading(wat)
   %pre= wat.message
 
+.pull-right
+  .grouping_unsubscribe
+    - if grouping.unsubscribed?(current_user)
+      = link_to grouping_unsubscribe_path(current_user.grouping_unsubscribes.where(grouping: grouping).first), method: :delete, class: "btn btn-success" do
+        Re-subscribe to email notifications
+    - else
+      = link_to grouping_grouping_unsubscribes_path(grouping), method: :post, class: "btn btn-warning" do
+        Unsubscribe to email notifications
+
 .grouping_summary
   .item
     .badge.badge-warning

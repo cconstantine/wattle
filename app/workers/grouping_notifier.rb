@@ -56,6 +56,7 @@ class GroupingNotifier < Struct.new(:grouping)
   def send_email
     Rails.logger.info("Sending email for grouping #{grouping.id}")
     Watcher.active.each do |watcher|
+      next if grouping.unsubscribed?(watcher)
       GroupingMailer.delay.notify(watcher, grouping)
     end
     grouping.update_attributes!(last_emailed_at: Time.zone.now)

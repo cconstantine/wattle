@@ -100,6 +100,15 @@ describe GroupingNotifier do
         end
       end
     end
+
+    context "with an unsubscribe for the default user" do
+      let(:watcher) {watchers(:default)}
+      before {GroupingUnsubscribe.create!(watcher: watcher, grouping: grouping)}
+      it "should not send the default user an email" do
+        subject
+        find_email(watcher.email).should_not be_present
+      end
+    end
   end
 
   describe "#send_email_now?" do

@@ -38,6 +38,19 @@ describe Grouping do
 
   end
 
+  describe "#unsubscribed?" do
+    let(:grouping) {groupings(:grouping1)}
+    let(:watcher) {watchers(:default)}
+    subject {grouping.unsubscribed?(watcher)}
+
+    it {should be_false}
+
+    context "with a grouping_unsubscribe record" do
+      before {watcher.grouping_unsubscribes.create!(grouping: grouping)}
+      it {should be_true}
+    end
+  end
+
   describe "#app_user_stats" do
     subject {grouping.app_user_stats()}
     context "with no app_user info" do

@@ -5,6 +5,7 @@ class Watcher < ActiveRecord::Base
 
   validates :email, :format => {:with => EMAIL_REGEX }, :unless => Proc.new {RESTRICT_DOMAIN.blank? }, :on => :create
   has_many :notes
+  has_many :grouping_unsubscribes, dependent: :destroy
 
   class << self
 

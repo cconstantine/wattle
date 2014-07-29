@@ -46,6 +46,8 @@ Sidekiq::Testing.fake!
 RSpec.configure do |config|
 
   config.before(:each) do |example|
+    reset_mailer
+
     # Clears out the jobs for tests using the fake testing
     Sidekiq::Worker.clear_all
     # Get the current example from the example_method object

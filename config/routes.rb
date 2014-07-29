@@ -28,9 +28,12 @@ Wattle::Application.routes.draw do
   get '/create/wat' => 'wats#create'
   resources :stats, only: :index
 
+  resources :grouping_unsubscribes, only: :destroy
+
   resources :groupings do
     resources :notes, only: :create
     resources :wats, only: [:show, :index]
+    resources :grouping_unsubscribes, only: :create
 
     member do
       get  :chart

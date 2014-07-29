@@ -6,6 +6,7 @@ class Grouping < ActiveRecord::Base
   has_many :wats, through: :wats_groupings
   has_many :notes
   has_many :stream_events
+  has_many :grouping_unsubscribes, dependent: :destroy
 
   has_one :representative_wat_grouping, -> {order("id desc")}, class_name: "WatsGrouping"
   has_one :representative_wat, class_name: "Wat", through: :representative_wat_grouping, source: :wat
@@ -73,6 +74,10 @@ class Grouping < ActiveRecord::Base
 
   def is_javascript?
     wats.javascript.any?
+  end
+
+  def unsubscribed?(watcher)
+    grouping_unsubscribes.where(watcher: watcher).any?
   end
 
   def app_user_stats(filters: {}, key_name: :id, limit: nil)
