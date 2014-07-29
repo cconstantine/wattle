@@ -5,6 +5,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'rr'
+require 'sidekiq/testing'
 require 'sidekiq/testing/inline'
 require 'email_spec'
 require 'capybara/rspec'
@@ -43,6 +44,22 @@ require 'support/fixture_builder'
 Sidekiq::Testing.fake!
 
 RSpec.configure do |config|
+
+  config.before(:each) do |example|
+    # Clears out the jobs for tests using the fake testing
+    Sidekiq::Worker.clear_all
+    # Get the current example from the example_method object
+
+    if example.metadata[:sidekiq] == :fake
+      Sidekiq::Testing.fake!
+    elsif example.metadata[:sidekiq] == :inline
+      Sidekiq::Testing.inline!
+    elsif example.metadata[:type] == :acceptance
+      Sidekiq::Testing.inline!
+    else
+      Sidekiq::Testing.fake!
+    end
+  end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

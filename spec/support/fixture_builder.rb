@@ -6,6 +6,9 @@ FixtureBuilder.configure do |fbuilder|
   # now declare objects
   fbuilder.factory do
     fbuilder.name :default, Watcher.create!(name: "Fake Watcher", first_name: "Fake", email: "test@example.com")
+    inactive_watcher = Watcher.create!(name: "Inactive Fake Watcher", first_name: "Inactive", email: "inactive@example.com")
+    inactive_watcher.deactivate!
+    fbuilder.name :inactive, inactive_watcher
     fbuilder.name :another_watcher, Watcher.create!(name: "Super Fake Watcher", first_name: "Fakey faker", email: "test2@example.com")
 
     fbuilder.name(:default, Wat.create_from_exception!(nil, {app_env: 'production'}) {raise RuntimeError.new( "a test")})

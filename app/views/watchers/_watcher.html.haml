@@ -1,0 +1,12 @@
+%article.watcher_listing{class: ["watcher_state_#{watcher.state}", "watcher_#{watcher_counter}"]}
+  %h4<>
+    = link_to watcher_path(watcher, params.slice(:utf8, :filters)), class: "watcher_detail_link" do
+      .watcher_name
+        = watcher.display_name
+
+  .watcher_body<>
+    .created_at
+      created
+      %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ",time: watcher.created_at}}
+    .email
+      = watcher.email

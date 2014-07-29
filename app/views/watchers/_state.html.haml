@@ -1,0 +1,12 @@
+.states
+  - if !watcher.active?
+    = link_to reactivate_watcher_path(watcher), method: :post do
+      .glyphicon.glyphicon-plus
+      %span.text-info
+        Reactivate
+  - else
+    = link_to deactivate_watcher_path(watcher), method: :post do
+      .glyphicon.glyphicon-remove-circle
+      %span.text-info
+        Deactviate
+

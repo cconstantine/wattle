@@ -87,6 +87,21 @@ describe GroupingNotifier do
     end
   end
 
+  describe "#send_email", sidekiq: :inline do
+    subject {grouping_notifier.send_email}
+
+    it "should send emails to all active watchers" do
+      subject
+      Watcher.all.each do |watcher|
+        if(watcher.active?)
+          find_email(watcher.email, with_text: "been detected in").should be_present
+        else
+          find_email(watcher.email).should_not be_present
+        end
+      end
+    end
+  end
+
   describe "#send_email_now?" do
     before { stub(grouping_notifier).needs_notifying? {true} }
     subject {grouping_notifier.send_email_now?}

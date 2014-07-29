@@ -19,6 +19,12 @@ Wattle::Application.routes.draw do
   mount WatCatcher::Engine => '/wat_catcher'
 
   resources :wats
+  resources :watchers do
+    member do
+      post :reactivate
+      post :deactivate
+    end
+  end
   get '/create/wat' => 'wats#create'
   resources :stats, only: :index
 

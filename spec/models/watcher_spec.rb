@@ -1,6 +1,43 @@
 require 'spec_helper'
 
 describe Watcher do
+
+  describe "#create" do
+    subject {Watcher.create!(first_name: "Bob", name: "bob?", email: "bob@example.com")}
+
+    it {should be_present}
+    its(:state) {should == "active"}
+  end
+
+  describe ".activate" do
+    let(:watcher) { watchers(:default) }
+    subject {watcher.activate; watcher}
+
+    it {should be_active}
+    context "when inactive" do
+      let(:watcher) {watchers(:inactive)}
+      it "should change to active" do
+        expect {subject}.to change {watcher.state}.to "active"
+      end
+    end
+  end
+
+
+  describe ".deactivate" do
+    let(:watcher) { watchers(:inactive) }
+    subject {watcher.deactivate; watcher}
+
+    it {should be_inactive}
+
+    context "when active" do
+      let(:watcher) {watchers(:default)}
+      it "should change to inactive" do
+        expect {subject}.to change {watcher.state}.to "inactive"
+      end
+    end
+  end
+
+
   describe "#find_or_create_from_auth_hash" do
     subject do
       Watcher.find_or_create_from_auth_hash! auth_data

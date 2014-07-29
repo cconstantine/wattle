@@ -13,6 +13,23 @@ class Watcher < ActiveRecord::Base
     end
   end
 
+
+  state_machine :state, initial: :active do
+    state :active, :inactive
+
+    event :activate do
+      transition any => :active
+    end
+
+    event :deactivate do
+      transition any => :inactive
+    end
+  end
+
+  scope :active, -> { where(state: :active)}
+  scope :inactive, -> { where(state: :inactive)}
+
+
   def display_name
     first_name || name || email
   end

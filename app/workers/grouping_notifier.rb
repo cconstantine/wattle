@@ -53,13 +53,16 @@ class GroupingNotifier < Struct.new(:grouping)
     Wat.javascript.open.after(1.day.ago).count
   end
 
-  private
-
   def send_email
     Rails.logger.info("Sending email for grouping #{grouping.id}")
-    GroupingMailer.delay.notify(grouping)
+    Watcher.active.each do |watcher|
+      GroupingMailer.delay.notify(watcher, grouping)
+    end
     grouping.update_attributes!(last_emailed_at: Time.zone.now)
   end
+
+  private
+
 
   def send_email_later
     Rails.logger.info("Delaying notification for grouping #{grouping.id}")
