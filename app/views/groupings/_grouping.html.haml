@@ -44,9 +44,9 @@
         %li.row
           .col-md-1
             .badge.badge-info.pull-right=  count
-          = link_to 'Groupings', groupings_path( filters: filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
-          = link_to 'Wats', wats_path( filters: filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
-          = link_to 'Filter', grouping_path(grouping, filters: filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
+          = link_to 'Groupings', groupings_path( filters: filters.params.merge(app_user: [user])), {class: "btn-xs btn-primary"}
+          = link_to 'Wats', wats_path( filters: filters.params.merge(app_user: [user])), {class: "btn-xs btn-primary"}
+          = link_to 'Filter', grouping_path(grouping, filters: filters.params.merge(app_user: [user])), {class: "btn-xs btn-primary"}
           = user
 
   - if grouping.browser_count(filters: filters) > 0

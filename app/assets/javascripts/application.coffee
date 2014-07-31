@@ -13,6 +13,8 @@
 #= require jquery
 #= require jquery_ujs
 
+#= require jquery.debounce-1.0.5
+
 # Loads all Bootstrap javascripts
 #= require twitter/bootstrap
 #= require underscore

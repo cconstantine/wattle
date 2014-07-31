@@ -40,7 +40,8 @@ class Grouping < ActiveRecord::Base
   scope :filtered, ->(opts=nil) {
     opts ||= {}
 
-    running_scope = opts[:state] ? state(opts[:state]) : open
+    running_scope = self
+    running_scope = running_scope.state(opts[:state])       if opts[:state]
     running_scope = running_scope.app_name(opts[:app_name]) if opts[:app_name]
     running_scope = running_scope.app_env(opts[:app_env])   if opts[:app_env]
     running_scope = running_scope.language(opts[:language]) if opts[:language]
@@ -120,8 +121,7 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  def chart_data(filters
-)
+  def chart_data(filters)
     wat_chart_data = wats.filtered(filters).group('date_trunc(\'day\',  wats.captured_at)').count.inject({}) do |doc, values|
       doc[values[0]] = values[1]
       doc

@@ -44,7 +44,7 @@ feature "Interacting with wats", js: true do
     context "viewing a grouping" do
       let(:grouping) {groupings(:grouping1)}
       before do
-        visit grouping_path(grouping)
+        visit grouping_path(grouping, filters: {state: ["active", "resolved", "wontfix", "muffled"]})
       end
 
       scenario "clicking on the header takes you to the exception" do

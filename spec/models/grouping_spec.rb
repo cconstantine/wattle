@@ -108,7 +108,7 @@ describe Grouping do
     let(:filter_params) {{}}
     let(:scope) {Grouping.all}
     subject {scope.filtered(filter_params)}
-    it {should have(Grouping.open.count).items}
+    it {should have(Grouping.count).items}
 
     context "with an app_user" do
       let(:filter_params) {{app_user: "2"}}
@@ -117,7 +117,7 @@ describe Grouping do
 
     context "with an app_name" do
       let(:filter_params) {{app_name: "app1"}}
-      it {should have(4).items}
+      it {should have(5).items}
     end
 
     context "with an app_env" do
