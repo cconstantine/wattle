@@ -36,7 +36,7 @@ feature "Interacting with wats", js: true do
       click_on 'Sign In'
     end
 
-    scenario "shows an exception on the homepage" do
+    scenario "shows a wat on the homepage" do
       visit "/"
       page.should have_content "RuntimeError"
     end

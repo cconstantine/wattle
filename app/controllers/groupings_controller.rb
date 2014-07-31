@@ -1,5 +1,5 @@
 class GroupingsController < ApplicationController
-  respond_to :html, :json
+  respond_to :html
 
   before_filter :load_group, except: [:index, :index_chart]
 

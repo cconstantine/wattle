@@ -1,14 +1,15 @@
 class FilterParams
-  attr_accessor :params
-
   DEFAULT_FILTERS = {state: ['active', 'muffled']}.with_indifferent_access
 
-  def initialize(params)
-    self.params = params
+  def initialize(params, current_user)
+    @params = params
+    @current_user = current_user
   end
 
   def filters
-    params[:filters].present? ? params.require("filters").permit! : DEFAULT_FILTERS
+    return param_filters if has_param_filters?
+
+    default_filters
   end
 
   def checked? param, key
@@ -27,4 +28,18 @@ class FilterParams
   def []=(k,v)
     filters[k] = v
   end
+
+  private
+  def has_param_filters?
+    @params[:filters].present?
+  end
+
+  def param_filters
+    @params.require("filters").permit!
+  end
+
+  def default_filters
+    @current_user.try(:default_filters) || DEFAULT_FILTERS
+  end
+
 end

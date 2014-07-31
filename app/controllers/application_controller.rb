@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   before_filter :require_login
 
   def filters
-    @_filters ||= FilterParams.new(params)
+    @_filters ||= FilterParams.new(params, current_user)
   end
   helper_method :filters
 

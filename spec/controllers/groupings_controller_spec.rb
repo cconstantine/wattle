@@ -3,17 +3,17 @@ require 'spec_helper'
 describe GroupingsController, versioning: true do
   render_views
 
-  let(:error) { capture_error {raise RuntimeError.new "test message"} }
+  let(:error) { capture_error { raise RuntimeError.new "test message" } }
 
-  let(:message) {error.message}
-  let(:error_class) {error.class.to_s}
+  let(:message) { error.message }
+  let(:error_class) { error.class.to_s }
   let(:backtrace) { error.backtrace }
-  let(:watcher) {watchers :default}
+  let(:watcher) { watchers :default }
 
   describe "GET #index" do
-    subject { get :index, format: :json }
+    subject { get :index }
     context "using real auth" do
-      before { stub(controller).use_developer_auth? {false } }
+      before { stub(controller).use_developer_auth? { false } }
 
       it "should require login" do
         subject.should redirect_to auth_path
@@ -25,12 +25,12 @@ describe GroupingsController, versioning: true do
         login watcher
       end
 
-      it {should be_success}
+      it { should be_success }
 
       context "groupings" do
         subject { get :index, params }
-        let(:grouping1)  {groupings(:group)}
-        let(:demo_group) {groupings(:demo_grouping)}
+        let(:grouping1) { groupings(:group) }
+        let(:demo_group) { groupings(:demo_grouping) }
         let(:params) { {} }
 
         it "should include unfiltered groupings" do
@@ -40,22 +40,22 @@ describe GroupingsController, versioning: true do
         end
 
         context "filtered" do
-          let(:params) { {filters: { :app_env => "staging" }} }
+          let(:params) { {filters: {:app_env => "staging"}} }
           it "should include filtered groupings" do
             subject
 
             assigns[:groupings].
-                to_a.
-                map(&:wats).
-                flatten.
-                map(&:app_env).
-                uniq.
-                should =~ ['staging']
+              to_a.
+              map(&:wats).
+              flatten.
+              map(&:app_env).
+              uniq.
+              should =~ ['staging']
           end
         end
         context "ordering" do
           subject { get :index, order: order }
-          let(:hotest) { Grouping.order(:popularity).last}
+          let(:hotest) { Grouping.order(:popularity).last }
           let(:newest) { Grouping.wat_order.reverse.first }
 
           #sanity check
@@ -64,7 +64,7 @@ describe GroupingsController, versioning: true do
           end
 
           context "without a specified order, page is new" do
-            let(:order) {nil}
+            let(:order) { nil }
             it "should show the newest groupings first" do
               subject
               assigns[:groupings].first.should == newest
@@ -72,7 +72,7 @@ describe GroupingsController, versioning: true do
           end
 
           context "page is hot" do
-            let(:order) {:hot}
+            let(:order) { :hot }
             it "should show the hottest groupings first" do
               subject
               assigns[:groupings].first.should == hotest
@@ -80,7 +80,7 @@ describe GroupingsController, versioning: true do
           end
 
           context "page is new" do
-            let(:order) {:new}
+            let(:order) { :new }
             it "should show the newest groupings first" do
               subject
               assigns[:groupings].first.should == newest
@@ -94,19 +94,28 @@ describe GroupingsController, versioning: true do
   end
 
   describe "GET #show" do
-    let(:wat) { grouping.wats.last}
-    let(:grouping) {groupings(:grouping3)}
-    let(:filters) {{}}
+    let(:wat) { grouping.wats.last }
+    let(:grouping) { groupings(:grouping3) }
+    let(:filters) { {} }
 
-    subject {get :show, id: grouping.to_param, filters: filters, format: :json }
+    subject { get :show, id: grouping.to_param, filters: filters }
     context "when logged in" do
       before do
         login watcher
       end
-      it {should be_success}
+      it { should be_success }
       it "should load the grouping" do
         subject
         assigns[:grouping].should == grouping
+      end
+
+      context "a grouping with wat users and browsers" do
+        let(:grouping) { groupings(:grouping4) }
+        it "succeeds" do
+          subject
+          expect(response).to be_success
+        end
+
       end
 
       context "when it is muffled with a note" do
@@ -124,46 +133,46 @@ describe GroupingsController, versioning: true do
   end
 
   describe "POST #resolve" do
-    let(:wat) { grouping.wats.first}
-    let(:grouping) {groupings(:grouping2)}
+    let(:wat) { grouping.wats.first }
+    let(:grouping) { groupings(:grouping2) }
 
     subject do
       @request.env['HTTP_REFERER'] = '/something'
-      post :resolve, id: grouping.to_param, format: :json
+      post :resolve, id: grouping.to_param
     end
 
     context "when logged in" do
-      let(:watcher) {watchers(:default)}
+      let(:watcher) { watchers(:default) }
       before do
         login watcher
       end
 
       it "should save the papertrail" do
-        expect {subject}.to change {grouping.versions.count}.by 1
+        expect { subject }.to change { grouping.versions.count }.by 1
         grouping.reload.versions.last.watcher.should == watcher
       end
 
-      it {should redirect_to '/something'}
+      it { should redirect_to '/something' }
       it "should resolve the grouping" do
-        expect {subject}.to change {grouping.reload.resolved?}.from(false).to(true)
+        expect { subject }.to change { grouping.reload.resolved? }.from(false).to(true)
       end
 
       context "with a resolved grouping" do
-        let(:grouping) {groupings(:resolved)}
+        let(:grouping) { groupings(:resolved) }
         it "should raise and error" do
-          expect{subject}.to raise_error StateMachine::InvalidTransition
+          expect { subject }.to raise_error StateMachine::InvalidTransition
         end
       end
     end
   end
 
   describe "POST #wontfix" do
-    let(:wat) { grouping.wats.first}
-    let(:grouping) {groupings(:grouping2)}
+    let(:wat) { grouping.wats.first }
+    let(:grouping) { groupings(:grouping2) }
 
     subject do
       @request.env['HTTP_REFERER'] = '/something'
-      post :wontfix, id: grouping.to_param, format: :json
+      post :wontfix, id: grouping.to_param
     end
 
     context "when logged in" do
@@ -172,31 +181,31 @@ describe GroupingsController, versioning: true do
       end
 
       it "should save the papertrail" do
-        expect {subject}.to change {grouping.versions.count}.by 1
+        expect { subject }.to change { grouping.versions.count }.by 1
         grouping.reload.versions.last.watcher.should == watcher
       end
 
-      it {should redirect_to '/something'}
+      it { should redirect_to '/something' }
       it "should resolve the grouping" do
-        expect {subject}.to change {grouping.reload.wontfix?}.from(false).to(true)
+        expect { subject }.to change { grouping.reload.wontfix? }.from(false).to(true)
       end
 
       context "with a wontfix grouping" do
-        let(:grouping) {groupings(:wontfix)}
+        let(:grouping) { groupings(:wontfix) }
         it "should raise and error" do
-          expect{subject}.to raise_error StateMachine::InvalidTransition
+          expect { subject }.to raise_error StateMachine::InvalidTransition
         end
       end
     end
   end
 
   describe "POST #activate" do
-    let(:wat) { grouping.wats.first}
-    let(:grouping) {groupings(:wontfix)}
+    let(:wat) { grouping.wats.first }
+    let(:grouping) { groupings(:wontfix) }
 
     subject do
       @request.env['HTTP_REFERER'] = '/something'
-      post :activate, id: grouping.to_param, format: :json
+      post :activate, id: grouping.to_param
     end
 
     context "when logged in" do
@@ -205,31 +214,31 @@ describe GroupingsController, versioning: true do
       end
 
       it "should save the papertrail" do
-        expect {subject}.to change {grouping.versions.count}.by 1
+        expect { subject }.to change { grouping.versions.count }.by 1
         grouping.reload.versions.last.watcher.should == watcher
       end
 
-      it {should redirect_to '/something'}
+      it { should redirect_to '/something' }
       it "should resolve the grouping" do
-        expect {subject}.to change {grouping.reload.active?}.from(false).to(true)
+        expect { subject }.to change { grouping.reload.active? }.from(false).to(true)
       end
 
       context "with a wontfix grouping" do
-        let(:grouping) {groupings(:grouping1)}
+        let(:grouping) { groupings(:grouping1) }
         it "should raise and error" do
-          expect{subject}.to raise_error StateMachine::InvalidTransition
+          expect { subject }.to raise_error StateMachine::InvalidTransition
         end
       end
     end
   end
 
   describe "POST #muffle" do
-    let(:wat) { grouping.wats.first}
-    let(:grouping) {groupings(:grouping2)}
+    let(:wat) { grouping.wats.first }
+    let(:grouping) { groupings(:grouping2) }
 
     subject do
       @request.env['HTTP_REFERER'] = '/something'
-      post :muffle, id: grouping.to_param, format: :json
+      post :muffle, id: grouping.to_param
     end
 
 
@@ -239,13 +248,13 @@ describe GroupingsController, versioning: true do
       end
 
       it "should save the papertrail" do
-        expect {subject}.to change {grouping.versions.count}.by 1
+        expect { subject }.to change { grouping.versions.count }.by 1
         grouping.reload.versions.last.watcher.should == watcher
       end
 
-      it {should redirect_to '/something'}
+      it { should redirect_to '/something' }
       it "should muffle the grouping" do
-        expect {subject}.to change {grouping.reload.muffled?}.from(false).to(true)
+        expect { subject }.to change { grouping.reload.muffled? }.from(false).to(true)
       end
     end
   end
