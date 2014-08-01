@@ -17,14 +17,23 @@ load Rails.root.join("db", "seeds.rb")
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
+Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 require "email_spec"
 
-Capybara.javascript_driver = :poltergeist
+suppressor = Capybara::Poltergeist::Suppressor.new(patterns: [
+  /CoreText performance note/,
+  /Method userSpaceScaleFactor in class NSView is deprecated/
+])
+
+Capybara.register_driver :quiet_poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, phantomjs_logger: suppressor)
+end
+
+Capybara.javascript_driver = :quiet_poltergeist
 
 RSpec.configure do |rspec|
   rspec.deprecation_stream = 'log/deprecations.log'

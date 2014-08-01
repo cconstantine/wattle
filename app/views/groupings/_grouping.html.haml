@@ -70,11 +70,13 @@
       - wat_the_last = wats.order(:captured_at).last
       %em
         First Incident:
-      %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat_the_first.captured_at}}
+      - if wat_the_first.captured_at.present?
+        %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat_the_first.captured_at.iso8601}}
     .item
       %em
         Most Recent Incident:
-      %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat_the_last.captured_at}}
+      - if wat_the_last.captured_at.present?
+        %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat_the_last.captured_at.iso8601}}
     .item
       - pages = wats.group(:page_url).pluck(:page_url)
       - if pages.any?

@@ -7,6 +7,7 @@
   .watcher_body<>
     .created_at
       created
-      %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ",time: watcher.created_at}}
+      - if watcher.created_at.present?
+        %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ",time: watcher.created_at.iso8601}}
     .email
       = watcher.email

@@ -63,5 +63,6 @@ group :test do
   gem 'email_spec'
   gem 'capybara'
   gem 'poltergeist'
+  gem "poltergeist-suppressor"
   gem 'launchy'
 end
