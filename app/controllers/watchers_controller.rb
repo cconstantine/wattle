@@ -2,7 +2,9 @@ class WatchersController < ApplicationController
   respond_to :html
 
   before_filter :load_watchers, only: :index
-  before_filter :load_watcher, only: [:show, :reactivate, :deactivate]
+  before_filter :load_watcher, only: [:show, :update, :reactivate, :deactivate]
+
+  before_filter :only_update_self, only: :update
 
   def index
 
@@ -10,6 +12,12 @@ class WatchersController < ApplicationController
 
   def show
 
+  end
+
+  def update
+    @watcher.update_attributes!(default_filters: params.require(:filters).permit!)
+    flash[:notice] = "Your defaults were saved!"
+    redirect_to :back
   end
 
   def reactivate
@@ -31,5 +39,9 @@ class WatchersController < ApplicationController
 
   def load_watcher
     @watcher = Watcher.find(params.require(:id))
+  end
+
+  def only_update_self
+    redirect_to :back unless @watcher == current_user
   end
 end
