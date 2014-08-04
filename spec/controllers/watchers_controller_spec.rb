@@ -5,8 +5,17 @@ describe WatchersController do
 
   describe "PATCH #update" do
     let(:watcher) { watchers(:another_watcher) }
-    subject {patch :update, id: watcher.to_param, filters: { language: [:ruby] } }
-    before { @request.env['HTTP_REFERER'] = '/something' }
+
+    let(:params) do
+      { watcher: {default_filters: { language: [:ruby] } }}
+    end
+
+    subject do
+      patch :update, params.merge(id: watcher.to_param)
+    end
+    before do
+      @request.env['HTTP_REFERER'] = '/something'
+    end
 
     context 'when logged in' do
       before do
@@ -16,10 +25,71 @@ describe WatchersController do
       context "when the current user is changing their own filters" do
         let(:current_user) {watcher}
 
-        it { should redirect_to '/something' }
+        context "with both default and email filters" do
+          before do
+            current_user.update_attributes!(
+                default_filters: { language: [:ruby] },
+                email_filters:   {language:  [:javascript]}
+            )
+          end
+          context "changing their default_filters" do
+            let(:params) { { watcher: {default_filters: { language: [:javascript] } }} }
 
-        it "changes their default filters" do
-          expect {subject}.to change {watcher.reload.default_filters}
+            let(:current_user) {watcher}
+
+            it { should redirect_to '/something' }
+
+            it "doesn't change their email filters" do
+              expect {
+                  subject
+              }.to_not change {watcher.reload.email_filters}
+            end
+
+            it "changes their default filters" do
+              expect {
+                subject
+              }.to change {watcher.reload.default_filters}
+            end
+          end
+          context "when changing their email filters" do
+            let(:params) { { watcher: {email_filters: { language: [:ruby] } }} }
+
+
+            it { should redirect_to '/something' }
+
+            it "changes their email filters" do
+              expect {
+                subject
+              }.to change {watcher.reload.email_filters}
+            end
+
+            it "doesn't change their default filters" do
+              expect {
+                subject
+              }.to_not change {watcher.reload.default_filters}
+            end
+          end
+
+          context "when changing both email and default filters" do
+            let(:params) do
+              { watcher: {
+                default_filters: { language: [:javascript] },
+                email_filters:   {language:  [:ruby]}
+              }}
+            end
+
+            it "changes their email filters" do
+              expect {
+                subject
+              }.to change {watcher.reload.email_filters}
+            end
+
+            it "changes their default filters" do
+              expect {
+                subject
+              }.to change {watcher.reload.default_filters}
+            end
+          end
         end
       end
 
@@ -31,7 +101,7 @@ describe WatchersController do
         it "does not change anyone's default filters" do
           subject
           expect(watcher.reload.default_filters).to be_nil
-          expect(watchers(:default).default_filters).to be_nil
+          expect(current_user.reload.default_filters).to be_nil
         end
       end
     end

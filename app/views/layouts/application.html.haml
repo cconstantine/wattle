@@ -34,10 +34,11 @@
           %li= link_to "Reports", groupings_path(params.slice(:utf8, :filters))
           %li= link_to "Stats", stats_path(params.slice(:utf8, :filters))
           %li= link_to "Watchers", watchers_path(params.slice(:utf8, :filters))
+          %li= link_to "Settings", watcher_path(current_user, params.slice(:utf8, :filters))
         %ul.navbar-right.nav.navbar-nav
           - if current_user
             %li
-              %a{href: "#settings"}
+              %a.settings_link{href: watcher_path(current_user)}
                 .pull-left= image_tag gravatar_url(current_user), class: "watcher-avatar"
                 = current_user.display_name
 

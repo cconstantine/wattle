@@ -1,0 +1,19 @@
+%li.nav-header.mb20
+  States
+  %ul.filter#states
+    %li
+      =label_tag do
+        = check_box_tag "#{prefix}[state][]", 'active', filter_set.checked?(:state, 'active')
+        Active
+    %li
+      =label_tag do
+        = check_box_tag "#{prefix}[state][]", 'muffled', filter_set.checked?(:state, 'muffled')
+        Muffled
+    %li
+      =label_tag do
+        = check_box_tag "#{prefix}[state][]", 'wontfix', filter_set.checked?(:state, 'wontfix')
+        Won't Fix
+    %li
+      =label_tag do
+        = check_box_tag "#{prefix}[state][]", 'resolved', filter_set.checked?(:state, 'resolved')
+        Resolved

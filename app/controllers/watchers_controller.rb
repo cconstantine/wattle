@@ -15,7 +15,10 @@ class WatchersController < ApplicationController
   end
 
   def update
-    @watcher.update_attributes!(default_filters: params.require(:filters).permit!)
+    attrs = {}
+    attrs[:default_filters] = filters_params(:default_filters) if filters_params(:default_filters).present?
+    attrs[:email_filters] = filters_params(:email_filters) if filters_params(:email_filters).present?
+    @watcher.update_attributes!(attrs)
     flash[:notice] = "Your defaults were saved!"
     redirect_to :back
   end
@@ -43,5 +46,9 @@ class WatchersController < ApplicationController
 
   def only_update_self
     redirect_to :back unless @watcher == current_user
+  end
+
+  def filters_params(which_filter)
+    params.require(:watcher).permit![which_filter]
   end
 end

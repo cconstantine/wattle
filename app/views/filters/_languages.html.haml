@@ -4,5 +4,5 @@
     - languages.each do |name|
       %li
         =label_tag do
-          = check_box_tag "filters[language][]", name, filters.checked?(:language, name)
+          = check_box_tag "#{prefix}[language][]", name, filter_set.checked?(:language, name)
           = name

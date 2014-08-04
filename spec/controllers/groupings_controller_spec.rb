@@ -35,7 +35,7 @@ describe GroupingsController, versioning: true do
 
         it "should include unfiltered groupings" do
           subject
-          assigns[:groupings].to_a.should have(Grouping.filtered(FilterParams::DEFAULT_FILTERS).count).items
+          assigns[:groupings].to_a.should have(Grouping.filtered(ApplicationController::DEFAULT_FILTERS).count).items
           assigns[:groupings].to_a.map(&:app_envs).flatten.uniq.should =~ ['demo', 'production', 'staging']
         end
 

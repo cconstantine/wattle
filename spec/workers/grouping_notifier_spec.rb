@@ -90,15 +90,23 @@ describe GroupingNotifier do
   describe "#send_email", sidekiq: :inline do
     subject {grouping_notifier.send_email}
 
-    it "should send emails to all active watchers" do
+
+    it "should send emails to active watchers" do
       subject
-      Watcher.all.each do |watcher|
-        if(watcher.active?)
-          find_email(watcher.email, with_text: "been detected in").should be_present
-        else
-          find_email(watcher.email).should_not be_present
-        end
-      end
+
+      find_email("test@example.com", with_text: "been detected in").should be_present
+    end
+
+    it "should not send emails to inactive watchers" do
+      subject
+
+      find_email("inactive@example.com", with_text: "been detected in").should_not be_present
+    end
+
+    it "should not send emails to watchers with restrictive email_filters" do
+      subject
+
+      find_email("test3@example.com", with_text: "been detected in").should_not be_present
     end
 
     context "with an unsubscribe for the default user" do

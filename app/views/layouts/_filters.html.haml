@@ -1,17 +1,3 @@
 =form_tag("#{request.fullpath}", method: "get", id: "filters") do
   .page_filters
-    =render partial: 'layouts/app_names'
-    =render partial: 'layouts/app_envs'
-    =render partial: 'layouts/languages'
-    =render partial: 'layouts/states'
-    =render partial: 'layouts/user'
-
-=form_for current_user, id: "update-default-filters" do |f|
-  .hidden.watcher_default_fields
-    =render partial: 'layouts/app_names'
-    =render partial: 'layouts/app_envs'
-    =render partial: 'layouts/languages'
-    =render partial: 'layouts/states'
-    =render partial: 'layouts/user'
-
-  = f.submit "Save as Defaults"
+    = render partial: 'filters/filter_fields', locals: {prefix: "filters", filter_set: filters}

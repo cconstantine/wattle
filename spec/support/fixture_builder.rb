@@ -10,6 +10,7 @@ FixtureBuilder.configure do |fbuilder|
     inactive_watcher.deactivate!
     fbuilder.name :inactive, inactive_watcher
     fbuilder.name :another_watcher, Watcher.create!(name: "Super Fake Watcher", first_name: "Fakey faker", email: "test2@example.com")
+    fbuilder.name :watcher_with_email_filters, Watcher.create!(name: "Super Fake Watcher", first_name: "Fakey faker", email: "test3@example.com", email_filters: {"app_name"=>["app2"], "app_env"=>["test"], "language"=>["not_a_lang"]}.with_indifferent_access)
 
     fbuilder.name(:default, Wat.create_from_exception!(nil, {app_env: 'production'}) {raise RuntimeError.new( "a test")})
     fbuilder.name(:javascript, Wat.create_from_exception!(nil, {app_env: 'production', language: :javascript}) {raise RuntimeError.new( "a test")})

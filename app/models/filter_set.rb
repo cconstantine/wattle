@@ -1,19 +1,18 @@
-class FilterParams
-  DEFAULT_FILTERS = {state: ['active', 'muffled']}.with_indifferent_access
-
-  def initialize(params, current_user)
+class FilterSet
+  def initialize(params: params, filters: filters, default_filters: default_filters)
     @params = params
-    @current_user = current_user
+    @_filters = filters || default_filters
   end
 
   def filters
     return param_filters if has_param_filters?
 
-    default_filters
+    @_filters
   end
 
   def checked? param, key
-    return true unless has_filter?(param)
+    return false unless (@params.present? || @_filters.present?)
+    return false unless has_filter?(param)
     filters[param].include?(key)
   end
 
@@ -31,15 +30,12 @@ class FilterParams
 
   private
   def has_param_filters?
+    return false unless @params.present?
     @params[:filters].present?
   end
 
   def param_filters
     @params.require("filters").permit!
-  end
-
-  def default_filters
-    @current_user.try(:default_filters) || DEFAULT_FILTERS
   end
 
 end

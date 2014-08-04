@@ -67,6 +67,8 @@ RSpec.configure do |config|
       Sidekiq::Testing.inline!
     elsif example.metadata[:type] == :acceptance
       Sidekiq::Testing.inline!
+    elsif example.metadata[:type] == :feature
+      Sidekiq::Testing.inline!
     else
       Sidekiq::Testing.fake!
     end

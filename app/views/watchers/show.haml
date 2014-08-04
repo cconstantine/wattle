@@ -8,3 +8,20 @@
 %h2
   = @watcher.display_name
 %pre= @watcher.email
+
+
+=form_for current_user, id: "update-default-filters" do |f|
+  .row
+    .col-lg-2
+      Default filters
+      .watcher_default_filter_fields
+        = render partial: 'filters/filter_fields', locals: {prefix: "watcher[default_filters]", filter_set: FilterSet.new(filters: @watcher.default_filters, default_filters: ApplicationController::DEFAULT_FILTERS)}
+
+    .col-lg-2
+      Email filters
+      .watcher_email_filter_fields
+        =render partial: 'filters/app_names', locals: {prefix: "watcher[email_filters]", filter_set: FilterSet.new(filters: @watcher.email_filters)}
+        =render partial: 'filters/app_envs',  locals: {prefix: "watcher[email_filters]", filter_set: FilterSet.new(filters: @watcher.email_filters)}
+        =render partial: 'filters/languages', locals: {prefix: "watcher[email_filters]", filter_set: FilterSet.new(filters: @watcher.email_filters)}
+
+  = f.submit "Save"

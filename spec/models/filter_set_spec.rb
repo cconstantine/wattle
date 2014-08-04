@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe FilterParams do
+describe FilterSet do
   let(:current_user) { nil }
-  let(:filter_params) { FilterParams.new(strong_params, current_user) }
+  let(:filter_params) { FilterSet.new(params: strong_params, filters: current_user.try(:default_filters), default_filters: ApplicationController::DEFAULT_FILTERS) }
 
 
   describe "#filters" do
@@ -26,12 +26,12 @@ describe FilterParams do
       let(:params) {{}}
 
       context "when the user is nil" do
-        it { should == FilterParams::DEFAULT_FILTERS }
+        it { should == ApplicationController::DEFAULT_FILTERS }
       end
 
       context "when the user does not have default filters" do
         let(:current_user) { watchers(:default) }
-        it { should == FilterParams::DEFAULT_FILTERS }
+        it { should == ApplicationController::DEFAULT_FILTERS }
       end
 
       context "when the user has default filters" do
@@ -41,6 +41,24 @@ describe FilterParams do
 
         it { should == users_filters }
       end
+    end
+
+    context "when there are no params" do
+      let(:filter_params) { FilterSet.new(filters: current_user.try(:default_filters), default_filters: ApplicationController::DEFAULT_FILTERS) }
+
+      context "when the user does not have default filters" do
+        let(:current_user) { watchers(:default) }
+        it { should == ApplicationController::DEFAULT_FILTERS }
+      end
+
+      context "when the user has default filters" do
+        let(:current_user) { watchers(:default) }
+        let(:users_filters) { {app_name: ["app1"]} }
+        before { current_user.update_attributes!(default_filters: users_filters) }
+
+        it { should == users_filters }
+      end
+
     end
   end
 
@@ -66,7 +84,7 @@ describe FilterParams do
       let(:key) { :nonesuch_key }
       let(:value) { "why_even_care" }
 
-      it { should == true }
+      it { should == false }
     end
   end
 end
