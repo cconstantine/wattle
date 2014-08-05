@@ -13,51 +13,71 @@
     = wat_heading(wat)
   %pre= wat.message
 
-.pull-right
-  .grouping_unsubscribe
-    - if grouping.unsubscribed?(current_user)
-      = link_to grouping_unsubscribe_path(current_user.grouping_unsubscribes.where(grouping: grouping).first), method: :delete, class: "btn btn-success" do
-        Re-subscribe to email notifications
-    - else
-      = link_to grouping_grouping_unsubscribes_path(grouping), method: :post, class: "btn btn-warning" do
-        Unsubscribe to email notifications
+.row
+  .col-md-10
+    .grouping_summary
+      %ul.plain.unstyled
+        .badge.badge-warning
+          = wats.count
+        Incidents,
+        .badge.badge-warning
+          = grouping.app_user_count(filters: filters)
+        users affected
+        - if grouping.app_user_stats(filters: filters)[nil].present?
+          .badge.badge-warning
+            = "+ #{grouping.app_user_stats(filters: filters)[nil]}"
+          unknowns,
+        .badge.badge-warning
+          = grouping.browser_count(filters: filters)
+        browsers affected
 
-.grouping_summary
-  .item
-    .badge.badge-warning
-      = wats.count
-    Incidents,
-    .badge.badge-warning
-      = grouping.app_user_count(filters: filters)
-    users affected
-    - if grouping.app_user_stats(filters: filters)[nil].present?
-      .badge.badge-warning
-        = "+ #{grouping.app_user_stats(filters: filters)[nil]}"
-      unknowns,
-    .badge.badge-warning
-      = grouping.browser_count(filters: filters)
-    browsers affected
+      - if grouping.app_user_count(filters: filters) > 0
+        %ul.plain.unstyled
+          - grouping.app_user_stats(filters: filters, limit: 10).each do |user, count|
+            %li.row
+              .col-md-1
+                .badge.badge-info.pull-right=  count
+              = link_to 'Groupings', groupings_path( filters: filters.filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
+              = link_to 'Wats', wats_path( filters: filters.filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
+              = link_to 'Filter', grouping_path(grouping, filters: filters.filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
+              = user
 
-  - if grouping.app_user_count(filters: filters) > 0
-    %ul.plain.unstyled
-      - grouping.app_user_stats(filters: filters, limit: 10).each do |user, count|
-        %li.row
-          .col-md-1
-            .badge.badge-info.pull-right=  count
-          = link_to 'Groupings', groupings_path( filters: filters.filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
-          = link_to 'Wats', wats_path( filters: filters.filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
-          = link_to 'Filter', grouping_path(grouping, filters: filters.filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
-          = user
+      - if grouping.browser_count(filters: filters) > 0
+        %ul.plain.unstyled
+          - grouping.browser_agent_stats(filters: filters, limit: 10).each do |browser, count|
+            %li.row
+              .col-md-1
+                .badge.pull-right.badge-info=  count
+              = browser
+  .col-md-2
+    .row
+      .grouping_unsubscribe
+        - if grouping.unsubscribed?(current_user)
+          = link_to grouping_unsubscribe_path(current_user.grouping_unsubscribes.where(grouping: grouping).first), method: :delete, class: "btn btn-success" do
+            Re-subscribe
+        - else
+          = link_to grouping_grouping_unsubscribes_path(grouping), method: :post, class: "btn btn-warning" do
+            Unsubscribe
+    .row
+      .claiming
+        - if grouping.grouping_owners.where(watcher: current_user).any?
+          = link_to grouping_owner_path(grouping.grouping_owners.where(watcher: current_user).first), method: :delete do
+            .glyphicon.glyphicon-shopping-cart
+            %span.text-info
+              Unclaim
+        - else
+          = link_to grouping_grouping_owners_path(grouping), method: :post do
+            .glyphicon.glyphicon-shopping-cart
+            %span.text-info
+              Claim
+        .owners
+          - if grouping.owners.any?
+            Claimed by:
+          - grouping.owners.each do |owner|
+            .owner
+              = owner.display_name
 
-  - if grouping.browser_count(filters: filters) > 0
-    %ul.plain.unstyled
-      - grouping.browser_agent_stats(filters: filters, limit: 10).each do |browser, count|
-        %li.row
-          .col-md-1
-            .badge.pull-right.badge-info=  count
-          = browser
-
-  %br
+.row
   .well
     .item
       %em

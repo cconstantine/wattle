@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GroupingUnsubscribesController do
+describe GroupingOwnersController do
   render_views
 
   let(:watcher) {watchers :default}
@@ -16,12 +16,12 @@ describe GroupingUnsubscribesController do
         login watcher
       end
 
-      it "should create an unsubscribe record for that grouping" do
-        expect{subject}.to change { watcher.grouping_unsubscribes.where(grouping: grouping).count }.by 1
+      it "should create an ownership record for that grouping" do
+        expect{subject}.to change { watcher.owned_groupings.count }.by 1
       end
 
-      context "when there is already an unsubscribe" do
-        before {watcher.grouping_unsubscribes.create!(grouping: grouping)}
+      context "when there is already an owner" do
+        before {watcher.grouping_owners.create!(grouping: grouping)}
 
         it "should NOT create an unsubscribe record for that grouping" do
           expect{subject}.to raise_error ActiveRecord::RecordNotUnique
@@ -32,7 +32,7 @@ describe GroupingUnsubscribesController do
 
 
   describe "DELETE #destroy" do
-    subject { delete :destroy, id: grouping_unsubscribe.id }
+    subject { delete :destroy, id: grouping_owner.id }
 
     context "when logged in" do
       before do
@@ -40,10 +40,10 @@ describe GroupingUnsubscribesController do
       end
 
       context "when there is already an unsubscribe" do
-        let!(:grouping_unsubscribe) {watcher.grouping_unsubscribes.create!(grouping: grouping)}
+        let!(:grouping_owner) {watcher.grouping_owners.create!(grouping: grouping)}
 
         it "should remove the unsubscribe record for that grouping" do
-          expect{subject}.to change {grouping.unsubscribed?(watcher)}.to false
+          expect{subject}.to change { watcher.owned_groupings.count }.by -1
         end
       end
     end

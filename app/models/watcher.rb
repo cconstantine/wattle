@@ -9,6 +9,9 @@ class Watcher < ActiveRecord::Base
   has_many :notes
   has_many :grouping_unsubscribes, dependent: :destroy
 
+  has_many :grouping_owners, dependent: :destroy
+  has_many :owned_groupings, through: :grouping_owners, source: :grouping
+
   class << self
 
     def find_or_create_from_auth_hash!(auth_hash)

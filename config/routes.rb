@@ -29,11 +29,18 @@ Wattle::Application.routes.draw do
   resources :stats, only: :index
 
   resources :grouping_unsubscribes, only: :destroy
+  resources :groupings do
+    resources :grouping_unsubscribes, only: :create
+  end
+
+  resources :grouping_owners, only: :destroy
+  resources :groupings do
+    resources :grouping_owners, only: :create
+  end
 
   resources :groupings do
     resources :notes, only: :create
     resources :wats, only: [:show, :index]
-    resources :grouping_unsubscribes, only: :create
 
     member do
       get  :chart

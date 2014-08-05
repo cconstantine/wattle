@@ -7,6 +7,10 @@ class Grouping < ActiveRecord::Base
   has_many :notes
   has_many :stream_events
   has_many :grouping_unsubscribes, dependent: :destroy
+  has_many :unsubscribes, through: :grouping_unsubscribes, source: :watcher
+
+  has_many :grouping_owners, dependent: :destroy
+  has_many :owners, through: :grouping_owners, source: :watcher
 
   has_one :representative_wat_grouping, -> {order("id desc")}, class_name: "WatsGrouping"
   has_one :representative_wat, class_name: "Wat", through: :representative_wat_grouping, source: :wat

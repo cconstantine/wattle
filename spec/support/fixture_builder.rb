@@ -48,6 +48,15 @@ FixtureBuilder.configure do |fbuilder|
       Wat.create_from_exception!(nil, {app_user: grouping_info["user"], request_headers: headers, app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
+    @claimed = 5.times.map do |i|
+      # These two need to be on the same line
+      Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}; Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'demo'})  {raise RuntimeError.new( "a test")}
+    end.first.groupings.first
+
+    @with_owned_grouping = Watcher.create!(name: "Owning Watcher", first_name: "Owning Watcher", email: "test5@example.com")
+
+    @claimed.owners << @with_owned_grouping
+
     @normal_javascripts = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production', language: :javascript})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
