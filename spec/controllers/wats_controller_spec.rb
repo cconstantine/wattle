@@ -64,9 +64,9 @@ describe WatsController do
       its(:error_class) {should == "ErrFoo"}
       its(:message) {should == "hi"}
       its(:page_url) {should == "somefoo"}
-      its(:sidekiq_msg) {should == {"retry" => true, "class" => "FooClass"}}
-      its(:request_headers) {should == {"a" => 1, "b" => 2}}
-      its(:session) {should == {"imakey" => true, "imastring" => "stringer"}}
+      its(:sidekiq_msg) {should == {"retry" => "true", "class" => "FooClass"}}
+      its(:request_headers) {should == {"a" => "1", "b" => "2"}}
+      its(:session) {should == {"imakey" => "true", "imastring" => "stringer"}}
     end
 
     context "with a crazy wat" do

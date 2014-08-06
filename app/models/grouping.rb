@@ -87,7 +87,6 @@ class Grouping < ActiveRecord::Base
 
   def app_user_stats(filters: {}, key_name: :id, limit: nil)
     wats.filtered(filters)
-      .select("app_user -> '#{key_name}' as #{key_name}, count(*) as count")
       .group("app_user -> '#{key_name}'")
       .order("count(app_user -> '#{key_name}') desc")
       .limit(limit).count
@@ -99,7 +98,6 @@ class Grouping < ActiveRecord::Base
 
   def browser_stats(filters: {}, key_name: :HTTP_USER_AGENT, limit: nil)
     wats.filtered(filters)
-    .select("request_headers -> '#{key_name}' as #{key_name}, count(*) as count")
     .group("request_headers -> '#{key_name}'")
     .order("count(request_headers -> '#{key_name}') desc")
     .limit(limit).count

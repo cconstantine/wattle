@@ -46,13 +46,14 @@ class Wat < ActiveRecord::Base
 
   # See: http://zogovic.com/post/44856908222/optimizing-postgresql-query-for-distinct-values
   def self.distinct(column)
-    select = <<-SQL
-  SELECT MIN(#{column}) FROM wats
+    query = <<-SQL
+WITH RECURSIVE t(n) AS (  SELECT MIN(#{column}) FROM wats
 UNION
   SELECT (SELECT #{column} FROM wats WHERE #{column} > n ORDER BY #{column} LIMIT 1)
   FROM t WHERE n IS NOT NULL
+) SELECT n FROM t  WHERE (n is not null)
 SQL
-    with.recursive("t(n)" => select).from("t").where("n is not null").pluck("n")
+    connection.execute(query).map { |row| row["n"] }
   end
 
   def self.new_from_exception(e=nil, metadata={}, &block)

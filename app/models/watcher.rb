@@ -13,7 +13,6 @@ class Watcher < ActiveRecord::Base
   has_many :owned_groupings, through: :grouping_owners, source: :grouping
 
   class << self
-
     def find_or_create_from_auth_hash!(auth_hash)
       where(email: auth_hash[:email]).first_or_create!(auth_hash.slice(:first_name, :name))
     end
