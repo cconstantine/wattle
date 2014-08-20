@@ -3,6 +3,7 @@
   %ul.filter#app_envs
     - app_envs.each do |env|
       %li
-        =label_tag do
-          = check_box_tag "#{prefix}[app_env][]", env, filter_set.checked?(:app_env, env)
+        = label_tag do
+          = hidden_field_tag "#{prefix}[app_env][#{env}]", 0
+          = check_box_tag "#{prefix}[app_env][#{env}]", "1", filter_set.checked?("app_env", env)
           = env

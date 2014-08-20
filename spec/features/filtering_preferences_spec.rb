@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "Filtering the wat groupings" do
+describe "Saving your preferences for wat filtering" do
   before do
     visit "/auth/developer"
 
@@ -38,7 +38,6 @@ describe "Filtering the wat groupings" do
     Wat.create_from_exception!(nil, app_name: "app1", app_env: "staging") {raise "hi"}
     find_email("test@example.com", with_text: "been detected in").should be_present
     find_email("user@example.com", with_text: "been detected in").should be_present
-
   end
 
   it "lets a user save default email filters" do

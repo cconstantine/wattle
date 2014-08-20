@@ -2,13 +2,13 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   include WatCatcher::CatcherOfWats
-  DEFAULT_FILTERS = {state: ['active', 'muffled']}.with_indifferent_access
 
   protect_from_forgery with: :exception
   before_filter :require_login
 
   def filters
-    @_filters ||= FilterSet.new(params: params, filters: current_user.default_filters, default_filters: DEFAULT_FILTERS)
+    filters = param_filters || current_user.default_filters
+    @filters ||= FilterSet.new(filters)
   end
   helper_method :filters
 
@@ -39,4 +39,11 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_user
 
+  private
+
+  def param_filters
+    if params[:filters].present?
+      FilterParameterConverter.new(params[:filters]).convert
+    end
+  end
 end

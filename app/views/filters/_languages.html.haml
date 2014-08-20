@@ -1,8 +1,9 @@
 %li.nav-header.mb20
   Languages
   %ul.filter#app_names
-    - languages.each do |name|
+    - languages.each do |language|
       %li
         =label_tag do
-          = check_box_tag "#{prefix}[language][]", name, filter_set.checked?(:language, name)
-          = name
+          = hidden_field_tag "#{prefix}[language][#{language}]", 0
+          = check_box_tag "#{prefix}[language][#{language}]", "1", filter_set.checked?("language", language)
+          = language

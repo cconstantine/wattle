@@ -45,13 +45,13 @@ class Grouping < ActiveRecord::Base
     opts ||= {}
 
     running_scope = self
-    running_scope = running_scope.state(opts[:state])       if opts[:state]
-    running_scope = running_scope.app_name(opts[:app_name]) if opts[:app_name]
-    running_scope = running_scope.app_env(opts[:app_env])   if opts[:app_env]
-    running_scope = running_scope.language(opts[:language]) if opts[:language]
-    running_scope = running_scope.by_user(opts[:app_user])  if opts[:app_user]
+    running_scope = running_scope.state(opts["state"])       if opts["state"] && opts["state"].any?
+    running_scope = running_scope.app_name(opts["app_name"]) if opts["app_name"] && opts["app_name"].any?
+    running_scope = running_scope.app_env(opts["app_env"])   if opts["app_env"] && opts["app_env"].any?
+    running_scope = running_scope.language(opts["language"]) if opts["language"] && opts["language"].any?
+    running_scope = running_scope.by_user(opts["app_user"])  if opts["app_user"] && opts["app_user"].any?
 
-    running_scope.distinct('groupings.id')
+    running_scope.distinct("groupings.id")
   }
 
   scope( :wat_order, -> { reorder("latest_wat_at asc") } ) do

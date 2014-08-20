@@ -3,17 +3,21 @@
   %ul.filter#states
     %li
       =label_tag do
-        = check_box_tag "#{prefix}[state][]", 'active', filter_set.checked?(:state, 'active')
+        = hidden_field_tag "#{prefix}[state][active]", 0
+        = check_box_tag "#{prefix}[state][active]", "1", filter_set.checked?("state", "active")
         Active
     %li
       =label_tag do
-        = check_box_tag "#{prefix}[state][]", 'muffled', filter_set.checked?(:state, 'muffled')
+        = hidden_field_tag "#{prefix}[state][muffled]", 0
+        = check_box_tag "#{prefix}[state][muffled]", "1", filter_set.checked?("state", "muffled")
         Muffled
     %li
       =label_tag do
-        = check_box_tag "#{prefix}[state][]", 'wontfix', filter_set.checked?(:state, 'wontfix')
+        = hidden_field_tag "#{prefix}[state][wontfix]", 0
+        = check_box_tag "#{prefix}[state][wontfix]", "1", filter_set.checked?("state", "wontfix")
         Won't Fix
     %li
       =label_tag do
-        = check_box_tag "#{prefix}[state][]", 'resolved', filter_set.checked?(:state, 'resolved')
+        = hidden_field_tag "#{prefix}[state][resolved]", 0
+        = check_box_tag "#{prefix}[state][resolved]", "1", filter_set.checked?("state", "resolved")
         Resolved

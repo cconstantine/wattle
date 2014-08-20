@@ -4,7 +4,6 @@ describe GroupingsController, versioning: true do
   render_views
 
   let(:error) { capture_error { raise RuntimeError.new "test message" } }
-
   let(:message) { error.message }
   let(:error_class) { error.class.to_s }
   let(:backtrace) { error.backtrace }
@@ -35,12 +34,12 @@ describe GroupingsController, versioning: true do
 
         it "should include unfiltered groupings" do
           subject
-          assigns[:groupings].to_a.should have(Grouping.filtered(ApplicationController::DEFAULT_FILTERS).count).items
+          assigns[:groupings].to_a.should have(Grouping.filtered(FilterSet::DEFAULT_FILTERS).count).items
           assigns[:groupings].to_a.map(&:app_envs).flatten.uniq.should =~ ['demo', 'production', 'staging']
         end
 
         context "filtered" do
-          let(:params) { {filters: {:app_env => "staging"}} }
+          let(:params) { { filters: { "app_env" => { "staging" => "1" } } } }
           it "should include filtered groupings" do
             subject
 
@@ -50,7 +49,7 @@ describe GroupingsController, versioning: true do
               flatten.
               map(&:app_env).
               uniq.
-              should =~ ['staging']
+              should =~ ["staging"]
           end
         end
         context "ordering" do

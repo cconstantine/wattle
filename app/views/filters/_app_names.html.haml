@@ -4,5 +4,6 @@
     - app_names.each do |name|
       %li
         =label_tag do
-          = check_box_tag "#{prefix}[app_name][]", name, filter_set.checked?(:app_name, name)
+          = hidden_field_tag "#{prefix}[app_name][#{name}]", 0
+          = check_box_tag "#{prefix}[app_name][#{name}]", "1", filter_set.checked?("app_name", name)
           = name

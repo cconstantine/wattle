@@ -1,5 +1,5 @@
-=render partial: 'filters/app_names', locals: {prefix: prefix, filter_set: filter_set}
-=render partial: 'filters/app_envs',  locals: {prefix: prefix, filter_set: filter_set}
-=render partial: 'filters/languages', locals: {prefix: prefix, filter_set: filter_set}
-=render partial: 'filters/states',    locals: {prefix: prefix, filter_set: filter_set}
-=render partial: 'filters/user',      locals: {prefix: prefix, filter_set: filter_set}
+= render 'filters/app_names', prefix: prefix, filter_set: filter_set
+= render 'filters/app_envs',  prefix: prefix, filter_set: filter_set
+= render 'filters/languages', prefix: prefix, filter_set: filter_set
+= render 'filters/states',    prefix: prefix, filter_set: filter_set
+= render 'filters/user',      prefix: prefix, filter_set: filter_set

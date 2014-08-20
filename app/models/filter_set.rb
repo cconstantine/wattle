@@ -1,22 +1,17 @@
 class FilterSet
-  def initialize(params: params, filters: filters, default_filters: default_filters)
-    @params = params
-    @_filters = filters || default_filters
+  DEFAULT_FILTERS = { "state" => ["active", "muffled"] }
+
+  attr_reader :filters
+
+  def initialize(filters)
+    @filters = filters || DEFAULT_FILTERS
   end
 
-  def filters
-    return param_filters if has_param_filters?
-
-    @_filters
+  def checked?(param, key)
+    has_filter?(param) && filters[param].include?(key)
   end
 
-  def checked? param, key
-    return false unless (@params.present? || @_filters.present?)
-    return false unless has_filter?(param)
-    filters[param].include?(key)
-  end
-
-  def has_filter? param
+  def has_filter?(param)
     filters[param].present?
   end
 
@@ -27,15 +22,4 @@ class FilterSet
   def []=(k,v)
     filters[k] = v
   end
-
-  private
-  def has_param_filters?
-    return false unless @params.present?
-    @params[:filters].present?
-  end
-
-  def param_filters
-    @params.require("filters").permit!
-  end
-
 end

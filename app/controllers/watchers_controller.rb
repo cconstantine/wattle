@@ -16,16 +16,17 @@ class WatchersController < ApplicationController
 
   def update
     attrs = {}
-    attrs[:default_filters] = filters_params(:default_filters) if filters_params(:default_filters).present?
-    attrs[:email_filters] = filters_params(:email_filters) if filters_params(:email_filters).present?
+    attrs[:default_filters] = converted_params(:default_filters)
+    attrs[:email_filters] = converted_params(:email_filters)
     @watcher.update_attributes!(attrs)
     flash[:notice] = "Your defaults were saved!"
     redirect_to :back
   end
 
+
   def reactivate
-   @watcher.activate!
-   redirect_to request.referer
+    @watcher.activate!
+    redirect_to request.referer
   end
 
   def deactivate
@@ -35,6 +36,10 @@ class WatchersController < ApplicationController
 
 
   protected
+
+  def converted_params(params_type)
+    FilterParameterConverter.new(filters_params(params_type)).convert
+  end
 
   def load_watchers
     @watchers = Watcher.all

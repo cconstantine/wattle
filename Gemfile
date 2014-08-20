@@ -49,6 +49,9 @@ end
 
 group :development do
   gem 'pivotal_git_scripts'
+  gem 'quiet_assets'
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :test, :development do

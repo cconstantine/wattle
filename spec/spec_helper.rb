@@ -35,10 +35,6 @@ end
 
 Capybara.javascript_driver = :quiet_poltergeist
 
-RSpec.configure do |rspec|
-  rspec.deprecation_stream = 'log/deprecations.log'
-end
-
 def capture_error &block
   err = nil
   begin
@@ -53,6 +49,7 @@ require 'support/fixture_builder'
 Sidekiq::Testing.fake!
 
 RSpec.configure do |config|
+  config.infer_spec_type_from_file_location!
 
   config.before(:each) do |example|
     reset_mailer

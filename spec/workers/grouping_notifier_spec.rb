@@ -97,7 +97,6 @@ describe GroupingNotifier do
       it {should_not include(watchers(:inactive))}
     end
 
-
     context "for a grouping with unsubscribes" do
       let(:unsubscribed_watcher) {watchers(:another_watcher)}
       before do
@@ -109,19 +108,19 @@ describe GroupingNotifier do
       it {should_not include(unsubscribed_watcher)}
     end
 
-    context "for a grouping not matching a watcher's email filters" do
+    context "for a grouping that the watcher has filtered out" do
       let(:watcher_with_email_filters) {watchers(:watcher_with_email_filters)}
 
       it {should_not include(watcher_with_email_filters)}
       it {should include(watchers(:default))}
     end
 
-    context "for a grouping not matching a watcher's email filters" do
+    context "for a grouping that the watcher has not filtered out" do
       let(:watcher_with_email_filters) {watchers(:watcher_with_email_filters)}
 
       before do
         watcher_with_email_filters.update_attributes(
-          email_filters: {"app_name"=>["app1"], "app_env"=>["production"], "language"=>["ruby"]}.with_indifferent_access
+          email_filters: {"app_name"=>["app1"], "app_env"=>["production"], "language"=>["ruby"]}
         )
       end
 
