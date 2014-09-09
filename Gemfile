@@ -33,6 +33,7 @@ gem 'uglifier', '>= 1.0.3'
 gem 'execjs'
 gem 'therubyracer'
 gem 'sidekiq'
+gem 'redis-semaphore'
 gem 'slim', ">= 1.3.0", :require => false
 gem 'sinatra', '>= 1.3.0', :require => false
 gem 'highcharts-rails'

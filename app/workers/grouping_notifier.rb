@@ -14,11 +14,15 @@ class GroupingNotifier < Struct.new(:grouping)
   end
 
   def perform
-    return unless needs_notifying?
-    if send_email_now?
-      send_email
-    else
-      send_email_later
+    Sidekiq::redis do |redis|
+      Redis::Semaphore.new(:GroupingNotifierSemaphore, :connection => redis).lock(1.hour) do
+        return unless needs_notifying?
+        if send_email_now?
+          send_email
+        else
+          send_email_later
+        end
+      end
     end
   end
 

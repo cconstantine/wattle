@@ -8,6 +8,34 @@ describe GroupingNotifier do
     before { stub(grouping_notifier).needs_notifying? {true} }
     subject { grouping_notifier.perform }
 
+
+    context "on a grouping that never notified" do
+      before { grouping.update_column(:last_emailed_at, nil)}
+      context "When multiple workers run at the same time" do
+        it "should only call send_email once" do
+
+          stub.proxy(grouping_notifier).send_email
+
+          # Call .perform in 3 separate threads (like you would with 3 separate sidekiq workers)
+          threads = Set.new
+          3.times do
+            threads << Thread.new do
+              grouping_notifier.perform
+            end
+          end
+
+          # and wait for them to finish executing
+          threads.each do |thread|
+            thread.join
+          end
+
+          expect(grouping_notifier).to have_received(:send_email).once
+        end
+
+      end
+    end
+
+
     context "send_email_now? is true" do
       before { stub(grouping_notifier).send_email_now? {true} }
       it "should send_email" do
