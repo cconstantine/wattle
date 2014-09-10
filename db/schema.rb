@@ -110,13 +110,13 @@ ActiveRecord::Schema.define(version: 20140805175851) do
     t.hstore   "request_headers"
     t.hstore   "request_params"
     t.text     "page_url"
-    t.text     "app_env",         default: "unknown",   null: false
+    t.text     "app_env",         default: "unknown",      null: false
     t.hstore   "sidekiq_msg"
-    t.text     "app_name",        default: "unknown",   null: false
-    t.text     "backtrace",                                          array: true
+    t.text     "app_name",        default: "unknown",      null: false
+    t.text     "backtrace",                                             array: true
     t.string   "language"
-    t.hstore   "app_user",        default: {"id"=>nil}
-    t.datetime "captured_at",                           null: false
+    t.hstore   "app_user",        default: "\"id\"=>NULL"
+    t.datetime "captured_at",                              null: false
   end
 
   add_index "wats", ["app_env"], name: "index_wats_on_app_env", using: :btree

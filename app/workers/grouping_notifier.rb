@@ -2,6 +2,7 @@ class GroupingNotifier < Struct.new(:grouping)
   include Sidekiq::Worker
 
   DEBOUNCE_DELAY = 60.minutes
+  SIDEKIQ_NOTIFY_AFTER = 10.minutes
 
   class << self
     def notify(grouping_id)
@@ -35,6 +36,7 @@ class GroupingNotifier < Struct.new(:grouping)
   end
 
   def needs_notifying?
+    return false if sidekiq_and_too_new?
     return false if grouping.app_envs.include? 'honeypot'
     return false if grouping.is_javascript? && js_wats_per_hour_in_previous_weeks > js_wats_in_previous_day / 2
     return false if grouping.muffled? && similar_wats_per_hour_in_previous_weeks > similar_wats_in_previous_day / 2
@@ -76,6 +78,21 @@ class GroupingNotifier < Struct.new(:grouping)
 
   private
 
+  def sidekiq_job?
+    sidekiq_msg.present?
+  end
+
+  def sidekiq_msg
+    wats.order(:captured_at).last.sidekiq_msg
+  end
+
+  def sidekiq_and_too_new?
+    return false unless sidekiq_job?
+    notify_after = (sidekiq_msg["notify_after"] || SIDEKIQ_NOTIFY_AFTER).to_i
+    enqueued_at = sidekiq_msg["enqueued_at"].to_f
+
+    return Time.zone.now < Time.at(enqueued_at + notify_after)
+  end
 
   def send_email_later
     Rails.logger.info("Delaying notification for grouping #{grouping.id}")

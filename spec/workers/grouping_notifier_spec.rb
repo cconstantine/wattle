@@ -61,6 +61,35 @@ describe GroupingNotifier do
 
   describe "#needs_notifying?" do
     subject {grouping_notifier}
+
+    context "with a sidekiq job" do
+      let(:grouping) {Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production', sidekiq_msg: {"retry"=>true, "queue"=>"default", "class"=>"FailedWorker", "args"=>[], "jid"=>"7f3849342188a8b17456ab33", "enqueued_at"=>enqueued_at.to_f.to_s}}) {raise "Something"}.groupings.first}
+
+      context "grouping's wat is too recent" do
+        let(:enqueued_at) { Time.now }
+        it { should_not be_needs_notifying }
+      end
+
+      context "grouping's wat is old enough" do
+        let(:enqueued_at) { 800.seconds.ago}
+        it { should be_needs_notifying }
+      end
+
+      context "with a specified notify_after" do
+        let(:grouping) {Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production', sidekiq_msg: {"retry"=>true, "queue"=>"default", "notify_after"=>"700", "class"=>"FailedWorker", "args"=>[], "jid"=>"7f3849342188a8b17456ab33", "enqueued_at"=>enqueued_at.to_f.to_s}}) {raise "Something"}.groupings.first}
+
+        context "grouping's wat is too recent" do
+          let(:enqueued_at) { Time.now }
+          it { should_not be_needs_notifying }
+        end
+
+        context "grouping's wat is old enough" do
+          let(:enqueued_at) { 800.seconds.ago}
+          it { should be_needs_notifying }
+        end
+      end
+    end
+
     context "with a blank last_emailed_at" do
       before { grouping.update_column :last_emailed_at, nil }
       context "when the grouping is resolved" do
