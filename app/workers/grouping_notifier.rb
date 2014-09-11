@@ -88,6 +88,11 @@ class GroupingNotifier < Struct.new(:grouping)
 
   def sidekiq_and_too_new?
     return false unless sidekiq_job?
+    return false if sidekiq_msg["retry"] == false
+    return false if sidekiq_msg["retry"] == "false"
+    if (sidekiq_msg["retry"] != "true" && sidekiq_msg["retry"] != true)
+      return false if sidekiq_msg["retry"].to_s.to_i == 0
+    end
     notify_after = (sidekiq_msg["notify_after"] || SIDEKIQ_NOTIFY_AFTER).to_i
     enqueued_at = sidekiq_msg["enqueued_at"].to_f
 

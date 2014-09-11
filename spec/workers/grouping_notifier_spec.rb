@@ -63,7 +63,26 @@ describe GroupingNotifier do
     subject {grouping_notifier}
 
     context "with a sidekiq job" do
-      let(:grouping) {Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production', sidekiq_msg: {"retry"=>true, "queue"=>"default", "class"=>"FailedWorker", "args"=>[], "jid"=>"7f3849342188a8b17456ab33", "enqueued_at"=>enqueued_at.to_f.to_s}}) {raise "Something"}.groupings.first}
+      let(:retry_option) {true}
+      let(:grouping) {Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production', sidekiq_msg: {"retry"=>retry_option, "queue"=>"default", "class"=>"FailedWorker", "args"=>[], "jid"=>"7f3849342188a8b17456ab33", "enqueued_at"=>enqueued_at.to_f.to_s}}) {raise "Something"}.groupings.first}
+
+      context "the retry option is nil" do
+        let(:enqueued_at) { Time.now }
+        let(:retry_option) {nil}
+        it { should be_needs_notifying }
+      end
+
+      context "the retry option is 0" do
+        let(:enqueued_at) { Time.now }
+        let(:retry_option) {0}
+        it { should be_needs_notifying }
+      end
+
+      context "the retry option is false" do
+        let(:enqueued_at) { Time.now }
+        let(:retry_option) {false}
+        it { should be_needs_notifying }
+      end
 
       context "grouping's wat is too recent" do
         let(:enqueued_at) { Time.now }
