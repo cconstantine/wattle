@@ -1,8 +1,10 @@
-class GroupingNotifier < Struct.new(:grouping)
+class GroupingNotifier
   include Sidekiq::Worker
 
   DEBOUNCE_DELAY = 60.minutes
   SIDEKIQ_NOTIFY_AFTER = 10.minutes
+
+  attr_accessor :grouping
 
   class << self
     def notify(grouping_id)
@@ -14,12 +16,18 @@ class GroupingNotifier < Struct.new(:grouping)
     end
   end
 
+  def initialize(grouping)
+    self.grouping = grouping
+  end
+
   def perform
     Sidekiq::redis do |redis|
       Redis::Semaphore.new(:GroupingNotifierSemaphore, :connection => redis).lock(1.hour) do
+        grouping.reload
         return unless needs_notifying?
         if send_email_now?
           send_email
+          mark_as_sent
         else
           send_email_later
         end
@@ -28,7 +36,7 @@ class GroupingNotifier < Struct.new(:grouping)
   end
 
   def send_email_now?
-    grouping.active? && (grouping.last_emailed_at.nil? ||  grouping.last_emailed_at <= Time.zone.now - DEBOUNCE_DELAY)
+    grouping.active? && (grouping.last_emailed_at.nil? ||  (grouping.last_emailed_at <= Time.zone.now - DEBOUNCE_DELAY))
   end
 
   def wats
@@ -73,10 +81,13 @@ class GroupingNotifier < Struct.new(:grouping)
     email_recipients.each do |watcher|
       GroupingMailer.delay.notify(watcher, grouping)
     end
-    grouping.update_attributes!(last_emailed_at: Time.zone.now)
   end
 
   private
+
+  def mark_as_sent
+    grouping.update_attributes!(last_emailed_at: Time.zone.now)
+  end
 
   def sidekiq_job?
     sidekiq_msg.present?

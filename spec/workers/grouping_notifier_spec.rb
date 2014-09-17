@@ -13,14 +13,18 @@ describe GroupingNotifier do
       before { grouping.update_column(:last_emailed_at, nil)}
       context "When multiple workers run at the same time" do
         it "should only call send_email once" do
+          call_count = 0
 
-          stub.proxy(grouping_notifier).send_email
+          any_instance_of(GroupingNotifier) do |klass|
+            stub(klass).send_email { call_count += 1 }
+            stub(klass).send_email_later
+          end
 
           # Call .perform in 3 separate threads (like you would with 3 separate sidekiq workers)
           threads = Set.new
-          3.times do
+          3.times do |i|
             threads << Thread.new do
-              grouping_notifier.perform
+              GroupingNotifier.notify(grouping.id)
             end
           end
 
@@ -28,8 +32,7 @@ describe GroupingNotifier do
           threads.each do |thread|
             thread.join
           end
-
-          expect(grouping_notifier).to have_received(:send_email).once
+          expect(call_count).to eq(1)
         end
 
       end
