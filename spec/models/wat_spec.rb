@@ -81,6 +81,19 @@ describe Wat do
         expect {subject}.to raise_error ActiveRecord::RecordInvalid
       end
     end
+    context "with an ignored user_agent" do
+      before {WatIgnores.create!(user_agent: "IGNOREME")}
+
+      let(:wat) {Wat.create!(
+        "request_headers" => {
+          "HTTP_USER_AGENT" => "IGNOREME",
+        })}
+
+
+      it "should throw a record invalid error" do
+        expect {subject}.to raise_error ActiveRecord::RecordInvalid
+      end
+    end
   end
 
   describe "clean_hstore" do

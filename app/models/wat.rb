@@ -16,6 +16,7 @@ class Wat < ActiveRecord::Base
   after_create :upvote_groupings
 
   validates :language, inclusion: { in: %w(ruby javascript) }, allow_nil: true
+  validate :request_headers_not_ignored
 
   scope :filtered, ->(opts={}) {
     running_scope = all
@@ -163,5 +164,9 @@ SQL
 
   def ensure_captured_at
     self.captured_at ||= Time.zone.now
+  end
+
+  def request_headers_not_ignored
+    errors.add(:request_headers) if WatIgnores.matches?(self)
   end
 end

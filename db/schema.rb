@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140805175851) do
+ActiveRecord::Schema.define(version: 20141009203333) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,14 @@ ActiveRecord::Schema.define(version: 20140805175851) do
 
   add_index "versions", ["item_type", "item_id", "type"], name: "index_versions_on_item_type_and_item_id_and_type", using: :btree
 
+  create_table "wat_ignores", force: true do |t|
+    t.text     "user_agent"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "wat_ignores", ["user_agent"], name: "index_wat_ignores_on_user_agent", using: :btree
+
   create_table "watchers", force: true do |t|
     t.string   "first_name"
     t.string   "name"
@@ -110,13 +118,13 @@ ActiveRecord::Schema.define(version: 20140805175851) do
     t.hstore   "request_headers"
     t.hstore   "request_params"
     t.text     "page_url"
-    t.text     "app_env",         default: "unknown",      null: false
+    t.text     "app_env",         default: "unknown",   null: false
     t.hstore   "sidekiq_msg"
-    t.text     "app_name",        default: "unknown",      null: false
-    t.text     "backtrace",                                             array: true
+    t.text     "app_name",        default: "unknown",   null: false
+    t.text     "backtrace",                                          array: true
     t.string   "language"
-    t.hstore   "app_user",        default: "\"id\"=>NULL"
-    t.datetime "captured_at",                              null: false
+    t.hstore   "app_user",        default: {"id"=>nil}
+    t.datetime "captured_at",                           null: false
   end
 
   add_index "wats", ["app_env"], name: "index_wats_on_app_env", using: :btree
