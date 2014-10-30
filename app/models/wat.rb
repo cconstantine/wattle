@@ -112,7 +112,11 @@ SQL
   end
 
   def construct_groupings!
-    self.groupings = (Grouping.matching(self) << Grouping.get_or_create_from_wat!(self)).uniq
+    Sidekiq::redis do |redis|
+      Redis::Semaphore.new(:"Wat#construct_groupings!", :connection => redis).lock(1.hour) do
+        self.groupings = (Grouping.matching(self) << Grouping.get_or_create_from_wat!(self)).uniq
+      end
+    end
   end
 
   def send_email
