@@ -48,7 +48,7 @@ feature "Claiming ownership of groupings", js: true do
           scenario "should only send emails to the owners" do
             subject
 
-            GroupingNotifier.new(grouping).send_email
+            GroupingWatNotifier.new(grouping).send_email
             find_email("test@example.com",  with_text: "been detected in").should_not be_present
             find_email("test5@example.com", with_text: "been detected in").should be_present
             find_email("user@example.com",  with_text: "been detected in").should be_present
@@ -74,7 +74,7 @@ feature "Claiming ownership of groupings", js: true do
           scenario "should only send emails to you" do
             subject
 
-            GroupingNotifier.new(grouping).send_email
+            GroupingWatNotifier.new(grouping).send_email
 
             find_email("test@example.com", with_text: "been detected in").should_not be_present
             find_email("user@example.com", with_text: "been detected in").should be_present

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe GroupingNotifier do
-  let(:grouping_notifier) {GroupingNotifier.new(grouping)}
+describe GroupingNoteNotifier do
+  let(:grouping_notifier) {GroupingNoteNotifier.new(grouping)}
   let(:grouping) {groupings(:grouping1)}
 
   describe "#perform" do
@@ -12,10 +12,10 @@ describe GroupingNotifier do
     context "on a grouping that never notified" do
       before { grouping.update_column(:last_emailed_at, nil)}
       context "When multiple workers run at the same time" do
-        it "should only call send_email once" do
+        it "should only call send_email once when a new wat is created" do
           call_count = 0
 
-          any_instance_of(GroupingNotifier) do |klass|
+          any_instance_of(GroupingNoteNotifier) do |klass|
             stub(klass).send_email { call_count += 1 }
             stub(klass).send_email_later
           end
@@ -24,7 +24,7 @@ describe GroupingNotifier do
           threads = Set.new
           3.times do |i|
             threads << Thread.new do
-              GroupingNotifier.notify(grouping.id)
+              GroupingNoteNotifier.notify(grouping.id)
             end
           end
 
@@ -65,53 +65,6 @@ describe GroupingNotifier do
   describe "#needs_notifying?" do
     subject {grouping_notifier}
 
-    context "with a sidekiq job" do
-      let(:retry_option) {true}
-      let(:grouping) {Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production', sidekiq_msg: {"retry"=>retry_option, "queue"=>"default", "class"=>"FailedWorker", "args"=>[], "jid"=>"7f3849342188a8b17456ab33", "enqueued_at"=>enqueued_at.to_f.to_s}}) {raise "Something"}.groupings.first}
-
-      context "the retry option is nil" do
-        let(:enqueued_at) { Time.now }
-        let(:retry_option) {nil}
-        it { should be_needs_notifying }
-      end
-
-      context "the retry option is 0" do
-        let(:enqueued_at) { Time.now }
-        let(:retry_option) {0}
-        it { should be_needs_notifying }
-      end
-
-      context "the retry option is false" do
-        let(:enqueued_at) { Time.now }
-        let(:retry_option) {false}
-        it { should be_needs_notifying }
-      end
-
-      context "grouping's wat is too recent" do
-        let(:enqueued_at) { Time.now }
-        it { should_not be_needs_notifying }
-      end
-
-      context "grouping's wat is old enough" do
-        let(:enqueued_at) { 800.seconds.ago}
-        it { should be_needs_notifying }
-      end
-
-      context "with a specified notify_after" do
-        let(:grouping) {Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production', sidekiq_msg: {"retry"=>true, "queue"=>"default", "notify_after"=>"700", "class"=>"FailedWorker", "args"=>[], "jid"=>"7f3849342188a8b17456ab33", "enqueued_at"=>enqueued_at.to_f.to_s}}) {raise "Something"}.groupings.first}
-
-        context "grouping's wat is too recent" do
-          let(:enqueued_at) { Time.now }
-          it { should_not be_needs_notifying }
-        end
-
-        context "grouping's wat is old enough" do
-          let(:enqueued_at) { 800.seconds.ago}
-          it { should be_needs_notifying }
-        end
-      end
-    end
-
     context "with a blank last_emailed_at" do
       before { grouping.update_column :last_emailed_at, nil }
       context "when the grouping is resolved" do
@@ -124,44 +77,10 @@ describe GroupingNotifier do
       end
       context "when the grouping is muffled" do
         let(:grouping) {groupings(:muffled)}
-
-        context "with 1000 wats per hour in the last weeks" do
-          before { stub(grouping_notifier).similar_wats_per_hour_in_previous_weeks { 1000 } }
-          context "with 1000 wats in the last day" do
-            before { stub(grouping_notifier).similar_wats_in_previous_day { 1000 } }
-
-            it {should_not be_needs_notifying}
-          end
-
-          context "with 2000 wats in the last hour" do
-            before { stub(grouping_notifier).similar_wats_in_previous_day { 2000 } }
-
-            it {should be_needs_notifying}
-          end
-        end
       end
       context "when the grouping is active" do
         let(:grouping) {groupings(:grouping1)}
         it {should be_needs_notifying}
-
-        context "with a js grouping" do
-          before { stub(grouping).is_javascript? { true } }
-
-          context "with an average of 1000 wats per hour in the last 24 hours" do
-            before { stub(grouping_notifier).js_wats_per_hour_in_previous_weeks { 1000 } }
-
-            context "with 2000 wats in the last hour" do
-              before { stub(grouping_notifier).js_wats_in_previous_day { 2000 } }
-
-              it {should be_needs_notifying}
-            end
-            context "with 1000 wats in the last hour" do
-              before { stub(grouping_notifier).js_wats_in_previous_day { 1000 } }
-
-              it {should_not be_needs_notifying}
-            end
-          end
-        end
       end
     end
   end
@@ -222,7 +141,7 @@ describe GroupingNotifier do
     it "should send emails" do
       subject
 
-      find_email("test@example.com", with_text: "been detected in").should be_present
+      find_email("test@example.com", with_text: "note has been added").should be_present
     end
 
 

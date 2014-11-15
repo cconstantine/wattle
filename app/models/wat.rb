@@ -121,7 +121,7 @@ SQL
 
   def send_email
     groupings.active.pluck(:id).each do |grouping_id|
-      GroupingNotifier.delay.notify(grouping_id)
+      GroupingWatNotifier.delay.notify(grouping_id)
     end
   end
 
