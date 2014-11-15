@@ -147,10 +147,10 @@ describe Wat do
     it "should call the notify the wat notifier" do
       Sidekiq::Testing.inline! do
 
-        stub.proxy(GroupingNotifier).notify
+        stub.proxy(GroupingWatNotifier).notify
         subject
 
-        expect(GroupingNotifier).to have_received(:notify).with wat.groupings.active.last.id
+        expect(GroupingWatNotifier).to have_received(:notify).with wat.groupings.active.last.id
           # Some other tests
       end
     end

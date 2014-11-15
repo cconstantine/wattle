@@ -1,4 +1,4 @@
-class GroupingNotifier
+class GroupingWatNotifier
   include Sidekiq::Worker
 
   DEBOUNCE_DELAY = 60.minutes
@@ -8,7 +8,7 @@ class GroupingNotifier
 
   class << self
     def notify(grouping_id)
-      GroupingNotifier.new(Grouping.find(grouping_id)).perform
+      GroupingWatNotifier.new(Grouping.find(grouping_id)).perform
     end
 
     def wat_user(grouping_id)
@@ -79,7 +79,7 @@ class GroupingNotifier
   def send_email
     Rails.logger.info("Sending email for grouping #{grouping.id}")
     email_recipients.each do |watcher|
-      GroupingMailer.delay.notify(watcher, grouping)
+      GroupingMailer.delay.notify_about_wat(watcher, grouping)
     end
   end
 
@@ -112,6 +112,6 @@ class GroupingNotifier
 
   def send_email_later
     Rails.logger.info("Delaying notification for grouping #{grouping.id}")
-    GroupingNotifier.delay_for(DEBOUNCE_DELAY).notify(grouping.id) unless Rails.env.test?
+    GroupingWatNotifier.delay_for(DEBOUNCE_DELAY).notify(grouping.id) unless Rails.env.test?
   end
 end

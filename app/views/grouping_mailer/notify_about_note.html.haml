@@ -1,0 +1,22 @@
+%h1 A note has been added to wat grouping #{@grouping.id}
+
+%table
+  %tbody
+    %tr
+      %th
+      %td= link_to "View grouping", grouping_url(@grouping)
+    %tr
+      %th Application
+      %td= "#{@wat.app_name} (#{@app_envs.join(",")})"
+    %tr
+      %th When
+      %td= "#{@wat.captured_at} (#{time_ago_in_words(@wat.captured_at)} ago)"
+
+    %tr
+      %th Key Line
+      %td= @wat.key_line
+
+  - if @wat.error_class.present?
+    %tr
+      %th Error Class
+      %td= @wat.error_class
