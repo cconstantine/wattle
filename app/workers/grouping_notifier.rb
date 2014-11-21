@@ -67,18 +67,9 @@ class GroupingNotifier
     Wat.javascript.open.after(1.day.ago).count
   end
 
-  def email_recipients
-    potential_watchers = grouping.owners.any? ? grouping.owners : Watcher.active
-    potential_watchers.map do |watcher|
-      next if grouping.unsubscribed?(watcher)
-      next unless Grouping.where(id: grouping.to_param).filtered(watcher.email_filters).any?
-      watcher
-    end.compact
-  end
-
   def send_email
     Rails.logger.info("Sending email for grouping #{grouping.id}")
-    email_recipients.each do |watcher|
+    grouping.email_recipients.each do |watcher|
       GroupingMailer.delay.notify(watcher, grouping)
     end
   end

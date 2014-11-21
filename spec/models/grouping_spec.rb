@@ -205,6 +205,57 @@ describe Grouping do
     end
   end
 
+
+  describe "#email_recipients" do
+    let(:grouping) {groupings(:grouping1)}
+    subject {grouping.email_recipients}
+
+    context "for a grouping with no unsubscribes or owners or matching filters" do
+      before {Watcher.update_all(email_filters: nil)}
+
+      it {should =~ Watcher.active.to_a}
+      it {should_not include(watchers(:inactive))}
+    end
+
+
+    context "for a grouping with unsubscribes" do
+      let(:unsubscribed_watcher) {watchers(:another_watcher)}
+      before do
+        grouping.unsubscribes << unsubscribed_watcher
+      end
+
+      it {should include(watchers(:default))}
+      it {should_not include(watchers(:inactive))}
+      it {should_not include(unsubscribed_watcher)}
+    end
+
+    context "for a grouping not matching a watcher's email filters" do
+      let(:watcher_with_email_filters) {watchers(:watcher_with_email_filters)}
+
+      it {should_not include(watcher_with_email_filters)}
+      it {should include(watchers(:default))}
+    end
+
+    context "for a grouping not matching a watcher's email filters" do
+      let(:watcher_with_email_filters) {watchers(:watcher_with_email_filters)}
+
+      before do
+        watcher_with_email_filters.update_attributes(
+          email_filters: {"app_name"=>["app1"], "app_env"=>["production"], "language"=>["ruby"]}.with_indifferent_access
+        )
+      end
+
+      it {should include(watcher_with_email_filters)}
+      it {should include(watchers(:default))}
+    end
+
+    context "for a grouping with an owner" do
+      let(:grouping) {groupings(:claimed)}
+
+      it {should == [watchers(:with_owned_grouping)]}
+    end
+  end
+
   describe "#popularity_addin" do
     let(:grouping) {groupings(:grouping1)}
     let(:effective_time) {Time.zone.now}

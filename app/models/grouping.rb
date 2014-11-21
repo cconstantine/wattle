@@ -141,6 +141,15 @@ class Grouping < ActiveRecord::Base
     wat_chart_values
   end
 
+  def email_recipients
+    potential_watchers = owners.any? ? self.owners : Watcher.active
+    potential_watchers.map do |watcher|
+      next if self.unsubscribed?(watcher)
+      next unless Grouping.where(id: self.to_param).filtered(watcher.email_filters).any?
+      watcher
+    end.compact
+  end
+
   def self.epoch
     Wat.order(:id).first.created_at || Date.new(2015, 10, 1).to_time
   end
