@@ -40,18 +40,18 @@ class Grouping < ActiveRecord::Base
   scope :resolved,      -> {where(state: :resolved)}
   scope :wontfix,  -> {where(state: :wontfix)}
   scope :state,         -> (state) {where(state: state)}
-  scope :matching, ->(wat) {language(wat.language).where(wat.matching_selector)}
+  scope :matching, ->(wat) {language_non_distinct(wat.language).where(wat.matching_selector).recursive_distinct('groupings.id')}
   scope :filtered, ->(opts=nil) {
     opts ||= {}
 
     running_scope = self
     running_scope = running_scope.state(opts[:state])       if opts[:state]
-    running_scope = running_scope.app_name(opts[:app_name]) if opts[:app_name]
-    running_scope = running_scope.app_env(opts[:app_env])   if opts[:app_env]
-    running_scope = running_scope.language(opts[:language]) if opts[:language]
+    running_scope = running_scope.app_name_non_distinct(opts[:app_name]) if opts[:app_name]
+    running_scope = running_scope.app_env_non_distinct(opts[:app_env])   if opts[:app_env]
+    running_scope = running_scope.language_non_distinct(opts[:language]) if opts[:language]
     running_scope = running_scope.by_user(opts[:app_user])  if opts[:app_user]
 
-    running_scope.distinct('groupings.id')
+    running_scope.recursive_distinct('groupings.id')
   }
 
   scope( :wat_order, -> { reorder("latest_wat_at asc") } ) do
@@ -60,10 +60,15 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  scope :app_env,  -> (ae) { distinct('groupings.id').joins(:wats).references(:wats).where('wats.app_env IN (?)', ae) }
-  scope :app_name, -> (an) { distinct('groupings.id').joins(:wats).references(:wats).where('wats.app_name IN (?)', an) }
-  scope :language, -> (an) { distinct('groupings.id').joins(:wats).references(:wats).where('wats.language IN (?)', an) }
-  scope :by_user,  -> (user_id) { distinct('groupings.id').joins(:wats).references(:wats).where('wats.app_user -> \'id\' = ?', user_id) }
+  scope :app_env_non_distinct,  -> (ae) { joins(:wats).references(:wats).where('wats.app_env IN (?)', ae) }
+  scope :app_name_non_distinct, -> (an) { joins(:wats).references(:wats).where('wats.app_name IN (?)', an) }
+  scope :language_non_distinct, -> (an) { joins(:wats).references(:wats).where('wats.language IN (?)', an) }
+  scope :by_user_non_distinct,  -> (user_id) { joins(:wats).references(:wats).where('wats.app_user -> \'id\' = ?', user_id) }
+
+  scope :app_env,  -> (ae) { app_env_non_distinct(ae).recursive_distinct('groupings.id') }
+  scope :app_name, -> (an) { app_name_non_distinct(an).recursive_distinct('groupings.id') }
+  scope :language, -> (an) { language_non_distinct(an).recursive_distinct('groupings.id') }
+  scope :by_user,  -> (user_id) { by_user_non_distinct(user_id).recursive_distinct('groupings.id') }
 
   def open?
     wontfix? || active? || muffled?
@@ -119,7 +124,7 @@ class Grouping < ActiveRecord::Base
 
   def self.get_or_create_from_wat!(wat)
     transaction do
-      open.matching(wat).first_or_create(state: "active")
+      open.matching(wat).first_or_create!(wat.matching_selector.merge(state: "active"))
     end
   end
 

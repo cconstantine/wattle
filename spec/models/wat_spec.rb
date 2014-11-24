@@ -289,6 +289,15 @@ describe Wat do
         subject
         wat.groupings.should include(grouping)
       end
+      context "a javascript exception" do
+        let(:wat) {wats(:javascript)}
+        let(:grouping) { wat.groupings.first }
+        it "should bind to the existing grouping" do
+          subject
+          wat.groupings.should include(grouping)
+        end
+
+      end
 
       context "when the line contains a release timestamp" do
         let(:existing_wat) { wats(:default) }

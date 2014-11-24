@@ -5,12 +5,7 @@ class GroupingsController < ApplicationController
 
   def index
     @groupings = Grouping.filtered(filters)
-    @order = params[:order].try(:to_sym) || :new
-    if @order == :new
-      @groupings = @groupings.wat_order.reverse
-    else
-      @groupings = @groupings.order('popularity desc')
-    end
+    @groupings = @groupings.wat_order.reverse
 
     @groupings = @groupings.page(params[:page]).per(params[:per_page] || 20)
 
