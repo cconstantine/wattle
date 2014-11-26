@@ -1,0 +1,20 @@
+%h1 #{@event.watcher.try(:display_name) || "Anonymous" } has done something.
+
+%table
+  %tbody
+    %tr
+      %th
+      %td= link_to "View grouping",grouping_url(@grouping)
+    %tr
+      %th Application
+      %td= "#{@app_name} (#{@app_envs.join(",")})"
+    %tr
+      %th When
+      %td= "#{@stream_event.happened_at} (#{time_ago_in_words(@stream_event.happened_at)} ago)"
+
+    %tr
+      %th What
+      %td
+        = "#{@event.watcher.try(:display_name) || "Anonymous"} "
+        = render partial: "stream_event_mailer/#{@event.to_partial_path}", locals: {@event.class.name.underscore.to_sym => @event}
+

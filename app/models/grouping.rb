@@ -78,6 +78,10 @@ class Grouping < ActiveRecord::Base
     wats.filtered(filters).select(:app_env).uniq.map &:app_env
   end
 
+  def app_names(filters={})
+    wats.filtered(filters).select(:app_name).uniq.map &:app_name
+  end
+
   def languages
     wats.select(:language).uniq.map &:language
   end
