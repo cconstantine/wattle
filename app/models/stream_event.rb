@@ -13,6 +13,8 @@ class StreamEvent < ActiveRecord::Base
   end
 
   def send_email
-
+    grouping.email_recipients.each do |watcher|
+      StreamEventMailer.delay.notify(watcher, self)
+    end
   end
 end
