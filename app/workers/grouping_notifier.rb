@@ -1,6 +1,8 @@
 class GroupingNotifier
   include Sidekiq::Worker
 
+  class SemaphoricError < StandardError; end
+
   DEBOUNCE_DELAY = 60.minutes
   SIDEKIQ_NOTIFY_AFTER = 10.minutes
 
@@ -22,7 +24,8 @@ class GroupingNotifier
 
   def perform
     Sidekiq::redis do |redis|
-      Redis::Semaphore.new(:GroupingNotifierSemaphore, :connection => redis).lock(1.hour) do
+      semaphore = Redis::Semaphore.new(:GroupingNotifierSemaphore, :connection => redis)
+      success = semaphore.lock(semaphore_lock_period) do
         grouping.reload
         return unless needs_notifying?
         if send_email_now?
@@ -31,8 +34,19 @@ class GroupingNotifier
         else
           send_email_later
         end
+        true
       end
+
+      if !success
+        semaphore.delete!
+        raise SemaphoricError.new 'Sophmoric Semaphoric Situation!'
+      end
+
     end
+  end
+
+  def semaphore_lock_period
+    1.hour.to_i
   end
 
   def send_email_now?

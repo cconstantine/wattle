@@ -6,6 +6,7 @@ describe GroupingNotifier do
 
   describe "#perform" do
     before { stub(grouping_notifier).needs_notifying? {true} }
+
     subject { grouping_notifier.perform }
 
 
@@ -35,6 +36,26 @@ describe GroupingNotifier do
           expect(call_count).to eq(1)
         end
 
+      end
+    end
+
+    context "when the redis semaphore is borked" do
+      before do
+        Sidekiq::redis do |redis|
+          stub(grouping_notifier).semaphore_lock_period {1}
+          @semaphore = Redis::Semaphore.new(:GroupingNotifierSemaphore, :connection => redis)
+          redis.blpop(@semaphore.send(:available_key), 1)
+          expect(@semaphore.available_count).to eq 0
+        end
+      end
+
+      after do
+        @semaphore.delete!
+      end
+
+      it "handles a broken semaphore gracefully" do
+        expect {grouping_notifier.perform}.to raise_error GroupingNotifier::SemaphoricError
+        expect {grouping_notifier.perform}.to_not raise_error
       end
     end
 
