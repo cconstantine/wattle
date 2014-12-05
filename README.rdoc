@@ -1,6 +1,5 @@
 == README
 
-
 Wattle is a self-hosted open source project to help your team collect, manage and process your Exceptions, or as we like to call them, Wats[https://www.destroyallsoftware.com/talks/wat]
 
 == Configuration
