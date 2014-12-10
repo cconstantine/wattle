@@ -1,2 +1,8 @@
+:pidfile: /var/www/shared/wattle/pids/sidekiq.pid
+:logfile: /var/www/shared/wattle/log/sidekiq.log
+
 :queues:
   - default
+
+
+
