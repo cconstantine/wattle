@@ -1,4 +1,4 @@
-:pidfile: /var/www/wattle/shared/pids/sidekiq.pid
+:pidfile: /var/www/wattle/shared/tmp/pids/sidekiq.pid
 :logfile: /var/www/wattle/shared/log/sidekiq.log
 
 :queues:
