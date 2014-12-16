@@ -1,8 +1,11 @@
-:pidfile: /var/www/wattle/shared/tmp/pids/sidekiq.pid
-:logfile: /var/www/wattle/shared/log/sidekiq.log
+:pidfile: tmp/pids/sidekiq.pid
+:logfile: log/sidekiq.log
+:concurrency: 25
+
+production:
+  :pidfile: /var/www/wattle/shared/tmp/pids/sidekiq.pid
+  :logfile: /var/www/wattle/shared/log/sidekiq.log
 
 :queues:
   - default
-
-
 
