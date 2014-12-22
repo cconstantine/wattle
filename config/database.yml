@@ -20,4 +20,5 @@ test:
 
 production:
   url: <%= ENV['DATABASE_URL'] %>
+  pool: 26
 
