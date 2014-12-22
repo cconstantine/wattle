@@ -6,7 +6,7 @@
 development:
   adapter: postgresql
   database: wattle_dev
-  pool: 5
+  pool: 20
   timeout: 5000
 
 # Warning: The database defined as "test" will be erased and
@@ -15,7 +15,7 @@ development:
 test:
   adapter: postgresql
   database: wattle_test
-  pool: 5
+  pool: 100
   timeout: 5000
 
 production:

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141009203333) do
+ActiveRecord::Schema.define(version: 20141219223147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,11 +41,12 @@ ActiveRecord::Schema.define(version: 20141009203333) do
     t.string   "error_class"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "state",                                      default: "active", null: false
+    t.string   "state",                                        default: "active", null: false
     t.datetime "last_emailed_at"
     t.text     "message"
-    t.decimal  "popularity",      precision: 1000, scale: 1
+    t.decimal  "popularity",        precision: 1000, scale: 1
     t.datetime "latest_wat_at"
+    t.string   "uniqueness_string",                                               null: false
   end
 
   add_index "groupings", ["key_line", "error_class"], name: "index_groupings_on_key_line_and_error_class", using: :btree
@@ -53,6 +54,7 @@ ActiveRecord::Schema.define(version: 20141009203333) do
   add_index "groupings", ["message"], name: "index_groupings_on_message", using: :btree
   add_index "groupings", ["popularity"], name: "index_groupings_on_popularity", using: :btree
   add_index "groupings", ["state"], name: "index_groupings_on_state", using: :btree
+  add_index "groupings", ["uniqueness_string"], name: "index_groupings_on_uniqueness_string", unique: true, where: "((state)::text <> 'resolved'::text)", using: :btree
 
   create_table "notes", force: true do |t|
     t.integer  "watcher_id"

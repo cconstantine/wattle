@@ -35,7 +35,7 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  scope :open,          -> {where(state: [:wontfix, :active, :muffled])}
+  scope :open,          -> {where.not(state: :resolved)}
   scope :active,        -> {where(state: :active)}
   scope :resolved,      -> {where(state: :resolved)}
   scope :wontfix,  -> {where(state: :wontfix)}
@@ -128,7 +128,7 @@ class Grouping < ActiveRecord::Base
 
   def self.get_or_create_from_wat!(wat)
     transaction do
-      open.matching(wat).first_or_create!(wat.matching_selector.merge(state: "active"))
+      open.matching(wat).first_or_create!(wat.matching_selector.merge(state: "active", uniqueness_string: wat.uniqueness_string))
     end
   end
 

@@ -94,6 +94,38 @@ describe Wat do
         expect {subject}.to raise_error ActiveRecord::RecordInvalid
       end
     end
+
+    context "when multiple creates! are called at the same time" do
+      let(:concurrency) {16}
+      subject do
+        threads = Set.new
+        concurrency.times do |i|
+          threads << Thread.new do
+            wat = Wat.new_from_exception(nil, {app_env: 'testy-test'}) {raise "a test #{i}"}
+            begin
+              wat.save!
+            rescue ActiveRecord::RecordNotUnique
+              wat.save!
+            end
+          end
+        end
+
+        # and wait for them to finish executing
+        threads.each do |thread|
+          thread.join
+        end
+      end
+
+
+      it "should only create one grouping" do
+        expect {subject}.to change(Grouping, :count).by 1
+      end
+
+      it "should only create three wats" do
+        expect {subject}.to change(Wat, :count).by concurrency
+      end
+
+    end
   end
 
   describe "clean_hstore" do
@@ -137,6 +169,42 @@ describe Wat do
     context "with a javascript wat" do
       let(:wat) {wats(:javascript)}
       its(:keys) { should =~ [:message] }
+    end
+  end
+
+
+  describe "uniqueness_string" do
+    let(:grouping) { groupings(:grouping1)}
+    let(:wats) { grouping.wats }
+    subject { wats.map &:uniqueness_string }
+
+    context "on a single wat" do
+      subject {wats.first.uniqueness_string}
+      it {should be_a String}
+    end
+
+    it "should have the same uniqueness_strings" do
+      subject.uniq.count.should == 1
+    end
+
+    describe "between groupings" do
+      let(:grouping1) {groupings(:grouping1)}
+      let(:grouping2) {groupings(:grouping2)}
+
+      let(:grouping1_uniqueness) {grouping1.wats.first.uniqueness_string}
+      let(:grouping2_uniqueness) {grouping2.wats.first.uniqueness_string}
+
+      it "should have different uniqueness_strings" do
+        grouping1_uniqueness.should_not == grouping2_uniqueness
+      end
+    end
+
+    context "with a javascript wat" do
+      let(:grouping) { groupings(:normal_javascripts)}
+
+      it "should have the same uniqueness_strings" do
+        subject.uniq.count.should == 1
+      end
     end
   end
 
@@ -279,7 +347,7 @@ describe Wat do
     end
 
     context "with an existing duplicate error" do
-      let!(:grouping) {Grouping.where(key_line: wat.key_line, error_class: wat.error_class).first_or_create!}
+      let!(:grouping) {Grouping.where(key_line: wat.key_line, error_class: wat.error_class).first_or_create!(uniqueness_string: "laksdjlskjslkjsdlk")}
 
       it "should not create a grouping" do
         expect {subject}.not_to change {Grouping.count}
@@ -334,6 +402,7 @@ describe Wat do
         wat.groupings.should include(grouping)
       end
     end
+
     context "with an existing wontfix duplicate error" do
       let!(:grouping) { Grouping.where(key_line: wat.key_line, error_class: wat.error_class).first_or_create!.tap {|g| g.wontfix!} }
 

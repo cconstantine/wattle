@@ -107,6 +107,11 @@ SQL
     end
   end
 
+  def uniqueness_string
+    sha256 = Digest::SHA256.new
+    Base64.encode64(sha256.digest(sha256.digest matching_selector.merge(language: language).to_yaml))
+  end
+
   def user_agent
     return Agent.new(request_headers["HTTP_USER_AGENT"]) if request_headers.present? && request_headers["HTTP_USER_AGENT"]
   end

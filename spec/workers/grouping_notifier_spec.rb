@@ -23,7 +23,7 @@ describe GroupingNotifier do
 
           # Call .perform in 3 separate threads (like you would with 3 separate sidekiq workers)
           threads = Set.new
-          3.times do |i|
+          10.times do |i|
             threads << Thread.new do
               GroupingNotifier.notify(grouping.id)
             end
@@ -38,27 +38,6 @@ describe GroupingNotifier do
 
       end
     end
-
-    context "when the redis semaphore is borked" do
-      before do
-        Sidekiq::redis do |redis|
-          stub(grouping_notifier).semaphore_lock_period {1}
-          @semaphore = Redis::Semaphore.new(:GroupingNotifierSemaphore, :connection => redis)
-          redis.blpop(@semaphore.send(:available_key), 1)
-          expect(@semaphore.available_count).to eq 0
-        end
-      end
-
-      after do
-        @semaphore.delete!
-      end
-
-      it "handles a broken semaphore gracefully" do
-        expect {grouping_notifier.perform}.to raise_error GroupingNotifier::SemaphoricError
-        expect {grouping_notifier.perform}.to_not raise_error
-      end
-    end
-
 
     context "send_email_now? is true" do
       before { stub(grouping_notifier).send_email_now? {true} }
