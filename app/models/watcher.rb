@@ -36,6 +36,6 @@ class Watcher < ActiveRecord::Base
 
 
   def display_name
-    first_name || name || email
+    name || first_name ||  email
   end
 end
