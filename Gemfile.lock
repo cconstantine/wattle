@@ -102,14 +102,14 @@ GEM
       railties (>= 3.1)
     hike (1.2.3)
     hitimes (1.2.2)
-    httpclient (2.5.3.3)
-    i18n (0.6.11)
+    httpclient (2.6.0.1)
+    i18n (0.7.0)
     jbuilder (1.0.2)
       activesupport (>= 3.0.0)
     jquery-rails (3.1.2)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
-    json (1.8.1)
+    json (1.8.2)
     jwt (1.0.0)
     kaminari (0.16.1)
       actionpack (>= 3.0.0)
@@ -124,7 +124,7 @@ GEM
       mime-types (>= 1.16, < 3)
     mime-types (2.4.3)
     mini_portile (0.6.1)
-    minitest (5.4.3)
+    minitest (5.5.1)
     moment_ago (0.0.3)
       coffee-rails
       momentjs-rails
@@ -170,7 +170,7 @@ GEM
     rack (1.5.2)
     rack-protection (1.5.3)
       rack
-    rack-test (0.6.2)
+    rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.1.8)
       actionmailer (= 4.1.8)
@@ -194,9 +194,9 @@ GEM
       activesupport (= 4.1.8)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (10.3.2)
+    rake (10.4.2)
     redcarpet (3.2.0)
-    redis (3.1.0)
+    redis (3.2.0)
     redis-namespace (1.5.1)
       redis (~> 3.0, >= 3.0.4)
     redis-semaphore (0.2.3.1)
@@ -262,7 +262,7 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     user-agent (1.0.0)
-    wat_catcher (0.7.2)
+    wat_catcher (0.8.0)
       coffee-rails
       httpclient
       sidekiq
