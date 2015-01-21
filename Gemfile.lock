@@ -72,7 +72,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.8.0)
-    connection_pool (2.1.0)
+    connection_pool (2.1.1)
     diff-lcs (1.2.5)
     eco (1.0.0)
       coffee-script
@@ -273,7 +273,7 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     user-agent (1.0.0)
-    wat_catcher (0.8.0)
+    wat_catcher (0.8.1)
       coffee-rails
       httpclient
       sidekiq
