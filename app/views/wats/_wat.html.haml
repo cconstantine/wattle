@@ -1,3 +1,8 @@
+%hr
+
+.small-title.pull-right
+  Wat #{wat.id}
+
 .row.wat-info
   .primary-info.mb30
     %dl.dl-horizontal
@@ -92,6 +97,17 @@
           %dt User affected
           %dd
             %pre~ JSON.pretty_generate wat.app_user
+
+      - if wat.app_user.present?
+        .text
+          %dt User Filters
+          %dd
+            - user = wat.app_user
+            - grouping = wat.groupings.last
+            %ul
+              %li= link_to 'All groupings for this user', groupings_path( filters: filters.filters.merge(app_user: [user]))
+              %li= link_to 'All wats for this user', wats_path( filters: filters.filters.merge(app_user: [user]))
+              %li= link_to 'Filter groupings by this user', grouping_path(grouping, filters: filters.filters.merge(app_user: [user]))
 
       .code.mt10
         - if wat.request_headers.present?
