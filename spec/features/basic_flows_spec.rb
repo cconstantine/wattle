@@ -56,7 +56,7 @@ feature "Interacting with wats", js: true do
           fill_in "note_message", :with => "a testy note"
           click_on "Post"
         end
-        within ".note" do
+        within ".stream-event" do
           page.should have_content "Jim Bob"
           page.should have_content "a testy note"
         end
@@ -88,8 +88,10 @@ feature "Interacting with wats", js: true do
           page.should have_content "Resolved"
         end
       end
+
       context "with a resolved grouping" do
         let(:grouping) {groupings(:resolved)}
+
         scenario "reactivating" do
           within ".states" do
             click_on "Reactivate"

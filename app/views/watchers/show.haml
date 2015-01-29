@@ -3,7 +3,7 @@
     .current_state{class: "#{@watcher.state}-tag"}
       = @watcher.state.capitalize
 
-  .pull-right.action-items
+  .pull-right
     = render partial: "state", locals: {watcher: @watcher}
 %h2
   = @watcher.display_name

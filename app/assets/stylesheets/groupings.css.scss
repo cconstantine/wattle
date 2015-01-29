@@ -2,102 +2,119 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.grouping_data{
+.grouping_data {
   position: relative;
 }
 
-.action-items{
-  margin-top: 20px;
+.states {
+  .btn {
+    display: inline-block;
+    margin-left: 10px;
+  }
+}
+
+.grouping_summary {
+  .wat-card {
+    display: inline-block;
+    width: 120px;
+  }
+
+  .big-number {
+    font-size: 40px;
+    color: #FF6D2A;
+  }
+}
+
+.timestamp {
+  font-size: 14px;
+  color: #95A0A5;
+  text-align: right;
 }
 
 .states-and-environments-container{
   @extend .clearfix;
 
-  .active-tag{
+  .active-tag {
     @extend .alert;
-    @extend .alert-danger;
-  }
-  .wontfix-tag{
-    @extend .alert;
-    @extend .alert-info;
-  }
-  .resolved-tag{
-    @extend .alert;
-    @extend .alert-success;
+    background-color: $active;
   }
 
-  .alert{
+  .wontfix-tag {
+    @extend .alert;
+    background-color: $wontfix;
+  }
+
+  .resolved-tag {
+    @extend .alert;
+    background-color: $resolved;
+  }
+
+  .muffled-tag {
+    @extend .alert;
+    background-color: $muffled;
+  }
+
+  .alert {
     display: inline-block;
     margin: 5px 5px;
-    padding: 7px 15px;
+    padding: 5px 15px;
     text-align: center;
     text-transform: capitalize;
+    border-radius: 20px;
+    color: white;
+  }
 
+  .environments {
+    color: black;
+    border: solid black 1px;
   }
 }
 
-.group_listing.group_state_active {
+.group_state_active {
   h4 {
-    background: rgba( 248, 148, 6, 0.7);
-    &:hover {
-      background: rgba( 248, 148, 6, 1);
-    }
+    background: $active;
   }
 }
 
-.group_listing.group_state_muffled {
+.group_state_muffled {
   h4 {
-    background: rgba(255, 149, 6, 0.43);
-    &:hover {
-      background: rgba( 248, 148, 6, 0.5);
-    }
+    background: $muffled;
   }
 }
 
 .group_listing.group_state_resolved {
   h4 {
-    background: rgba( 70, 165, 70, 0.7);
-    &:hover {
-      background: rgba( 70, 165, 70, 1);
-    }
+    background: $resolved;
   }
 }
 .group_listing.group_state_wontfix {
   h4 {
-    background: rgba( 180, 180, 180, 0.7);
-    &:hover {
-      background: rgba( 180, 180, 180, 1);
-    }
+    background: $wontfix;
   }
 }
+
 .group_listing {
-  margin-bottom: 20px;
-  border: 1px solid silver;
-  border-radius: 16px 16px 0 0;
+  margin-bottom: 30px;
+  border: 1px solid $light-grey;
+  border-radius: 5px;
 
   .grouping_detail_link:hover {
     text-decoration: none;
   }
 
   .group_state {
-    font-size: 12px;
-    font-weight: normal; 
-    margin-right: 32px;
     padding: 0px 10px;
-    background: rgba( 200, 200, 200, 0.5 );
-    line-height: 32px;
   }
 
   h4 {
-    border-bottom: 1px solid silver;
+    border-radius: 5px 5px 0 0;
     margin-top: 0;
-    margin-bottom: 0;
-    border-radius: 16px 16px 0 0;
-    line-height: 32px;
+    line-height: 55px;
 
+    &:hover {
+      @include opacity(0.6);
+    }
   }
-
-  
 
   .incident_heading {
     padding-left: 20px;
@@ -105,99 +122,45 @@
     color: white;
   }
 
-  .incident_language {
+  .incident_user_count {
     padding-right: 10px;
     display: inline;
     color: white;
-    text-align: bottom;
   }
 
   .incident_count {
-    display: inline;
-    margin-left: 32px; 
+    display: inline-block;
+    line-height: 25px;
+    padding: 0 15px;
+    margin-left: 20px;
     color: white;
+    border: solid white 2px;
+    border-radius: 15px;
+    text-align: center;
   }
 
   .grouping_body {
     padding: 10px;
+
+    dl {
+      margin-bottom: 0;
+    }
+
+    dt {
+      text-align: left;
+      width: 100px;
+    }
+
+    dd {
+      margin-left: 100px;
+    }
+
+    .text {
+      margin-top: 5px;
+    }
+
+    .code {
+      margin-top: 10px;
+    }
   }
-}
-
-.backtrace_container {
-  height: 200px;
-  overflow: hidden;
-
-  .obscure_backtrace {
-    display: none;
-  }
-}
-
-.backtrace_container.complete {
-  height: auto;
-  .obscure_backtrace {
-    display: inline;
-  }
-}
-.group_listing {
-  margin-bottom: 20px;
-  border: 1px solid silver;
-  border-radius: 16px 16px 0 0;
-
-  .grouping_detail_link:hover {
-    text-decoration: none;
-  }
-
-  .group_state {
-    font-size: 12px;
-    font-weight: normal; 
-    margin-right: 32px;
-    padding: 0px 10px;
-    background: rgba( 200, 200, 200, 0.5 );
-    line-height: 32px;
-  }
-
-  h4 {
-    border-bottom: 1px solid silver;
-    margin-top: 0;
-    margin-bottom: 0;
-    border-radius: 16px 16px 0 0;
-    line-height: 32px;
-
-  }
-
-  .incident_heading {
-    padding-left: 20px;
-    display: inline;
-    color: white;
-  }
-
-  .incident_count {
-    display: inline;
-    margin-left: 32px; 
-    color: white;
-  }
-
-  .grouping_body {
-    padding: 10px;
-  }
-}
-
-.backtrace_container {
-  height: 200px;
-  overflow: hidden;
-
-  .obscure_backtrace {
-    display: none;
-  }
-}
-
-.backtrace_container.complete {
-  height: auto;
-  .obscure_backtrace {
-    display: inline;
-  }
-}
-
-.on-pages-link{
-  line-height: 24px;
 }

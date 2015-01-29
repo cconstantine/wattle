@@ -1,14 +1,5 @@
-%li.list-group-item.note
-  .row
-    %div
-      .col-md-1
-        - if grouping_version.watcher.present?
-          = image_tag gravatar_url(grouping_version.watcher), class: ["img-circle", "img-responsive"]
-        - else
-          .label.label-warning.logo-label ?!
-      .col-md-11
-        = "State change from #{ grouping_version.reify.state } => #{(grouping_version.next.try(:reify) || grouping_version.item.reload).try(:state)}"
-        .mic-info
-          By:
-          = grouping_version.watcher.try(:display_name) || "Anonymous"
-          = "#{time_ago_in_words grouping_version.created_at} ago"
+.stream-event
+  #{ grouping_version.watcher.present? ? grouping_version.watcher.display_name : "Someone" } changed state from
+  %span.state-change #{ grouping_version.reify.state } to #{(grouping_version.next.try(:reify) || grouping_version.item.reload).try(:state)}
+  .at
+    #{time_ago_in_words grouping_version.created_at} ago

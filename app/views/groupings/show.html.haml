@@ -4,15 +4,17 @@
 - else
   .grouping_data
     = render @grouping, wats: wats
-    %br
 
+  - paged_wats = wats.order("captured_at desc").page(params[:page]).per(1)
 
-    = render partial: "stream_events/index", locals: {stream_events: @stream_events }
+  .row
+    .col-md-7
+      %hr
 
-    .highchart{data: {chart: @chart.to_json}}
-
-    - paged_wats = wats.order("captured_at desc").page(params[:page]).per(1)
-    = paginate paged_wats
-    .grouping_details
       = render paged_wats
+
+    .col-md-4.col-md-offset-1.m20.mb30.mt30
+      = render partial: "stream_events/index", locals: {stream_events: @stream_events }
+      = paginate paged_wats
+
 
