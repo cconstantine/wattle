@@ -1,11 +1,5 @@
-%li.list-group-item.note
-  .row
-    %div
-      .col-md-1
-        = image_tag gravatar_url(note.watcher), class: ["img-circle", "img-responsive"]
-      .col-md-11
-        =markdown note.message
-        .mic-info
-          By:
-          = note.watcher.display_name
-          = "#{time_ago_in_words note.created_at} ago"
+.stream-event
+  #{ note.watcher.present? ? note.watcher.display_name : "Someone" } said:
+  =markdown note.message
+  .at
+    #{time_ago_in_words note.created_at} ago

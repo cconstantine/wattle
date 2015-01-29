@@ -1,0 +1,75 @@
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.mb30 {
+  margin-bottom: 30px;
+}
+
+.mb80 {
+  margin-bottom: 80px;
+}
+
+.m10 {
+  margin: 10px;
+}
+
+.mt10 {
+  margin-top: 10px;
+}
+
+.mt30 {
+  margin-top: 30px;
+}
+
+
+// *** Colors *** //
+/* ------------------------------------------------------------ */
+$red: #FF5621;
+$light-grey: #BECBD1;
+$orange: #F8A824;
+$green: #00C752;
+$grey: #90A3AD;
+$light-blue: #73D0FA;
+$blue: #03A9F4;
+
+$active: $light-blue;
+$wontfix: $orange;
+$resolved: $green;
+$muffled: $grey;
+
+
+/* ::Opacity */
+/* ------------------------------------------------------------ */
+@mixin opacity($value){
+  $IEValue: $value*100;
+  opacity: $value;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity="+$IEValue+")";
+  filter: alpha(opacity=$IEValue);
+}
+
+/* Bootstrap Overrides */
+
+.btn-primary {
+  background-color: $blue;
+  border: none;
+}
+
+.btn-warning {
+  background-color: $orange;
+  border: none;
+}
+
+.btn-success {
+  background-color: $green;
+  border: none;
+}
+
+.btn-info {
+  background-color: $light-blue;
+  border: none;
+}

@@ -1,17 +1,6 @@
-.panel.panel-default.widget
-  .panel-heading
-    %span.glyphicon.glyphicon-comment
-    %h3.panel-title
-      Stream Events
-    %span.label.label-info
-      =stream_events.count
-  .panel-body
-    %ul.list-group
+.small-title
+  Stream Events
 
+= render stream_events.map(&:context)
 
-
-    .media-list.notes
-      = render stream_events.map(&:context)
-
-
-    = render "notes/new", note: @grouping.notes.build
+= render "notes/new", note: @grouping.notes.build

@@ -1,0 +1,32 @@
+.wat-info {
+  dt {
+    text-transform: uppercase;
+    font-size: 12px;
+    color: grey;
+    font-weight: normal;
+    width: 100px;
+  }
+
+  .text {
+    dd {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+
+  .light-text {
+    color: darkgrey;
+  }
+
+  pre {
+    background-color: white;
+  }
+
+  .text, .code {
+    margin-top: 30px;
+
+    dd {
+      margin-left: 130px;
+    }
+  }
+}

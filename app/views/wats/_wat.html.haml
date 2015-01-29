@@ -1,81 +1,130 @@
-.row
-  %dl.dl-horizontal
-    %dd= link_to "View wat", wat_path(wat)
-    %dt Application
-    %dd= "#{wat.app_name} (#{wat.app_env})"
-    %dt Language
-    %dd= wat.language
-    %dt Grouping(s)
-    %dd!
-      - wat.groupings.order(:id).each do |grouping|
-        %div
-          = link_to "Grouping ##{grouping.id}", grouping_path(grouping)
-          = "on #{grouping.created_at.to_date} (#{grouping.wats.count})"
-    - if wat.page_url.present?
-      %dt Page URL
-      %dd= wat.page_url
-    %dt Occurred at
-    %dd
-      - if wat.captured_at.present?
-        .moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat.captured_at.iso8601}}
-    -if agent = wat.user_agent
-      %dt Browser
-      %dd
-        - if agent.name == :Unknown
-          = agent.string
-        - else
-          #{agent.name} #{agent.version} running on #{agent.os}
-    %dt Key Line
-    %dd= wat.key_line
-    - if wat.session.present?
-      %dt Session
-      %dd
-        %pre~ JSON.pretty_generate wat.session
-    -if wat.app_user.present?
-      %dt User affected
-      %dd
-        %pre~ JSON.pretty_generate wat.app_user
-    - if wat.request_params.present?
-      %dt Request Parameters
-      %dd
-        %pre~ JSON.pretty_generate wat.request_params
+%hr
 
-    - if wat.sidekiq_msg.present?
-      %dt Sidekiq Message
-      %dd
-        %pre~ JSON.pretty_generate wat.sidekiq_msg
-    - if wat.message.present?
-      %dt Message
-      %dd
-        %pre= wat.message
-    - if wat.error_class.present?
-      %dt Error Class
-      %dd= wat.error_class
-    - if wat.backtrace.present?
-      %dt Backtrace
-      %dd
-        - backtrace_chunked = wat.backtrace.each_slice(10)
-        - backtrace_top = backtrace_chunked.first
-        - backtrace_rest = backtrace_chunked.to_a[1..-1]
+.small-title.pull-right
+  Wat #{wat.id}
 
-        - backtrace_top.each do |line|
-          %div{class: (line == wat.key_line ? "text-error" : "text-muted")}
-            = line
-        #collapse-backtrace.collapse
-          - backtrace_rest.each do |chunk|
-            - chunk.each do |line|
-              %div{class: (line == wat.key_line ? "text-error" : "text-muted")}
-                = line
-        - if backtrace_rest.present?
-          %a{ "data" => {"toggle" => "collapse"}, "href" => "#collapse-backtrace" }
-            Show / Hide
+.row.wat-info
+  .primary-info.mb30
+    %dl.dl-horizontal
+      .text
+        %dt Occurred
+        %dd
+          - if wat.captured_at.present?
+            = wat.captured_at.localtime.strftime("%a, %b %d at %l:%M %p %z")
+            %span.light-text.moment_ago{data: {time: wat.captured_at.iso8601}}
 
-    - if wat.request_headers.present?
-      %dt Request Headers
-      %dd
-        - wat.request_headers.sort.each do |header_name, value|
-          %div
-            %strong= header_name
-          %div
-            = value
-          %br
+
+      -if agent = wat.user_agent
+        .text
+          %dt Browser
+          %dd
+            - if agent.name == :Unknown
+              = agent.string
+            - else
+              #{agent.name} #{agent.version} running on #{agent.os}
+      .code
+        %dt Key Line
+        %dd
+          %pre= wat.key_line
+
+          - if wat.backtrace.present?
+            %dd
+              %a{ "data" => {"toggle" => "collapse"}, "href" => "#collapse-backtrace" }
+                Full Backtrace
+            %dd
+              #collapse-backtrace.collapse
+                - wat.backtrace.each do |line|
+                  %div{class: (line == wat.key_line ? "text-error" : "text-muted")}
+                    = line
+
+  .secondary-info
+    %dl.dl-horizontal
+      .text
+        %dt Application
+        %dd= "#{wat.app_name.capitalize} (#{wat.app_env})"
+
+      - if wat.language.present?
+        .text
+          %dt Language
+          %dd= wat.language.capitalize
+
+      .text
+        %dt Grouping(s)
+        %dd!
+          - wat.groupings.order(:id).each do |grouping|
+            %div
+              = link_to "Grouping ##{grouping.id}", grouping_path(grouping)
+              = "on #{grouping.created_at.to_date} (#{grouping.wats.count} wats)"
+
+      .text
+        - if wat.page_url.present?
+          %dt Page URL
+          %dd= wat.page_url
+
+      .text
+        - if wat.error_class.present?
+          %dt Error Class
+          %dd= wat.error_class
+
+      .code
+        - if wat.message.present?
+          %dt Message
+          %dd
+            %pre= wat.message
+
+      .code
+        - if wat.request_params.present?
+          %dt
+            Request
+            %br
+            Parameters
+          %dd
+            %pre~ JSON.pretty_generate wat.request_params
+
+      .code
+        - if wat.sidekiq_msg.present?
+          %dt Sidekiq Message
+          %dd
+            %pre~ JSON.pretty_generate wat.sidekiq_msg
+      .code
+        - if wat.session.present?
+          %dt Session
+          %dd
+            %pre~ JSON.pretty_generate wat.session
+
+      .code
+        - if wat.app_user.present?
+          %dt User affected
+          %dd
+            %pre~ JSON.pretty_generate wat.app_user
+
+      - if wat.app_user.present?
+        .text
+          %dt User Filters
+          %dd
+            - user = wat.app_user
+            - grouping = wat.groupings.last
+            %ul
+              %li= link_to 'All groupings for this user', groupings_path( filters: filters.filters.merge(app_user: [user]))
+              %li= link_to 'All wats for this user', wats_path( filters: filters.filters.merge(app_user: [user]))
+              %li= link_to 'Filter groupings by this user', grouping_path(grouping, filters: filters.filters.merge(app_user: [user]))
+
+      .code.mt10
+        - if wat.request_headers.present?
+          %dd
+            %a.btn.btn-info{ "data" => {"toggle" => "collapse"}, "href" => "#collapse-request-headers" }
+              Show All Request Headers
+
+      - if wat.request_headers.present?
+        #collapse-request-headers.collapse.code
+          %dt
+            Request
+            %br
+            Headers
+          %dd
+            - wat.request_headers.sort.each do |header_name, value|
+              %div
+                %strong= header_name
+              %div
+                = value
+              %br

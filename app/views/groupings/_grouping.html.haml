@@ -1,110 +1,93 @@
-.clearfix
-  .states-and-environments-container.pull-left
-    .current_state{class: "#{grouping.state}-tag"}
-      = grouping.state.capitalize
-    - grouping.app_envs(filters).each do |app_env|
-      .alert.alert-info
-        = app_env
-  .pull-right.action-items
-    = render partial: "state", locals: {group: grouping}
-- wat = grouping.representative_wat
-- if wat
-  %h2
-    = wat_heading(wat)
-  %pre= wat.message
+.row.mb20
+  .col-md-7
+    - wat = grouping.representative_wat
+    - if wat
+      %h3= wat_heading(wat)
+    .states-and-environments-container.pull-left
+      .current_state{class: "#{grouping.state}-tag"}
+        = grouping.state.capitalize
+      - grouping.app_envs(filters).each do |app_env|
+        .environments.alert
+          = app_env
 
-.row
-  .col-md-10
+  .col-md-5
+    .pull-right
+      .clearfix
+        = render partial: "state", locals: {group: grouping}
+
+      .timestamps.mt10
+        - wat_the_first = wats.order(:captured_at).first
+        - wat_the_last = wats.order(:captured_at).last
+
+        - if wats.count > 1
+          - if wat_the_first.captured_at.present?
+            .timestamp
+              First seen
+              %span.moment_ago{ data: { time: wat_the_first.captured_at.iso8601 } }
+              on
+              = wat_the_first.captured_at.localtime.strftime("%a, %b %d at %l:%M %p %z")
+
+          - if wat_the_last.captured_at.present?
+            .timestamp
+              Last seen
+              %span.moment_ago{ data: { time: wat_the_last.captured_at.iso8601 } }
+                on
+              = wat_the_last.captured_at.localtime.strftime("%a, %b %d at %l:%M %p %z")
+        - else
+          .timestamp
+            Seen
+            %span.moment_ago{ data: { time: wat_the_first.captured_at.iso8601 } }
+            on
+            = wat_the_first.captured_at.localtime.strftime("%a, %b %d at %l:%M %p %z")
+
+        .pull-right
+          %a.mb20{"href" => "#", "data-target" => "#wat-chart-modal", "data-toggle" => "modal"}
+            Show Frequency Chart
+
+.row.mb20
+  .col-md-6
     .grouping_summary
-      %ul.plain.unstyled
-        .badge.badge-warning
-          = wats.count
-        Incidents,
-        .badge.badge-warning
-          = grouping.app_user_count(filters: filters)
-        users affected
-        - if grouping.app_user_stats(filters: filters)[nil].present?
-          .badge.badge-warning
-            = "+ #{grouping.app_user_stats(filters: filters)[nil]}"
-          unknowns,
-        .badge.badge-warning
-          = grouping.browser_count(filters: filters)
-        browsers affected
+      .wat-card
+        .small-title
+          wats
+        .big-number
+          #{ wats.count }
 
-      - if grouping.app_user_count(filters: filters) > 0
-        %ul.plain.unstyled
-          - grouping.app_user_stats(filters: filters, limit: 10).each do |user, count|
-            %li.row
-              .col-md-1
-                .badge.badge-info.pull-right=  count
-              = link_to 'Groupings', groupings_path( filters: filters.filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
-              = link_to 'Wats', wats_path( filters: filters.filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
-              = link_to 'Filter', grouping_path(grouping, filters: filters.filters.merge(app_user: [user])), {class: "btn-xs btn-primary"}
-              = user
+      .wat-card
+        .small-title
+          users
+        .big-number
+          #{ grouping.app_user_count(filters: filters) }
 
-      - if grouping.browser_count(filters: filters) > 0
-        %ul.plain.unstyled
-          - grouping.browser_agent_stats(filters: filters, limit: 10).each do |browser, count|
-            %li.row
-              .col-md-1
-                .badge.pull-right.badge-info=  count
-              = browser
-  .col-md-2
-    .row
-      .grouping_unsubscribe
-        - if grouping.unsubscribed?(current_user)
-          = link_to grouping_unsubscribe_path(current_user.grouping_unsubscribes.where(grouping: grouping).first), method: :delete, class: "btn btn-success" do
-            Re-subscribe
-        - else
-          = link_to grouping_grouping_unsubscribes_path(grouping), method: :post, class: "btn btn-warning" do
-            Unsubscribe
-    .row
-      .claiming
-        - if grouping.grouping_owners.where(watcher: current_user).any?
-          = link_to grouping_owner_path(grouping.grouping_owners.where(watcher: current_user).first), method: :delete do
-            .glyphicon.glyphicon-shopping-cart
-            %span.text-info
-              Unclaim
-        - else
-          = link_to grouping_grouping_owners_path(grouping), method: :post do
-            .glyphicon.glyphicon-shopping-cart
-            %span.text-info
-              Claim
-        .owners
-          - if grouping.owners.any?
-            Claimed by:
-          - grouping.owners.each do |owner|
-            .owner
-              = owner.display_name
+      - unknowns = grouping.app_user_stats(filters: filters)[nil]
+      - if unknowns.present?
+        .wat-card
+          .small-title
+            unknowns
+          .big-number
+            #{ unknowns }
 
-.row
-  .well
-    .item
-      %em
-        Application:
-      = wat.app_name
-      in
-      = grouping_envs(grouping)
-    .item
-      - wat_the_first = wats.order(:captured_at).first
-      - wat_the_last = wats.order(:captured_at).last
-      %em
-        First Incident:
-      - if wat_the_first.captured_at.present?
-        %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat_the_first.captured_at.iso8601}}
-    .item
-      %em
-        Most Recent Incident:
-      - if wat_the_last.captured_at.present?
-        %span.moment_ago{data: {display_date: "1", title_format: "llll ZZ", time: wat_the_last.captured_at.iso8601}}
-    .item
-      - pages = wats.group(:page_url).pluck(:page_url)
-      - if pages.any?
-        %em
-          On Pages:
-          %a{ "data" => {"toggle" => "collapse"}, "href" => "#collapsePage" }
-            Show / Hide
-        #collapsePage.panel-collapse.collapse
-          - pages.uniq.each do |page|
-            = link_to truncate(page, length: 120), page, target: "_blank", class: "on-pages-link"
-            %br
+      .wat-card
+        .small-title
+          browsers
+        .big-number
+          #{ grouping.browser_count(filters: filters) }
+
+
+- pages = wats.group(:page_url).pluck(:page_url)
+- if pages.count > 1
+  %button.btn.btn-info.mb20{"data-target" => "#all-pages", "data-toggle" => "modal", :type => "button"}
+    All Page URLs
+
+.modal#wat-chart-modal
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-body
+        .highchart{data: {chart: @chart.to_json}}
+
+.modal#all-pages
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-body
+        - pages.uniq.each do |page|
+          = link_to truncate(page, length: 120), page, target: "_blank", class: "on-pages-link"

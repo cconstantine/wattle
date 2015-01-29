@@ -1,24 +1,11 @@
-.states
+.states.pull-right
   - if !group.active?
-    = link_to activate_grouping_path(group), method: :post do
-      .glyphicon.glyphicon-refresh
-      %span.text-info
-        Reactivate
+    = link_to "Reactivate", activate_grouping_path(group), method: :post, class: "btn btn-primary"
   - else
-    = link_to wontfix_grouping_path(group), method: :post do
-      .glyphicon.glyphicon-check
-      %span.text-info
-        Won't Fix
-  - if group.active? || group.wontfix?
-    = link_to muffle_grouping_path(group), method: :post do
-      .glyphicon.glyphicon.glyphicon-volume-down
-      %span.text-info
-        Muffle
-  &nbsp;
-  &nbsp;
-  - unless group.resolved?
-    = link_to resolve_grouping_path(group), method: :post do
-      .glyphicon.glyphicon-thumbs-up
-      %span.text-success
-        Resolve
+    = link_to "Won't Fix", wontfix_grouping_path(group), method: :post, class: "btn btn-default"
 
+  - if group.active? || group.wontfix?
+    = link_to "Muffle", muffle_grouping_path(group), method: :post, class: "btn btn-warning"
+
+  - unless group.resolved?
+    = link_to "Resolve", resolve_grouping_path(group), method: :post, class: "btn btn-success"

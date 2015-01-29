@@ -1,11 +1,4 @@
-
-%li.list-group-item
-  .row
-    %div
-      .col-md-1
-        = image_tag gravatar_url(current_user), class: ["img-circle", "img-responsive"]
-      .col-md-11
-        = form_for note, url: grouping_notes_url(note.grouping) do |f|
-          %br
-          = f.text_area :message, class: "form-control mb20", rows: 3
-          = f.button "Post", class: "btn btn-primary pull-right"
+= form_for note, url: grouping_notes_url(note.grouping), html: { class: "new_note mb80" } do |f|
+  %br
+  = f.text_area :message, class: "form-control mb20", rows: 3
+  = f.button "Post", class: "btn btn-primary pull-right"
