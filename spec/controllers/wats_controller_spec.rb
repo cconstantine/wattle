@@ -57,34 +57,42 @@ describe WatsController do
       }}
     subject {das_post }
 
-    it {should be_success}
-    context "the created wat" do
-      subject {das_post;assigns[:wat]}
-      its(:backtrace) {should == ["a", "b", "c"]}
-      its(:error_class) {should == "ErrFoo"}
-      its(:message) {should == "hi"}
-      its(:page_url) {should == "somefoo"}
-      its(:sidekiq_msg) {should == {"retry" => "true", "class" => "FooClass"}}
-      its(:request_headers) {should == {"a" => "1", "b" => "2"}}
-      its(:session) {should == {"imakey" => "true", "imastring" => "stringer"}}
+    it "should queue a job" do
+      subject
+      expect(WatsController::CreateWatWorker).to have(1).enqueued.job
     end
 
-    context "with a crazy wat" do
-      let(:das_post) {post :create, format: :json , wat: {
-        page_url: "somefoo",
-        message: "hi",
-        error_class: "ErrFoo",
-        backtrace: ["a", "b", "c"],
-        request_headers: {a: 1, b: 2},
-        sidekiq_msg: {retry: true, class: "FooClass"},
-        session: {imakey: true, imastring: "stringer"},
-        language: "needmorepylons"
-      }}
+    context "with sidekiq running inline", sidekiq: :inline do
 
-      it { should be_success }
+      it {should be_success}
+      context "the created wat" do
+        subject {das_post;Wat.last}
+        its(:backtrace) {should == ["a", "b", "c"]}
+        its(:error_class) {should == "ErrFoo"}
+        its(:message) {should == "hi"}
+        its(:page_url) {should == "somefoo"}
+        its(:sidekiq_msg) {should == {"retry" => "true", "class" => "FooClass"}}
+        its(:request_headers) {should == {"a" => "1", "b" => "2"}}
+        its(:session) {should == {"imakey" => "true", "imastring" => "stringer"}}
+      end
 
-      it "shouldn't make a wat" do
-        expect {subject}.to_not change(Wat, :count)
+      context "with a crazy wat" do
+        let(:das_post) {post :create, format: :json , wat: {
+          page_url: "somefoo",
+          message: "hi",
+          error_class: "ErrFoo",
+          backtrace: ["a", "b", "c"],
+          request_headers: {a: 1, b: 2},
+          sidekiq_msg: {retry: true, class: "FooClass"},
+          session: {imakey: true, imastring: "stringer"},
+          language: "needmorepylons"
+        }}
+
+        it { should be_success }
+
+        it "shouldn't make a wat" do
+          expect {subject}.to_not change(Wat, :count)
+        end
       end
     end
   end
