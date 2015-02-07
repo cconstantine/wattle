@@ -43,6 +43,7 @@ gem 'puma'
 gem 'newrelic_rpm'
 
 gem 'paper_trail'
+gem 'searchkick'
 
 group :production do
   gem 'rails_12factor'

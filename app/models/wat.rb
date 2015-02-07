@@ -12,6 +12,7 @@ class Wat < ActiveRecord::Base
 
   after_commit :send_email, on: :create unless Rails.env.test?
   after_create :send_email              if     Rails.env.test?
+  after_commit :reindex_groupings
 
   after_create :upvote_groupings
 
@@ -95,6 +96,10 @@ SQL
     end
   end
 
+  def key_line_clean
+    (key_line || backtrace.try(:first) || "").sub(/releases\/\d+\//, '')
+  end
+
   def matching_selector
     case language
       when "javascript"
@@ -102,7 +107,7 @@ SQL
       else
         {
           error_class: error_class,
-          key_line: (key_line || backtrace.try(:first) || "").sub(/releases\/\d+\//, '')
+          key_line: key_line_clean
         }
     end
   end
@@ -123,6 +128,12 @@ SQL
   def send_email
     groupings.active.pluck(:id).each do |grouping_id|
       GroupingNotifier.delay.notify(grouping_id)
+    end
+  end
+
+  def reindex_groupings
+    groupings.each do |grouping|
+      grouping.delay.reindex
     end
   end
 

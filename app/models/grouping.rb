@@ -70,6 +70,41 @@ class Grouping < ActiveRecord::Base
   scope :language, -> (an) { language_non_distinct(an).recursive_distinct('groupings.id') }
   scope :by_user,  -> (user_id) { by_user_non_distinct(user_id).recursive_distinct('groupings.id') }
 
+  searchkick(text_middle: [:key_line, :user_emails], index_name: "#{Rails.application.class.parent_name.downcase}_#{model_name.plural}_#{Rails.env.to_s}")
+
+  def search_data
+    {
+      key_line: key_line,
+      error_class: error_class,
+      state: state,
+      message: wats.group(:message).count.keys,
+      app_name: wats.group(:app_name).count.first.first,
+      app_env: wats.group(:app_env).count.keys,
+      language: wats.group(:language).count.first.first,
+      user_emails: app_user_stats(filters: {}, key_name: :email,  limit: 1000).keys#  wats.limit(100).pluck('distinct wats.app_user -> \'email\'').join(' ')
+    }
+  end
+
+  def self.filtered_by_params(filters, opts={})
+    search_query = filters[:search_query]
+
+    unless search_query.blank?
+      # raise search_query.inspect
+
+      wheres = {}
+      wheres[:state] = filters[:state] if filters[:state]
+      wheres[:app_env] = filters[:app_env] if filters[:app_env]
+      wheres[:app_name] = filters[:app_name] if filters[:app_name]
+      wheres[:language] = filters[:language] if filters[:language]
+
+      @groupings = Grouping.search(search_query, fields: [{key_line: :text_middle}, :error_class, :message, :user_emails], where: wheres, page: opts[:page], per_page: 20)
+    else
+      @groupings = Grouping.filtered(filters)
+      @groupings = @groupings.wat_order.reverse
+      @groupings = @groupings.page(opts[:page]).per(20)
+    end
+  end
+
   def open?
     wontfix? || active? || muffled?
   end

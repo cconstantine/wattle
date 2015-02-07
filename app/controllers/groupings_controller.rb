@@ -4,10 +4,8 @@ class GroupingsController < ApplicationController
   before_filter :load_group, except: [:index, :index_chart]
 
   def index
-    @groupings = Grouping.filtered(filters)
-    @groupings = @groupings.wat_order.reverse
+    @groupings = Grouping.filtered_by_params(filters, page: params[:page])
 
-    @groupings = @groupings.page(params[:page]).per(params[:per_page] || 20)
 
     respond_with(@groupings)
   end
