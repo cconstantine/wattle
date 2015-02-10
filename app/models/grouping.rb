@@ -2,8 +2,10 @@ class Grouping < ActiveRecord::Base
   has_paper_trail class_name: "GroupingVersion", :only => [:state]
 
   has_many :wats_groupings
+  has_many :open_wats_groupings, -> {self.open }, class_name: "WatsGrouping"
+  has_many :wats, through: :open_wats_groupings
+  has_many :all_wats, through: :wats_groupings
   has_many :new_wats, ->(grouping) { grouping.last_emailed_at.present? ? where('wats.created_at > ?', grouping.last_emailed_at) : self }, class_name: "Wat", through: :wats_groupings, source: :wat
-  has_many :wats, through: :wats_groupings
   has_many :notes
   has_many :stream_events
   has_many :grouping_unsubscribes, dependent: :destroy
