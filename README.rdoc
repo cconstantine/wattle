@@ -2,7 +2,7 @@
 
 Wattle is a self-hosted open source project to help your team collect, manage and process your Exceptions, or as we like to call them, Wats[https://www.destroyallsoftware.com/talks/wat]
 
-== Configuration
+== Server Configuration
 
 === General application configuration
 
@@ -54,5 +54,10 @@ To limit emails to be from a particular domain (like, say, your corporate email 
 
 to everything after the @ in your email addresses.
 
+== Client Configuration
 
+=== How to send Wats from your application
 
+Add the WatCatcher gem to your application which can be found here:
+
+https://github.com/cconstantine/wat_catcher
