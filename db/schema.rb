@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141219223147) do
+ActiveRecord::Schema.define(version: 20150220185658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,6 +127,7 @@ ActiveRecord::Schema.define(version: 20141219223147) do
     t.string   "language"
     t.hstore   "app_user",        default: {"id"=>nil}
     t.datetime "captured_at",                           null: false
+    t.text     "hostname"
   end
 
   add_index "wats", ["app_env"], name: "index_wats_on_app_env", using: :btree
