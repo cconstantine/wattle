@@ -14,9 +14,6 @@ class Grouping < ActiveRecord::Base
   has_many :grouping_owners, dependent: :destroy
   has_many :owners, through: :grouping_owners, source: :watcher
 
-  has_one :representative_wat_grouping, -> {order("id desc")}, class_name: "WatsGrouping"
-  has_one :representative_wat, class_name: "Wat", through: :representative_wat_grouping, source: :wat
-
   state_machine :state, initial: :active do
     state :active, :resolved, :wontfix, :muffled
 

@@ -1,6 +1,6 @@
 .row.mb20
   .col-md-7
-    - wat = grouping.representative_wat
+    - wat = grouping.wats.filtered(filters).order(:id).last
     - if wat
       %h3= wat_heading(wat)
     .states-and-environments-container.pull-left
