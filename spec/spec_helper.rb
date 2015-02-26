@@ -59,6 +59,9 @@ RSpec.configure do |config|
 
     # Clears out the jobs for tests using the fake testing
     Sidekiq::Worker.clear_all
+    Sidekiq.redis do |redis|
+      redis.flushdb
+    end
     # Get the current example from the example_method object
 
     if example.metadata[:sidekiq] == :fake

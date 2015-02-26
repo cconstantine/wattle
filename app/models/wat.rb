@@ -133,7 +133,7 @@ SQL
 
   def reindex_groupings
     groupings.each do |grouping|
-      grouping.delay.reindex
+      GroupingReindexer.debounce_enqueue(grouping.id)
     end
   end
 
