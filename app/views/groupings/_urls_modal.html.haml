@@ -1,0 +1,12 @@
+
+- pages = wats.group(:page_url).pluck(:page_url)
+- if pages.count > 1
+  %button.btn.btn-info.mb20{"data-target" => "#all-pages", "data-toggle" => "modal", :type => "button"}
+    All Page URLs
+
+.modal#all-pages
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-body
+        - pages.uniq.each do |page|
+          %p= link_to truncate(page, length: 120), page, target: "_blank", class: "on-pages-link"

@@ -1,0 +1,15 @@
+
+.modal#browsers-affected
+  .modal-dialog.modal-lg
+    .modal-content
+      .modal-body
+        - grouping.browser_stats(filters: filters, limit: 100).each do |browser, count|
+          %li.row
+            .col-md-1
+              .badge.badge-info.pull-right=  count
+            = browser
+        - if grouping.browser_count(filters: filters) > 100
+          %li.row
+            .col-md-1
+              .badge.badge-info.pull-right
+            = "..."

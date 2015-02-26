@@ -57,7 +57,9 @@
         .small-title
           users
         .big-number
-          #{ grouping.app_user_count(filters: filters) }
+          %a.mb20{"href" => "#", "data-target" => "#users-affected", "data-toggle" => "modal"}
+            #{ grouping.app_user_count(filters: filters) }
+
 
       - unknowns = grouping.app_user_stats(filters: filters)[nil]
       - if unknowns.present?
@@ -71,23 +73,11 @@
         .small-title
           browsers
         .big-number
-          #{ grouping.browser_count(filters: filters) }
+          %a.mb20{"href" => "#", "data-target" => "#browsers-affected", "data-toggle" => "modal"}
+            #{ grouping.browser_count(filters: filters) }
 
 
-- pages = wats.group(:page_url).pluck(:page_url)
-- if pages.count > 1
-  %button.btn.btn-info.mb20{"data-target" => "#all-pages", "data-toggle" => "modal", :type => "button"}
-    All Page URLs
-
-.modal#wat-chart-modal
-  .modal-dialog.modal-lg
-    .modal-content
-      .modal-body
-        .highchart{data: {chart: @chart.to_json}}
-
-.modal#all-pages
-  .modal-dialog.modal-lg
-    .modal-content
-      .modal-body
-        - pages.uniq.each do |page|
-          = link_to truncate(page, length: 120), page, target: "_blank", class: "on-pages-link"
+= render partial: 'urls_modal', locals: {wats: wats, grouping: grouping}
+= render partial: 'wat_chart_modal', locals: {grouping: grouping}
+= render partial: 'users_modal', locals: {grouping: grouping}
+= render partial: 'browsers_modal', locals: {grouping: grouping}
