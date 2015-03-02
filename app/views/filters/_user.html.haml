@@ -5,5 +5,5 @@
       - filters[:app_user].each do |user_id|
         %li
           =label_tag do
-            = check_box_tag '#{prefix}[app_user][]', user_id, true
+            = check_box_tag "#{prefix}[app_user][]", user_id, true
             = user_id

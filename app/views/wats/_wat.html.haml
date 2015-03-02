@@ -105,9 +105,7 @@
             - user = wat.app_user
             - grouping = wat.groupings.last
             %ul
-              %li= link_to 'All groupings for this user', groupings_path( filters: filters.filters.merge(app_user: [user]))
-              %li= link_to 'All wats for this user', wats_path( filters: filters.filters.merge(app_user: [user]))
-              %li= link_to 'Filter groupings by this user', grouping_path(grouping, filters: filters.filters.merge(app_user: [user]))
+              %li= link_to 'Filter this user', grouping_path(grouping, filters: filters.filters.merge(app_user: [user["id"]]))
 
       .code
         - if wat.hostname.present?

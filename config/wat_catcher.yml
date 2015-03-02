@@ -1,5 +1,5 @@
 development:
-  host: "//localhost:3001"
+  host: "http://localhost:3000"
   disabled: false
 
 test:
