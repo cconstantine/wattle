@@ -201,7 +201,6 @@ class Grouping < ActiveRecord::Base
 
   def rescore!
     transaction do
-      self.popularity = nil
       self.wats.where("wats_groupings.state != ?", :resolved).find_each do |wat|
         self.upvote wat.created_at
       end
@@ -209,15 +208,7 @@ class Grouping < ActiveRecord::Base
     end
   end
 
-  def popularity_addin(effective_time=nil)
-    0.1 * (2 ** ((effective_time.to_i - Grouping.epoch.to_i) / 1.day.to_i))
-  end
-
   def update_sorting(effective_time=nil)
-    effective_time = Time.zone.now unless effective_time
-    self.popularity = 0.1 unless self.popularity
-
-    self.popularity += popularity_addin(effective_time)
     self.latest_wat_at = effective_time
   end
 end

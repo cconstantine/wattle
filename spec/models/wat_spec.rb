@@ -237,14 +237,6 @@ describe Wat do
     end
   end
 
-  describe "#upvote_groupings" do
-    let(:wat) { wats(:default) }
-    subject { wat.upvote_groupings }
-    it "should upvote all of the open groupings" do
-      expect { subject}.to change {wat.groupings.open.first.popularity}
-    end
-  end
-
   describe "#backtrace" do
     it "can have a very long path" do
       bt = (1..1000).map { |x| "#{x} long string"*1000 }

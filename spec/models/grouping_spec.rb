@@ -256,24 +256,10 @@ describe Grouping do
     end
   end
 
-  describe "#popularity_addin" do
-    let(:grouping) {groupings(:grouping1)}
-    let(:effective_time) {Time.zone.now}
-    subject { grouping.popularity_addin(effective_time) }
-
-    it "should be positive" do
-      subject.should be > 0
-    end
-  end
-
   describe "#update_sorting" do
     let(:grouping) {groupings(:grouping1)}
     let(:effective_time) {Time.zone.now}
     subject { grouping.update_sorting(effective_time) }
-
-    it "should change the popularity score" do
-      expect { subject }.to change {grouping.popularity}
-    end
 
     it "should update the latest_wat_at" do
       expect { subject }.to change {grouping.latest_wat_at}.to effective_time
