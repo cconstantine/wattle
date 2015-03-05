@@ -21,9 +21,4 @@ class GroupingReindexer
   def perform(grouping_id)
     Grouping.find(grouping_id).reindex
   end
-
-  def wat_user(grouping_id)
-    {id: "grouping_#{grouping_id}"}
-  end
-
 end
