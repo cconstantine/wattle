@@ -45,6 +45,8 @@ gem 'newrelic_rpm'
 gem 'paper_trail'
 gem 'searchkick'
 
+gem 'responders', '~> 2.0'
+
 group :production do
   gem 'rails_12factor'
 end
@@ -69,6 +71,5 @@ group :test do
   gem 'poltergeist'
   gem "poltergeist-suppressor"
   gem 'launchy'
-  gem 'responders', '~> 2.0'
   gem 'rspec-collection_matchers'
 end
