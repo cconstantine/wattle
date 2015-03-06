@@ -6,8 +6,8 @@ describe StreamEvent do
 
   context "#create!" do
     subject {StreamEvent.create!(grouping: grouping, context: grouping)}
-    its(:happened_at) {should be_present}
-    its(:happened_at) {should be_within(1.second).of(Time.zone.now)}
+    it {expect(subject.happened_at).to be_present}
+    it {expect(subject.happened_at).to be_within(1.second).of(Time.zone.now)}
   end
 
   context "#send_email" do
@@ -16,7 +16,7 @@ describe StreamEvent do
     subject {stream_event.save!}
 
     it "should call send_email" do
-      stub.proxy(stream_event).send_email
+      allow(stream_event).to receive(:send_email) {  }
       subject
       expect(stream_event).to have_received(:send_email)
     end

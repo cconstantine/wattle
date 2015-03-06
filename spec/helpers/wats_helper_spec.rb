@@ -13,7 +13,7 @@ describe WatsHelper do
       Wat.create_from_exception!(nil, {app_env: 'hawaii'})  {raise RuntimeError.new( "a test")}
     end
     subject { helper.app_envs }
-    it { should =~ ['demo', 'production', 'staging', 'hawaii'] }
+    it { is_expected.to match_array ['demo', 'production', 'staging', 'hawaii'] }
   end
 
 end

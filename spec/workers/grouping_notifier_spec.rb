@@ -5,7 +5,7 @@ describe GroupingNotifier do
   let(:grouping) {groupings(:grouping1)}
 
   describe "#perform" do
-    before { stub(grouping_notifier).needs_notifying? {true} }
+    before { allow(grouping_notifier).to receive(:needs_notifying?) {true} }
 
     subject { grouping_notifier.perform }
 
@@ -16,12 +16,9 @@ describe GroupingNotifier do
         it "should only call send_email once" do
           call_count = 0
 
-          any_instance_of(GroupingNotifier) do |klass|
-            stub(klass).send_email { call_count += 1 }
-            stub(klass).send_email_later
-          end
+          allow_any_instance_of(GroupingNotifier).to receive(:send_email) {call_count += 1}
+          allow_any_instance_of(GroupingNotifier).to receive(:send_email_later)
 
-          # Call .perform in 3 separate threads (like you would with 3 separate sidekiq workers)
           threads = Set.new
           10.times do |i|
             threads << Thread.new do
@@ -29,7 +26,6 @@ describe GroupingNotifier do
             end
           end
 
-          # and wait for them to finish executing
           threads.each do |thread|
             thread.join
           end
@@ -40,20 +36,20 @@ describe GroupingNotifier do
     end
 
     context "send_email_now? is true" do
-      before { stub(grouping_notifier).send_email_now? {true} }
+      before { allow(grouping_notifier).to receive(:send_email_now?) {true} }
       it "should send_email" do
-        stub.proxy(grouping_notifier).send_email
-        stub.proxy(grouping_notifier).send_email_later
+        allow(grouping_notifier).to receive(:send_email)
+        allow(grouping_notifier).to receive(:send_email_later)
         subject
         expect(grouping_notifier).to have_received(:send_email)
         expect(grouping_notifier).to_not have_received(:send_email_later)
       end
     end
     context "send_email is false" do
-      before {stub(grouping_notifier).send_email_now? {false}}
+      before {allow(grouping_notifier).to receive(:send_email_now?) {false}}
       it "should not send_email" do
-        stub.proxy(grouping_notifier).send_email
-        stub.proxy(grouping_notifier).send_email_later
+        allow(grouping_notifier).to receive(:send_email)
+        allow(grouping_notifier).to receive(:send_email_later)
         subject
         expect(grouping_notifier).to_not have_received(:send_email)
         expect(grouping_notifier).to have_received(:send_email_later)
@@ -72,29 +68,29 @@ describe GroupingNotifier do
       context "the retry option is nil" do
         let(:enqueued_at) { Time.now }
         let(:retry_option) {nil}
-        it { should be_needs_notifying }
+        it { is_expected.to be_needs_notifying }
       end
 
       context "the retry option is 0" do
         let(:enqueued_at) { Time.now }
         let(:retry_option) {0}
-        it { should be_needs_notifying }
+        it { is_expected.to be_needs_notifying }
       end
 
       context "the retry option is false" do
         let(:enqueued_at) { Time.now }
         let(:retry_option) {false}
-        it { should be_needs_notifying }
+        it { is_expected.to be_needs_notifying }
       end
 
       context "grouping's wat is too recent" do
         let(:enqueued_at) { Time.now }
-        it { should_not be_needs_notifying }
+        it { is_expected.to_not be_needs_notifying }
       end
 
       context "grouping's wat is old enough" do
         let(:enqueued_at) { 800.seconds.ago}
-        it { should be_needs_notifying }
+        it { is_expected.to be_needs_notifying }
       end
 
       context "with a specified notify_after" do
@@ -102,12 +98,12 @@ describe GroupingNotifier do
 
         context "grouping's wat is too recent" do
           let(:enqueued_at) { Time.now }
-          it { should_not be_needs_notifying }
+          it { is_expected.to_not be_needs_notifying }
         end
 
         context "grouping's wat is old enough" do
           let(:enqueued_at) { 800.seconds.ago}
-          it { should be_needs_notifying }
+          it { is_expected.to be_needs_notifying }
         end
       end
     end
@@ -116,49 +112,49 @@ describe GroupingNotifier do
       before { grouping.update_column :last_emailed_at, nil }
       context "when the grouping is resolved" do
         let(:grouping) {groupings(:resolved)}
-        it {should_not be_needs_notifying}
+        it {is_expected.to_not be_needs_notifying}
       end
       context "when the grouping is wontfix" do
         let(:grouping) {groupings(:wontfix)}
-        it {should_not be_needs_notifying}
+        it {is_expected.to_not be_needs_notifying}
       end
       context "when the grouping is muffled" do
         let(:grouping) {groupings(:muffled)}
 
         context "with 1000 wats per hour in the last weeks" do
-          before { stub(grouping_notifier).similar_wats_per_hour_in_previous_weeks { 1000 } }
+          before { allow(grouping_notifier).to receive(:similar_wats_per_hour_in_previous_weeks) { 1000 } }
           context "with 1000 wats in the last day" do
-            before { stub(grouping_notifier).similar_wats_in_previous_day { 1000 } }
+            before { allow(grouping_notifier).to receive(:similar_wats_in_previous_day) { 1000 } }
 
-            it {should_not be_needs_notifying}
+            it {is_expected.to_not be_needs_notifying}
           end
 
           context "with 2000 wats in the last hour" do
-            before { stub(grouping_notifier).similar_wats_in_previous_day { 2000 } }
+            before { allow(grouping_notifier).to receive(:similar_wats_in_previous_day) { 2000 } }
 
-            it {should be_needs_notifying}
+            it {is_expected.to be_needs_notifying}
           end
         end
       end
       context "when the grouping is active" do
         let(:grouping) {groupings(:grouping1)}
-        it {should be_needs_notifying}
+        it {is_expected.to be_needs_notifying}
 
         context "with a js grouping" do
-          before { stub(grouping).is_javascript? { true } }
+          before { allow(grouping).to receive(:is_javascript?) { true } }
 
           context "with an average of 1000 wats per hour in the last 24 hours" do
-            before { stub(grouping_notifier).js_wats_per_hour_in_previous_weeks { 1000 } }
+            before { allow(grouping_notifier).to receive(:js_wats_per_hour_in_previous_weeks) { 1000 } }
 
             context "with 2000 wats in the last hour" do
-              before { stub(grouping_notifier).js_wats_in_previous_day { 2000 } }
+              before { allow(grouping_notifier).to receive(:js_wats_in_previous_day) { 2000 } }
 
-              it {should be_needs_notifying}
+              it {is_expected.to be_needs_notifying}
             end
             context "with 1000 wats in the last hour" do
-              before { stub(grouping_notifier).js_wats_in_previous_day { 1000 } }
+              before { allow(grouping_notifier).to receive(:js_wats_in_previous_day) { 1000 } }
 
-              it {should_not be_needs_notifying}
+              it {is_expected.to_not be_needs_notifying}
             end
           end
         end
@@ -173,35 +169,34 @@ describe GroupingNotifier do
     it "should send emails" do
       subject
 
-      find_email("test@example.com", with_text: "been detected in").should be_present
+      expect(find_email("test@example.com", with_text: "been detected in")).to be_present
     end
 
 
     it "should not send emails to watchers with restrictive email_filters" do
       subject
-
-      find_email("test3@example.com", with_text: "been detected in").should_not be_present
+      expect(find_email("test3@example.com", with_text: "been detected in")).to_not be_present
     end
   end
 
   describe "#send_email_now?" do
-    before { stub(grouping_notifier).needs_notifying? {true} }
+    before { allow(grouping_notifier).to receive(:needs_notifying?) {true} }
     subject {grouping_notifier.send_email_now?}
     context "when the grouping was never notified" do
       before { grouping.update_column(:last_emailed_at, nil)}
-      it {should be_true}
+      it {is_expected.to be_truthy}
     end
     context "when the grouping was notified recently" do
       before { grouping.update_column(:last_emailed_at, 1.minute.ago)}
-      it {should be_false}
+      it {is_expected.to be_falsey}
     end
     context "when the grouping was not notified recently" do
       before { grouping.update_column(:last_emailed_at, 1.day.ago)}
-      it {should be_true}
+      it {is_expected.to be_truthy}
       context "with a wontfix grouping" do
         let(:grouping) {groupings(:wontfix)}
 
-        it {should be_false}
+        it {is_expected.to be_falsey}
       end
     end
   end

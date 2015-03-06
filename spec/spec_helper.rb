@@ -3,7 +3,6 @@ ENV["RAILS_ENV"] ||= 'test'
 
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'rr'
 require 'sidekiq/testing'
 require 'sidekiq/testing/inline'
@@ -11,7 +10,7 @@ require 'email_spec'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara/poltergeist'
-
+require 'rspec/collection_matchers'
 
 load Rails.root.join("db", "seeds.rb")
 
@@ -34,10 +33,6 @@ Capybara.register_driver :quiet_poltergeist do |app|
 end
 
 Capybara.javascript_driver = :quiet_poltergeist
-
-RSpec.configure do |rspec|
-  rspec.deprecation_stream = 'log/deprecations.log'
-end
 
 def capture_error &block
   err = nil
@@ -117,7 +112,7 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
 
-
+  config.raise_errors_for_deprecations!
 
   config.order = "random"
   config.include SessionSpecHelper, type: :controller

@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-describe GroupingsController, versioning: true do
-  render_views
-
+describe GroupingsController, versioning: true, :type => :controller do
   let(:error) { capture_error { raise RuntimeError.new "test message" } }
 
   let(:message) { error.message }
@@ -13,10 +11,10 @@ describe GroupingsController, versioning: true do
   describe "GET #index" do
     subject { get :index }
     context "using real auth" do
-      before { stub(controller).use_developer_auth? { false } }
+      before { allow(controller).to receive(:use_developer_auth?) { false } }
 
       it "should require login" do
-        subject.should redirect_to auth_path
+        is_expected.to redirect_to auth_path
       end
     end
 
@@ -35,8 +33,8 @@ describe GroupingsController, versioning: true do
 
         it "should include unfiltered groupings" do
           subject
-          assigns[:groupings].to_a.should have(Grouping.filtered(ApplicationController::DEFAULT_FILTERS).count).items
-          assigns[:groupings].to_a.map(&:app_envs).flatten.uniq.should =~ ['demo', 'production', 'staging']
+          expect(assigns[:groupings].to_a).to have(Grouping.filtered(ApplicationController::DEFAULT_FILTERS).count).items
+          expect(assigns[:groupings].to_a.map(&:app_envs).flatten.uniq).to match_array ['demo', 'production', 'staging']
         end
 
         context "filtered" do
@@ -44,13 +42,12 @@ describe GroupingsController, versioning: true do
           it "should include filtered groupings" do
             subject
 
-            assigns[:groupings].
-              to_a.
-              map(&:wats).
-              flatten.
-              map(&:app_env).
-              uniq.
-              should =~ ['staging']
+            expect(assigns[:groupings].
+                    to_a.
+                    map(&:wats).
+                    flatten.
+                    map(&:app_env).
+                    uniq).to match_array ['staging']
           end
         end
         context "ordering" do
@@ -62,7 +59,7 @@ describe GroupingsController, versioning: true do
             let(:order) { nil }
             it "should show the newest groupings first" do
               subject
-              assigns[:groupings].first.should == newest
+              expect(assigns[:groupings].first).to eq newest
             end
           end
         end
@@ -85,7 +82,7 @@ describe GroupingsController, versioning: true do
       it { should be_success }
       it "should load the grouping" do
         subject
-        assigns[:grouping].should == grouping
+        expect(assigns[:grouping]).to eq grouping
       end
 
       context "a grouping with wat users and browsers" do
@@ -105,7 +102,7 @@ describe GroupingsController, versioning: true do
 
         it "should have some stream_events" do
           subject
-          assigns[:stream_events].should have(2).items
+          expect(assigns[:stream_events]).to have(2).items
         end
       end
     end
@@ -128,7 +125,7 @@ describe GroupingsController, versioning: true do
 
       it "should save the papertrail" do
         expect { subject }.to change { grouping.versions.count }.by 1
-        grouping.reload.versions.last.watcher.should == watcher
+        expect(grouping.reload.versions.last.watcher).to eq watcher
       end
 
       it { should redirect_to '/something' }
@@ -161,7 +158,7 @@ describe GroupingsController, versioning: true do
 
       it "should save the papertrail" do
         expect { subject }.to change { grouping.versions.count }.by 1
-        grouping.reload.versions.last.watcher.should == watcher
+        expect(grouping.reload.versions.last.watcher).to eq watcher
       end
 
       it { should redirect_to '/something' }
@@ -194,7 +191,7 @@ describe GroupingsController, versioning: true do
 
       it "should save the papertrail" do
         expect { subject }.to change { grouping.versions.count }.by 1
-        grouping.reload.versions.last.watcher.should == watcher
+        expect(grouping.reload.versions.last.watcher).to eq watcher
       end
 
       it { should redirect_to '/something' }
@@ -228,7 +225,7 @@ describe GroupingsController, versioning: true do
 
       it "should save the papertrail" do
         expect { subject }.to change { grouping.versions.count }.by 1
-        grouping.reload.versions.last.watcher.should == watcher
+        expect(grouping.reload.versions.last.watcher).to eq watcher
       end
 
       it { should redirect_to '/something' }

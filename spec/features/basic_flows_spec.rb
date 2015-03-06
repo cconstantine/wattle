@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-feature "Interacting with wats", js: true do
+feature "Interacting with wats", js: true, :type => :feature do
 
 
   context "with an invalid email" do
@@ -10,7 +10,7 @@ feature "Interacting with wats", js: true do
       fill_in 'name', :with => 'Jim Bob'
       fill_in 'email', :with => 'user@not_valid_domain.com'
       click_on 'Sign In'
-      page.should have_content "Unable to find or create user"
+      expect(page).to have_content "Unable to find or create user"
     end
   end
 
@@ -23,7 +23,7 @@ feature "Interacting with wats", js: true do
       fill_in 'email', :with => 'user@example.com'
       click_on 'Sign In'
 
-      current_path.should == grouping_path(grouping)
+      expect(current_path).to eq grouping_path(grouping)
     end
   end
 
@@ -38,7 +38,7 @@ feature "Interacting with wats", js: true do
 
     scenario "shows a wat on the homepage" do
       visit "/"
-      page.should have_content "RuntimeError"
+      expect(page).to have_content "RuntimeError"
     end
 
     context "viewing a grouping" do
@@ -48,7 +48,7 @@ feature "Interacting with wats", js: true do
       end
 
       scenario "clicking on the header takes you to the exception" do
-        page.should have_content "a test"
+        expect(page).to have_content "a test"
       end
 
       scenario "leaving a note" do
@@ -57,8 +57,8 @@ feature "Interacting with wats", js: true do
           click_on "Post"
         end
         within ".stream-event" do
-          page.should have_content "Jim Bob"
-          page.should have_content "a testy note"
+          expect(page).to have_content "Jim Bob"
+          expect(page).to have_content "a testy note"
         end
       end
 
@@ -67,7 +67,7 @@ feature "Interacting with wats", js: true do
           click_on "Won't Fix"
         end
         within ".current_state" do
-          page.should have_content "Wontfix"
+          expect(page).to have_content "Wontfix"
         end
       end
 
@@ -76,7 +76,7 @@ feature "Interacting with wats", js: true do
           click_on "Muffle"
         end
         within ".current_state" do
-          page.should have_content "Muffled"
+          expect(page).to have_content "Muffled"
         end
       end
 
@@ -85,7 +85,7 @@ feature "Interacting with wats", js: true do
           click_on "Resolve"
         end
         within ".current_state" do
-          page.should have_content "Resolved"
+          expect(page).to have_content "Resolved"
         end
       end
 
@@ -98,7 +98,7 @@ feature "Interacting with wats", js: true do
           end
 
           within ".current_state" do
-            page.should have_content "Active"
+            expect(page).to have_content "Active"
           end
         end
       end

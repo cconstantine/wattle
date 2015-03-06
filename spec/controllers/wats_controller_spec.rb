@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-describe WatsController do
-  render_views
-
+describe WatsController, :type => :controller do
   let!(:wat) do
     Wat.create_from_exception!(capture_error {raise RuntimeError.enw 'hi'})
   end
@@ -19,7 +17,7 @@ describe WatsController do
 
       it "should get all wats" do
         subject
-        assigns[:wats].should have(Wat.count).items
+        expect(assigns[:wats]).to have(Wat.count).items
       end
     end
   end
@@ -34,7 +32,7 @@ describe WatsController do
       it {should be_success}
       it "should give the wat" do
         subject
-        assigns[:wat].should == wat
+        expect(assigns[:wat]).to eq wat
       end
 
       context "with a super-empty wat" do
@@ -67,13 +65,13 @@ describe WatsController do
       it {should be_success}
       context "the created wat" do
         subject {das_post;Wat.last}
-        its(:backtrace) {should == ["a", "b", "c"]}
-        its(:error_class) {should == "ErrFoo"}
-        its(:message) {should == "hi"}
-        its(:page_url) {should == "somefoo"}
-        its(:sidekiq_msg) {should == {"retry" => "true", "class" => "FooClass"}}
-        its(:request_headers) {should == {"a" => "1", "b" => "2"}}
-        its(:session) {should == {"imakey" => "true", "imastring" => "stringer"}}
+        it { expect(subject.backtrace).to eq( ["a", "b", "c"] )}
+        it { expect(subject.error_class).to eq  "ErrFoo" }
+        it { expect(subject.message).to eq  "hi" }
+        it { expect(subject.page_url).to eq  "somefoo" }
+        it { expect(subject.sidekiq_msg).to eq({"retry" => "true", "class" => "FooClass"}) }
+        it { expect(subject.request_headers).to eq ({"a" => "1", "b" => "2"})}
+        it { expect(subject.session).to eq( {"imakey" => "true", "imastring" => "stringer"})}
       end
 
       context "with a crazy wat" do

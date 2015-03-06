@@ -72,14 +72,15 @@ class Grouping < ActiveRecord::Base
   searchkick(text_middle: [:key_line, :user_emails], index_name: "#{Rails.application.class.parent_name.downcase}_#{model_name.plural}_#{Rails.env.to_s}")
 
   def search_data
+    return {} unless wats.any?
     {
       key_line: key_line,
       error_class: error_class,
       state: state,
       message: wats.group(:message).count.keys,
-      app_name: wats.group(:app_name).count.first.first,
+      app_name: wats.first.app_name,
       app_env: wats.group(:app_env).count.keys,
-      language: wats.group(:language).count.first.first,
+      language: wats.first.language,
       user_emails: app_user_stats(filters: {}, key_name: :email,  limit: 1000).keys#  wats.limit(100).pluck('distinct wats.app_user -> \'email\'').join(' ')
     }
   end
@@ -157,9 +158,10 @@ class Grouping < ActiveRecord::Base
   end
 
   def self.get_or_create_from_wat!(wat)
-    transaction do
-      open.matching(wat).first_or_create!(wat.matching_selector.merge(state: "active", uniqueness_string: wat.uniqueness_string))
-    end
+    disable_search_callbacks
+    open.matching(wat).first_or_create!(wat.matching_selector.merge(state: "active", uniqueness_string: wat.uniqueness_string))
+  ensure
+    enable_search_callbacks
   end
 
   def chart_data(filters)

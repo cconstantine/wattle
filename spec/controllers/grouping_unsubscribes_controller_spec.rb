@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-describe GroupingUnsubscribesController do
-  render_views
-
+describe GroupingUnsubscribesController, :type => :controller do
   let(:watcher) {watchers :default}
   let(:grouping) {groupings(:grouping1)}
 

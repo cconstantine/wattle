@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe "Filtering the wat groupings" do
+feature "Filtering the wat groupings" do
   before do
     visit "/auth/developer"
 
@@ -36,8 +36,8 @@ describe "Filtering the wat groupings" do
 
     # Make sure emails go out appropriately when a new wat comes in
     Wat.create_from_exception!(nil, app_name: "app1", app_env: "staging") {raise "hi"}
-    find_email("test@example.com", with_text: "been detected in").should be_present
-    find_email("user@example.com", with_text: "been detected in").should be_present
+    expect(find_email("test@example.com", with_text: "been detected in")).to be_present
+    expect(find_email("user@example.com", with_text: "been detected in")).to be_present
 
   end
 
@@ -62,8 +62,8 @@ describe "Filtering the wat groupings" do
 
     # Make sure emails go out appropriately when a new wat comes in
     Wat.create_from_exception!(nil, app_name: "app1", app_env: "staging") {raise "hi"}
-    find_email("test@example.com", with_text: "been detected in").should be_present
-    find_email("user@example.com", with_text: "been detected in").should_not be_present
+    expect(find_email("test@example.com", with_text: "been detected in")).to be_present
+    expect(find_email("user@example.com", with_text: "been detected in")).to_not be_present
   end
 
 
@@ -103,7 +103,7 @@ describe "Filtering the wat groupings" do
 
     # Make sure emails go out appropriately when a new wat comes in
     Wat.create_from_exception!(nil, app_name: "app1", app_env: "staging") {raise "hi"}
-    find_email("test@example.com", with_text: "been detected in").should be_present
-    find_email("user@example.com", with_text: "been detected in").should_not be_present
+    expect(find_email("test@example.com", with_text: "been detected in")).to be_present
+    expect(find_email("user@example.com", with_text: "been detected in")).to_not be_present
   end
 end

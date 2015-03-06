@@ -20,7 +20,7 @@ describe Wat do
 
     it "removes the associated wat grouping" do
       wg = wat.wats_groupings.to_a
-      wg.should_not be_empty
+      expect(wg).to_not be_empty
 
       subject
       wg.each do |x|
@@ -31,7 +31,7 @@ describe Wat do
     it "removes the grouping if we are the last wat" do
       groupings = wat.groupings.to_a
       subject
-      groupings.should_not be_empty
+      expect(groupings).to_not be_empty
 
       subject
       groupings.each do |x|
@@ -68,11 +68,11 @@ describe Wat do
       expect { subject }.to change {Wat.count}.by 1
     end
 
-    its(:session) {should == {"derpy" => "\\u0000"}}
-    its(:request_headers) {should == {"HTTP_ACCEPT" => "\\u0000"}}
-    its(:request_params) {should == {"nulls" => "\\u0000"}}
-    its(:backtrace) {should == ["bob", "\\u0000"]}
-    its(:app_user) {should == {"derpy" => "\\u0000"}}
+    it {expect(subject.session).to eq( {"derpy" => "\\u0000"})}
+    it {expect(subject.request_headers).to eq({"HTTP_ACCEPT" => "\\u0000"})}
+    it {expect(subject.request_params).to eq({"nulls" => "\\u0000"})}
+    it {expect(subject.backtrace).to eq ["bob", "\\u0000"]}
+    it {expect(subject.app_user).to eq({"derpy" => "\\u0000"})}
 
     context "with a crazy-long language" do
       let(:wat) {Wat.create!(:language => "visual basic")}
@@ -133,17 +133,17 @@ describe Wat do
       subject {Wat.new.clean_hstore(hash)}
       context "that is normal" do
         let(:hash) { {a: 1, b: "laksjdf"} }
-        it {should == hash}
+        it {is_expected.to eq hash}
       end
 
       context "with a null value" do
         let(:hash)  { {a: "\u0000", b: 1} }
-        it {should == {a: "\\u0000", b: 1}}
+        it {is_expected.to eq( {a: "\\u0000", b: 1})}
       end
 
       context "with a null key" do
         let(:hash)  { {"\u0000" => "a", :b => 1} }
-        it {should == {"\\u0000" => "a", :b => 1}}
+        it {is_expected.to eq({"\\u0000" => "a", :b => 1})}
       end
     end
 
@@ -151,12 +151,12 @@ describe Wat do
       subject {Wat.new.clean_hstore(array)}
       context "that is normal" do
         let(:array) {[1, 2, "bob"]}
-        it {should == array}
+        it {is_expected.to eq array}
       end
 
       context "with a null value" do
         let(:array)  { ["\u0000", 1] }
-        it {should == ["\\u0000", 1] }
+        it {is_expected.to eq ["\\u0000", 1] }
       end
 
     end
@@ -164,11 +164,12 @@ describe Wat do
   describe "matching_selector" do
     let(:wat) { wats(:default) }
     subject { wat.matching_selector }
-    its(:keys) {should =~ [:key_line, :error_class]}
+
+    it {expect(subject.keys).to match_array [:key_line, :error_class]}
 
     context "with a javascript wat" do
       let(:wat) {wats(:javascript)}
-      its(:keys) { should =~ [:message] }
+      it {expect(subject.keys).to eq [:message] }
     end
   end
 
@@ -180,11 +181,11 @@ describe Wat do
 
     context "on a single wat" do
       subject {wats.first.uniqueness_string}
-      it {should be_a String}
+      it {is_expected.to be_a String}
     end
 
     it "should have the same uniqueness_strings" do
-      subject.uniq.count.should == 1
+      expect(subject.uniq).to have(1).item
     end
 
     describe "between groupings" do
@@ -195,7 +196,7 @@ describe Wat do
       let(:grouping2_uniqueness) {grouping2.wats.first.uniqueness_string}
 
       it "should have different uniqueness_strings" do
-        grouping1_uniqueness.should_not == grouping2_uniqueness
+        expect(grouping1_uniqueness).to_not eq grouping2_uniqueness
       end
     end
 
@@ -203,7 +204,7 @@ describe Wat do
       let(:grouping) { groupings(:normal_javascripts)}
 
       it "should have the same uniqueness_strings" do
-        subject.uniq.count.should == 1
+        expect(subject.uniq).to have(1).item
       end
     end
   end
@@ -215,7 +216,7 @@ describe Wat do
     it "should call the notify the wat notifier" do
       Sidekiq::Testing.inline! do
 
-        stub.proxy(GroupingNotifier).notify
+        allow(GroupingNotifier).to receive(:notify) {  }
         subject
 
         expect(GroupingNotifier).to have_received(:notify).with wat.groupings.active.last.id
@@ -224,14 +225,14 @@ describe Wat do
     end
 
     it "should call send_email" do
-      stub.proxy(wat).send_email
+      allow(wat).to receive(:send_email) {  }
       subject
 
       expect(wat).to have_received(:send_email)
     end
 
     it "should upvote the groupings" do
-      stub.proxy(wat).upvote_groupings
+      allow(wat).to receive(:upvote_groupings) {  }
       subject
       expect(wat).to have_received(:upvote_groupings)
     end
@@ -293,9 +294,10 @@ describe Wat do
       subject { Wat.create_from_exception!(error, {app_env: app_env} )}
 
       it                { should == Wat.last }
-      its(:message)     { should == "test message"}
-      its(:error_class) { should == "RuntimeError"}
-      its(:app_env)     { should == "production"}
+      it {expect(subject.message).to eq "test message"}
+      it {expect(subject.error_class).to eq  "RuntimeError"}
+      it {expect(subject.app_env).to eq  "production"}
+
       it "should create a new wat" do
         expect {subject}.to change {Wat.count}.by(1)
       end
@@ -347,14 +349,14 @@ describe Wat do
 
       it "should bind to the existing grouping" do
         subject
-        wat.groupings.should include(grouping)
+        expect(wat.groupings).to include(grouping)
       end
       context "a javascript exception" do
         let(:wat) {wats(:javascript)}
         let(:grouping) { wat.groupings.first }
         it "should bind to the existing grouping" do
           subject
-          wat.groupings.should include(grouping)
+          expect(wat.groupings).to include(grouping)
         end
 
       end
@@ -376,7 +378,7 @@ describe Wat do
 
         it "should bind to the existing grouping" do
           subject
-          wat.groupings.should include(existing_wat.groupings.first)
+          expect(wat.groupings).to include(existing_wat.groupings.first)
         end
 
       end
@@ -391,7 +393,7 @@ describe Wat do
 
       it "should not bind to the existing grouping" do
         subject
-        wat.groupings.should include(grouping)
+        expect(wat.groupings).to include(grouping)
       end
     end
 
@@ -404,7 +406,7 @@ describe Wat do
 
       it "should bind to the existing grouping" do
         subject
-        wat.groupings.should include(grouping)
+        expect(wat.groupings).to include(grouping)
       end
     end
   end

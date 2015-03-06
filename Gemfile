@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 #ruby File.read(".ruby-version").strip#'2.1.1'
-gem 'rails', "~> 4.1.8"
+gem 'rails'#, "~> 4.2"
 
 gem 'pg'
 
@@ -21,7 +21,7 @@ gem 'kaminari'
 gem 'kaminari-bootstrap'
 gem 'omniauth-gplus'
 gem 'secrets', :github => "austinfromboston/secrets"
-gem 'state_machine'
+gem 'state_machine', :github => "seuros/state_machine"
 gem 'user-agent'
 gem 'redcarpet'
 
@@ -59,7 +59,7 @@ end
 group :test, :development do
   gem 'awesome_print'
   gem 'rr', require: false
-  gem "rspec-rails", "~> 2"
+  gem 'rspec-rails'#, "~> 2"
   gem 'fixture_builder'
 end
 
@@ -69,4 +69,6 @@ group :test do
   gem 'poltergeist'
   gem "poltergeist-suppressor"
   gem 'launchy'
+  gem 'responders', '~> 2.0'
+  gem 'rspec-collection_matchers'
 end

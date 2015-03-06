@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-describe WatchersController do
-  render_views
-
+describe WatchersController, :type => :controller do
   describe "PATCH #update" do
     let(:watcher) { watchers(:another_watcher) }
 
@@ -119,7 +117,7 @@ describe WatchersController do
 
       it "should get all watchers" do
         subject
-        assigns[:watchers].should have(Watcher.count).items
+        expect(assigns[:watchers]).to have(Watcher.count).items
       end
     end
   end
@@ -136,7 +134,7 @@ describe WatchersController do
       it {should be_success}
       it "should give the watcher" do
         subject
-        assigns[:watcher].should == watcher
+        expect(assigns[:watcher]).to eq watcher
       end
     end
   end

@@ -2,6 +2,6 @@ class GroupingOwner < ActiveRecord::Base
   belongs_to :grouping
   belongs_to :watcher
 
-  validate :grouping, presence: true
-  validate :watcher, presence: true
+  validates :grouping, presence: true
+  validates :watcher, presence: true
 end

@@ -6,7 +6,7 @@ describe Watcher do
     subject {Watcher.create!(first_name: "Bob", name: "bob?", email: "bob@example.com")}
 
     it {should be_present}
-    its(:state) {should == "active"}
+    it {expect(subject.state).to eq "active"}
   end
 
   describe ".activate" do
@@ -46,7 +46,7 @@ describe Watcher do
       let(:auth_data) {{ email: "test@example.com" }}
       it "should find the Watcher and not create one" do
         expect { subject }.not_to change(Watcher, :count)
-        subject.should == watchers(:default)
+        expect(subject).to eq watchers(:default)
       end
     end
     context "when no matching user exists" do
@@ -54,9 +54,9 @@ describe Watcher do
       it "should make a new Watcher" do
         expect { subject }.to change(Watcher, :count)
 
-        subject.should == Watcher.last
-        Watcher.last.email.should == "fake1@example.com"
-        Watcher.last.first_name.should == "Edward"
+        expect(subject).to eq Watcher.last
+        expect(Watcher.last.email).to eq "fake1@example.com"
+        expect(Watcher.last.first_name).to eq "Edward"
       end
     end
     context "when creating a non @example.com user" do

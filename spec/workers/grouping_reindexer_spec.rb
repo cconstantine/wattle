@@ -10,9 +10,7 @@ describe GroupingReindexer do
 
     it "should reindex" do
       call_count = 0
-      any_instance_of(Grouping) do |klass|
-        stub(klass).reindex { call_count += 1 }
-      end
+      allow_any_instance_of(Grouping).to receive(:reindex) {call_count += 1}
       subject
       expect(call_count).to eq 1
     end
@@ -20,8 +18,8 @@ describe GroupingReindexer do
 
   describe ".debounce_enqueue" do
     before do
-      stub(GroupingReindexer).perform_async
-      stub(GroupingReindexer).perform_in
+      allow(GroupingReindexer).to receive(:perform_async)
+      allow(GroupingReindexer).to receive(:perform_in)
     end
 
     context "being called in quick succession" do

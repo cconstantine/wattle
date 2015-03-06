@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe SessionsController do
+describe SessionsController, :type => :controller do
   describe "create" do
     it "should read auth data from the session environment" do
       request.env['omniauth.auth'] = {info: {email: "test@example.com"}}
       get :create, provider: "gplus"
-      response.should redirect_to(root_path)
-      session[:watcher_id].should == watchers(:default).to_param
+      expect(response).to redirect_to(root_path)
+      expect(session[:watcher_id]).to eq watchers(:default).to_param
     end
   end
 end

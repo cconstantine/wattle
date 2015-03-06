@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NotesController do
+describe NotesController, :type => :controller do
 
   describe "#create" do
     let(:grouping) { groupings(:grouping1) }
@@ -11,7 +11,7 @@ describe NotesController do
 
     it "should fail" do
       subject
-      response.should_not be_success
+      expect(response).to_not be_success
     end
 
     context "when logged in" do
@@ -26,7 +26,7 @@ describe NotesController do
 
       it "should send back to the page we were on" do
         subject
-        response.should redirect_to :back
+        expect(response).to redirect_to :back
       end
 
       context "the created note" do
@@ -34,10 +34,11 @@ describe NotesController do
           the_post
           assigns[:note]
         end
-        its(:id)       {should_not be_nil}
-        its(:watcher)  {should == watcher}
-        its(:message)  {should == "I'm a message"}
-        its(:grouping) {should == grouping}
+        it {expect(subject.id).to be_present}
+        it {expect(subject.id).to be_present}
+        it {expect(subject.watcher).to eq watcher }
+        it {expect(subject.message).to eq "I'm a message" }
+        it {expect(subject.grouping).to eq grouping }
       end
     end
   end

@@ -1,8 +1,6 @@
 require 'spec_helper'
 
-describe StatsController do
-  render_views
-
+describe StatsController, :type => :controller do
   describe "GET #index" do
     subject { get :index }
     context 'when logged in' do

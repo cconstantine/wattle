@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ExceptionalsController do
+describe ExceptionalsController, :type => :controller do
 
   describe "GET #an_exception" do
     subject { get :an_exception, format: :json }
@@ -12,7 +12,7 @@ describe ExceptionalsController do
 
     it "should register a wat" do
       expect {subject}.to raise_error(ExpectedError)
-      controller.should be_report_wat
+      expect(controller).to be_report_wat
     end
 
     context "when logged in" do
@@ -23,7 +23,7 @@ describe ExceptionalsController do
 
       it "should pass the user hash" do
         expect {subject}.to raise_error(ExpectedError)
-        controller.env["wat_report"][:user].should == user
+        expect(controller.env["wat_report"][:user]).to eq user
       end
     end
   end

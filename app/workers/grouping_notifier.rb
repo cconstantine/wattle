@@ -67,7 +67,7 @@ class GroupingNotifier
   def send_email
     Rails.logger.info("Sending email for grouping #{grouping.id}")
     grouping.email_recipients.each do |watcher|
-      GroupingMailer.delay.notify(watcher, grouping)
+      GroupingMailer.notify(watcher, grouping).deliver_later
     end
   end
 

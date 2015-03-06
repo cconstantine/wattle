@@ -1,12 +1,10 @@
 require 'spec_helper'
 
-describe GroupingOwnersController do
-  render_views
-
+describe GroupingOwnersController, :type => :controller do
   let(:watcher) {watchers :default}
   let(:grouping) {groupings(:grouping1)}
 
-  before { @request.env['HTTP_REFERER'] = '/something'  }
+  before { request.env['HTTP_REFERER'] = '/something'  }
 
   describe "POST #create" do
     subject { post :create, grouping_id: grouping.id }

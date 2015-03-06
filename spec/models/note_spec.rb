@@ -7,6 +7,6 @@ describe Note do
   describe "#create" do
     subject {Note.create!(watcher: watcher, grouping: grouping, message: "HI!")}
 
-    its(:stream_event) {should be_present}
+    it { expect(subject.stream_event).to be_present }
   end
 end

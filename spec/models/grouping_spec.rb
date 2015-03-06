@@ -17,7 +17,7 @@ describe Grouping do
     subject {Grouping.by_user(user_id)}
 
     let(:user_id) {"2"}
-    it {should have(1).item}
+    it {is_expected.to have(1).item}
   end
 
   describe "#new_wats" do
@@ -33,7 +33,7 @@ describe Grouping do
     end
     context "with a last_emailed_at before the latest wat" do
       before {grouping.update_column(:last_emailed_at, grouping.wats.minimum(:created_at) - 1.second)}
-      it {should have(5).item}
+      it {is_expected.to have(5).items}
     end
 
   end
@@ -43,11 +43,11 @@ describe Grouping do
     let(:watcher) {watchers(:default)}
     subject {grouping.unsubscribed?(watcher)}
 
-    it {should be_false}
+    it {is_expected.to be_falsey}
 
     context "with a grouping_unsubscribe record" do
       before {watcher.grouping_unsubscribes.create!(grouping: grouping)}
-      it {should be_true}
+      it {is_expected.to be_truthy}
     end
   end
 
@@ -55,12 +55,12 @@ describe Grouping do
     subject {grouping.app_user_stats()}
     context "with no app_user info" do
       let(:grouping) {groupings(:grouping1)}
-      it {should == {nil => 5}}
+      it {is_expected.to eq( {nil => 5})}
     end
 
     context "with some interesting app_user info" do
       let(:grouping) {groupings(:grouping4)}
-      it {should == {nil => 2, "2" => 2, "1" => 1}}
+      it {is_expected.to eq( {nil => 2, "2" => 2, "1" => 1})}
     end
   end
 
@@ -68,12 +68,12 @@ describe Grouping do
     subject {grouping.app_user_count()}
     context "with no app_user info" do
       let(:grouping) {groupings(:grouping1)}
-      it {should == 0}
+      it {is_expected.to eq 0}
     end
 
     context "with some interesting app_user info" do
       let(:grouping) {groupings(:grouping4)}
-      it {should == 2}
+      it {is_expected.to eq 2}
     end
   end
 
@@ -81,12 +81,12 @@ describe Grouping do
     subject {grouping.browser_stats()}
     context "with no browser info" do
       let(:grouping) {groupings(:grouping1)}
-      it {should == {nil => 5}}
+      it {is_expected.to eq( {nil => 5})}
     end
 
     context "with some interesting browser info" do
       let(:grouping) {groupings(:grouping4)}
-      it {should == {nil => 2, "FooBrowser" => 2, "Barser" => 1}}
+      it {is_expected.to eq( {nil => 2, "FooBrowser" => 2, "Barser" => 1})}
     end
   end
 
@@ -94,12 +94,12 @@ describe Grouping do
     subject {grouping.browser_count()}
     context "with no browser info" do
       let(:grouping) {groupings(:grouping1)}
-      it {should == 0}
+      it {is_expected.to eq 0}
     end
 
     context "with some interesting browser info" do
       let(:grouping) {groupings(:grouping4)}
-      it {should == 2}
+      it {is_expected.to eq 2}
     end
   end
 
@@ -108,39 +108,39 @@ describe Grouping do
     let(:filter_params) {{}}
     let(:scope) {Grouping.all}
     subject {scope.filtered(filter_params)}
-    it {should have(Grouping.count).items}
+    it {is_expected.to have(Grouping.count).items}
 
     context "with an app_user" do
       let(:filter_params) {{app_user: "2"}}
-      it {should have(1).items}
+      it {is_expected.to have(1).items}
     end
 
     context "with an app_name" do
       let(:filter_params) {{app_name: "app1"}}
-      it {should have(5).items}
+      it {is_expected.to have(5).items}
     end
 
     context "with an app_env" do
       let(:filter_params) {{app_env: "demo"}}
-      it {should have(Grouping.open.app_env(:demo).count).items}
+      it {is_expected.to have(Grouping.open.app_env(:demo).count).items}
     end
 
     context "with an app_name and an app_env" do
       let(:filter_params) {{app_name: "app2", app_env: "production"}}
-      it {should have(Grouping.open.app_name(:app2).app_env("production").count).items}
+      it {is_expected.to have(Grouping.open.app_name(:app2).app_env("production").count).items}
     end
 
     context "with a state" do
       let(:filter_params) {{state: :wontfix}}
-      it {should have(1).item}
+      it {is_expected.to have(1).item}
       context "with an app_name" do
         let(:filter_params) {{state: :wontfix, app_name: :app1}}
-        it {should have(1).item}
+        it {is_expected.to have(1).item}
       end
 
       context "with an app_env" do
         let(:filter_params) {{state: :wontfix, app_env: :production}}
-        it {should have(1).item}
+        it {is_expected.to have(1).item}
       end
 
     end
@@ -160,12 +160,12 @@ describe Grouping do
       end
 
       it "groups by app_env" do
-        subject.app_envs.should =~ ['production', 'staging']
+        expect(subject.app_envs).to match_array ['production', 'staging']
       end
     end
     context "with a javascript wat" do
       let(:wat) { Wat.create_from_exception!(nil, {language: "javascript"}) {raise RuntimeError.new 'hi'} }
-      its(:message) { should == 'hi' }
+      it {expect(subject.message).to eq 'hi' }
     end
   end
 
@@ -174,33 +174,33 @@ describe Grouping do
 
     context "with an active wat" do
       let(:grouping) {groupings(:grouping1)}
-      it {should be_open}
+      it {is_expected.to be_open}
     end
     context "with a wontfix wat" do
       let(:grouping) {groupings(:wontfix)}
-      it {should be_open}
+      it {is_expected.to be_open}
     end
     context "with a resolved wat" do
       let(:grouping) {groupings(:resolved)}
-      it {should_not be_open}
+      it {is_expected.to_not be_open}
     end
     context "with a muffled wat" do
       let(:grouping) {groupings(:muffled)}
-      it {should be_open}
+      it {is_expected.to be_open}
     end
   end
 
   describe "#wat_order" do
-    subject {Grouping.wat_order}
+    subject {Grouping.wat_order.to_a}
 
     it "should be sorted in-order" do
-     subject.to_a.should == Grouping.all.sort {|x, y| x.wats.last.id <=> y.wats.last.id}
+     is_expected.to eq Grouping.all.sort {|x, y| x.wats.last.id <=> y.wats.last.id}
     end
 
     context "#reverse" do
-      subject {Grouping.wat_order.reverse}
+      subject {Grouping.wat_order.reverse.to_a}
       it "should be sorted in-order" do
-        subject.to_a.should == Grouping.all.sort {|x, y| y.wats.last.id <=> x.wats.last.id}
+        is_expected.to eq Grouping.all.sort {|x, y| y.wats.last.id <=> x.wats.last.id}
       end
     end
   end
@@ -213,8 +213,8 @@ describe Grouping do
     context "for a grouping with no unsubscribes or owners or matching filters" do
       before {Watcher.update_all(email_filters: nil)}
 
-      it {should =~ Watcher.active.to_a}
-      it {should_not include(watchers(:inactive))}
+      it {is_expected.to match_array Watcher.active.to_a}
+      it {is_expected.to_not include(watchers(:inactive))}
     end
 
 
@@ -224,16 +224,16 @@ describe Grouping do
         grouping.unsubscribes << unsubscribed_watcher
       end
 
-      it {should include(watchers(:default))}
-      it {should_not include(watchers(:inactive))}
-      it {should_not include(unsubscribed_watcher)}
+      it {is_expected.to include(watchers(:default))}
+      it {is_expected.to_not include(watchers(:inactive))}
+      it {is_expected.to_not include(unsubscribed_watcher)}
     end
 
     context "for a grouping not matching a watcher's email filters" do
       let(:watcher_with_email_filters) {watchers(:watcher_with_email_filters)}
 
-      it {should_not include(watcher_with_email_filters)}
-      it {should include(watchers(:default))}
+      it {is_expected.to_not include(watcher_with_email_filters)}
+      it {is_expected.to include(watchers(:default))}
     end
 
     context "for a grouping not matching a watcher's email filters" do
@@ -245,14 +245,14 @@ describe Grouping do
         )
       end
 
-      it {should include(watcher_with_email_filters)}
-      it {should include(watchers(:default))}
+      it {is_expected.to include(watcher_with_email_filters)}
+      it {is_expected.to include(watchers(:default))}
     end
 
     context "for a grouping with an owner" do
       let(:grouping) {groupings(:claimed)}
 
-      it {should == [watchers(:with_owned_grouping)]}
+      it {is_expected.to eq [watchers(:with_owned_grouping)]}
     end
   end
 
