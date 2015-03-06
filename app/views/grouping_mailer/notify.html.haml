@@ -16,7 +16,11 @@
       %th Key Line
       %td= @wat.key_line
 
-  - if @wat.error_class.present?
+    - if @wat.error_class.present?
+      %tr
+        %th Error Class
+        %td= @wat.error_class
+
     %tr
-      %th Error Class
-      %td= @wat.error_class
+      %th Users affected (since last email)
+      %td= "#{pluralize(@new_users_count, "new user")} (of #{@users_count})"
