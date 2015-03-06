@@ -43,6 +43,10 @@
         .pull-right
           %a.mb20{"href" => "#", "data-target" => "#wat-chart-modal", "data-toggle" => "modal"}
             Show Frequency Chart
+          %br
+          .pull-right
+            = link_to "Permalink", grouping_path(grouping, filters.filters), class: :mb20
+            .glyphicon.glyphicon-copy
 
 .row.mb20
   .col-md-6
