@@ -1,13 +1,13 @@
 class FailedWorker
   include Sidekiq::Worker
 
-  def perform
-    foo
+  def perform(an_argument)
+    foo(an_argument)
   end
 
 
   private
-  def foo
-    raise ExpectedError.new("Job")
+  def foo(an_argument)
+    raise ExpectedError.new(an_argument)
   end
 end

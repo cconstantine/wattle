@@ -233,7 +233,7 @@ GEM
       activesupport (>= 4.2.0.beta, < 5.0)
       nokogiri (~> 1.6.0)
       rails-deprecated_sanitizer (>= 1.0.1)
-    rails-html-sanitizer (1.0.1)
+    rails-html-sanitizer (1.0.2)
       loofah (~> 2.0)
     rails-observers (0.1.2)
       activemodel (~> 4.0)
@@ -318,7 +318,7 @@ GEM
       libv8 (~> 3.16.14.0)
       ref
     thor (0.19.1)
-    thread_safe (0.3.4)
+    thread_safe (0.3.5)
     tilt (1.4.1)
     timers (4.0.1)
       hitimes
@@ -328,7 +328,7 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     user-agent (1.0.0)
-    wat_catcher (0.8.4)
+    wat_catcher (0.8.5)
       coffee-rails
       httpclient
       sidekiq
