@@ -213,14 +213,13 @@ describe Wat do
     let(:wat) { Wat.new_from_exception {raise RuntimeError.new 'hi'} }
 
     subject {wat.save!}
-    it "should call the notify the wat notifier" do
+    it "should call the debounce_enqueue method from the wat notifier" do
       Sidekiq::Testing.inline! do
 
-        allow(GroupingNotifier).to receive(:notify) {  }
+        allow(GroupingNotifier).to receive(:debounce_enqueue) {  }
         subject
 
-        expect(GroupingNotifier).to have_received(:notify).with wat.groupings.active.last.id
-          # Some other tests
+        expect(GroupingNotifier).to have_received(:debounce_enqueue).with wat.groupings.active.last.id, GroupingNotifier::DEBOUNCE_DELAY
       end
     end
 

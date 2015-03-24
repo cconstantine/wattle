@@ -1,5 +1,6 @@
 class GroupingNotifier
   include Sidekiq::Worker
+  include Debounce
 
   DEBOUNCE_DELAY = 60.minutes
   SIDEKIQ_NOTIFY_AFTER = 10.minutes
@@ -7,28 +8,26 @@ class GroupingNotifier
   attr_accessor :grouping
 
   class << self
-    def notify(grouping_id)
-      GroupingNotifier.new(Grouping.find(grouping_id)).perform
-    end
+    # def notify(grouping_id)
+    #   GroupingNotifier.new(Grouping.find(grouping_id)).perform
+    # end
 
     def wat_user(grouping_id)
       {id: "grouping_#{grouping_id}"}
     end
   end
 
-  def initialize(grouping)
-    self.grouping = grouping
-  end
+  # def initialize(grouping)
+  #   self.grouping = grouping
+  # end
 
-  def perform
-    grouping.reload.with_lock do
+  def perform(grouping_id)
+    self.grouping = Grouping.find(grouping_id)
+
+    grouping.with_lock do
       return unless needs_notifying?
-      if send_email_now?
-        send_email
-        mark_as_sent
-      else
-        send_email_later
-      end
+      send_email
+      mark_as_sent
     end
   end
 
@@ -98,8 +97,8 @@ class GroupingNotifier
     return Time.zone.now < Time.at(enqueued_at + notify_after)
   end
 
-  def send_email_later
-    Rails.logger.info("Delaying notification for grouping #{grouping.id}")
-    GroupingNotifier.delay_for(DEBOUNCE_DELAY).notify(grouping.id) unless Rails.env.test?
-  end
+  # def send_email_later
+  #   Rails.logger.info("Delaying notification for grouping #{grouping.id}")
+  #   GroupingNotifier.delay_for(DEBOUNCE_DELAY).notify(grouping.id) unless Rails.env.test?
+  # end
 end

@@ -39,6 +39,8 @@ module Wattle
 
     config.middleware.use(WatCatcher::RackMiddleware)
 
+    config.autoload_paths += %W(#{config.root}/app/workers/concerns)
+
     ::Sidekiq.configure_server do |config|
       config.server_middleware do |chain|
         chain.add ::WatCatcher::SidekiqMiddleware

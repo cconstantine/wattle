@@ -128,13 +128,13 @@ SQL
 
   def send_email
     groupings.active.pluck(:id).each do |grouping_id|
-      GroupingNotifier.delay.notify(grouping_id)
+      GroupingNotifier.debounce_enqueue(grouping_id, GroupingNotifier::DEBOUNCE_DELAY)
     end
   end
 
   def reindex_groupings
     groupings.each do |grouping|
-      GroupingReindexer.debounce_enqueue(grouping.id)
+      GroupingReindexer.debounce_enqueue(grouping.id, GroupingReindexer::DEBOUNCE_DELAY)
     end
   end
 

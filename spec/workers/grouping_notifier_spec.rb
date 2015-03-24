@@ -1,58 +1,50 @@
 require 'spec_helper'
 
 describe GroupingNotifier do
-  let(:grouping_notifier) {GroupingNotifier.new(grouping)}
   let(:grouping) {groupings(:grouping1)}
+  let(:grouping_notifier) { GroupingNotifier.new.tap {|gn| gn.grouping = grouping} }
 
   describe "#perform" do
-    before { allow(grouping_notifier).to receive(:needs_notifying?) {true} }
+    let(:grouping_notifier) { GroupingNotifier.new }
 
-    subject { grouping_notifier.perform }
+    before { allow_any_instance_of(GroupingNotifier).to receive(:needs_notifying?) {true} }
 
+    subject { grouping_notifier.perform(grouping.id) }
 
     context "on a grouping that never notified" do
       before { grouping.update_column(:last_emailed_at, nil)}
+
       context "When multiple workers run at the same time" do
+
         it "should only call send_email once" do
           call_count = 0
 
-          allow_any_instance_of(GroupingNotifier).to receive(:send_email) {call_count += 1}
-          allow_any_instance_of(GroupingNotifier).to receive(:send_email_later)
+          allow(grouping_notifier).to receive(:send_email) {call_count += 1}
 
-          threads = Set.new
-          10.times do |i|
-            threads << Thread.new do
-              GroupingNotifier.notify(grouping.id)
-            end
-          end
-
-          threads.each do |thread|
-            thread.join
-          end
+          subject
           expect(call_count).to eq(1)
         end
 
       end
     end
 
-    context "send_email_now? is true" do
-      before { allow(grouping_notifier).to receive(:send_email_now?) {true} }
+    context "needs_notifying?? is true" do
+      before { allow(grouping_notifier).to receive(:needs_notifying?) {true} }
+
       it "should send_email" do
         allow(grouping_notifier).to receive(:send_email)
-        allow(grouping_notifier).to receive(:send_email_later)
         subject
         expect(grouping_notifier).to have_received(:send_email)
-        expect(grouping_notifier).to_not have_received(:send_email_later)
       end
     end
+
     context "send_email is false" do
-      before {allow(grouping_notifier).to receive(:send_email_now?) {false}}
+      before {allow(grouping_notifier).to receive(:needs_notifying?) {false}}
+
       it "should not send_email" do
         allow(grouping_notifier).to receive(:send_email)
-        allow(grouping_notifier).to receive(:send_email_later)
         subject
         expect(grouping_notifier).to_not have_received(:send_email)
-        expect(grouping_notifier).to have_received(:send_email_later)
       end
 
     end
@@ -200,4 +192,6 @@ describe GroupingNotifier do
       end
     end
   end
+
+  it_behaves_like "the debounce enqueue method"
 end
