@@ -3,6 +3,7 @@ class WatsController < ApplicationController
 
   class CreateWatWorker
     include Sidekiq::Worker
+    sidekiq_options queue: :high
 
     def perform(params)
       params = YAML.load(params)

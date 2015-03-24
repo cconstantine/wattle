@@ -5,5 +5,6 @@ production:
   :logfile: /var/www/wattle/shared/log/sidekiq.log
 
 :queues:
+  - [high, 5]
   - default
   - mailers
