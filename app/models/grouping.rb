@@ -32,6 +32,8 @@ class Grouping < ActiveRecord::Base
     event :muffle do
       transition [:wontfix, :active] => :muffled
     end
+
+    after_transition any => any, :do => :reindex
   end
 
   scope :open,          -> {where.not(state: :resolved)}
@@ -69,7 +71,7 @@ class Grouping < ActiveRecord::Base
   scope :language, -> (an) { language_non_distinct(an).recursive_distinct('groupings.id') }
   scope :by_user,  -> (user_id) { by_user_non_distinct(user_id).recursive_distinct('groupings.id') }
 
-  searchkick(text_middle: [:key_line, :user_emails], index_name: "#{Rails.application.class.parent_name.downcase}_#{model_name.plural}_#{Rails.env.to_s}")
+  searchkick(callbacks: false, text_middle: [:key_line, :user_emails], index_name: "#{Rails.application.class.parent_name.downcase}_#{model_name.plural}_#{Rails.env.to_s}")
 
   def search_data
     return {} unless wats.any?

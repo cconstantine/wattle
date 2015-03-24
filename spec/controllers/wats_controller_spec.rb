@@ -60,9 +60,17 @@ describe WatsController, :type => :controller do
       expect(WatsController::CreateWatWorker).to have(1).enqueued.job
     end
 
+
+    it "shouldn't do any reindexing" do
+      allow_any_instance_of(Grouping).to receive(:reindex) { raise RuntimeError.new "Should not get called" }
+      subject
+      WatsController::CreateWatWorker.drain
+    end
+
     context "with sidekiq running inline", sidekiq: :inline do
 
       it {should be_success}
+
 
       context "the created wat" do
         subject {das_post;Wat.last}

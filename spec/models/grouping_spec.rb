@@ -265,4 +265,15 @@ describe Grouping do
       expect { subject }.to change {grouping.latest_wat_at}.to effective_time
     end
   end
+
+  describe "reindex on state change" do
+    let(:grouping) { groupings(:grouping1) }
+    subject { grouping.resolve! }
+
+    it "should do a reindexing" do
+      allow(grouping).to receive(:reindex)
+      subject
+      expect(grouping).to have_received(:reindex)
+    end
+  end
 end
