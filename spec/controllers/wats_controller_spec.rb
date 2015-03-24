@@ -50,7 +50,7 @@ describe WatsController, :type => :controller do
         error_class: "ErrFoo",
         backtrace: ["a", "b", "c"],
         request_headers: {a: 1, b: 2},
-        sidekiq_msg: {retry: true, class: "FooClass"},
+        sidekiq_msg: {retry: false, class: "FooClass"},
         session: {imakey: true, imastring: "stringer"}
       }}
     subject {das_post }
@@ -63,13 +63,14 @@ describe WatsController, :type => :controller do
     context "with sidekiq running inline", sidekiq: :inline do
 
       it {should be_success}
+
       context "the created wat" do
         subject {das_post;Wat.last}
         it { expect(subject.backtrace).to eq( ["a", "b", "c"] )}
         it { expect(subject.error_class).to eq  "ErrFoo" }
         it { expect(subject.message).to eq  "hi" }
         it { expect(subject.page_url).to eq  "somefoo" }
-        it { expect(subject.sidekiq_msg).to eq({"retry" => "true", "class" => "FooClass"}) }
+        it { expect(subject.sidekiq_msg).to eq({"retry" => "false", "class" => "FooClass"}) }
         it { expect(subject.request_headers).to eq ({"a" => "1", "b" => "2"})}
         it { expect(subject.session).to eq( {"imakey" => "true", "imastring" => "stringer"})}
       end
@@ -85,6 +86,19 @@ describe WatsController, :type => :controller do
           session: {imakey: true, imastring: "stringer"},
           language: "needmorepylons"
         }}
+
+        it { should be_success }
+
+        it "shouldn't make a wat" do
+          expect {subject}.to_not change(Wat, :count)
+        end
+      end
+
+      context "with a wat that still has sidekiq retries left" do
+        let(:das_post) {post :create, format: :json , wat: {
+            sidekiq_msg: {retry: true, class: "FooClass", retry_count: "2"},
+            language: "ruby"
+          }}
 
         it { should be_success }
 

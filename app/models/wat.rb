@@ -18,6 +18,7 @@ class Wat < ActiveRecord::Base
 
   validates :language, inclusion: { in: %w(ruby javascript) }, allow_nil: true
   validate :request_headers_not_ignored
+  validate :validate_sidekiq_job_retry_count
 
   scope :filtered, ->(opts={}) {
     running_scope = all
@@ -184,5 +185,12 @@ SQL
 
   def request_headers_not_ignored
     errors.add(:request_headers) if WatIgnores.matches?(self)
+  end
+
+  def validate_sidekiq_job_retry_count
+    return unless sidekiq_msg
+    return unless sidekiq_msg["retry"].to_s == "true"
+
+    errors.add(:sidekiq_msg) unless sidekiq_msg["retry_count"].to_i > 3
   end
 end

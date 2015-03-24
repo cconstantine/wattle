@@ -411,5 +411,62 @@ describe Wat do
     end
   end
 
+  describe "#validate_sidekiq_job_retry_count" do
+    let(:final_sidekiq_msg) { sidekiq_msg }
+    let(:wat) { Wat.new sidekiq_msg: final_sidekiq_msg }
 
+    subject { wat.validate_sidekiq_job_retry_count }
+
+    context "with a job that retries" do
+      let(:sidekiq_msg) {{
+        "jid" => "ac839153b79a152ecb9d2a0b",
+        "args" => "[23061]",
+        "class" => "RiskScreenerLeadUploader",
+        "queue" => "medium",
+        "retry" => true,
+        "enqueued_at" => "1427155937.2241511"
+      }}
+
+      context "with no retry count" do
+        it "adds an error" do
+          subject
+          expect(wat).to have(1).errors_on :sidekiq_msg
+        end
+      end
+
+      context "with a retry count of 1" do
+        let(:final_sidekiq_msg) { sidekiq_msg.merge({"retry_count" => "1" }) }
+
+        it "adds an error" do
+          subject
+          expect(wat).to have(1).errors_on :sidekiq_msg
+        end
+      end
+
+      context "with a retry count of 4" do
+        let(:final_sidekiq_msg) { sidekiq_msg.merge({"retry_count" => "4" }) }
+
+        it "doesn't an error" do
+          subject
+          expect(wat).to have(0).errors_on :sidekiq_msg
+        end
+      end
+    end
+
+    context "with a job that doesn't retry" do
+      let(:sidekiq_msg) {{
+        "jid" => "ac839153b79a152ecb9d2a0b",
+        "args" => "[23061]",
+        "class" => "RiskScreenerLeadUploader",
+        "queue" => "medium",
+        "retry" => false,
+        "enqueued_at" => "1427155937.2241511"
+      }}
+
+      it "doesn't add an error" do
+        subject
+        expect(wat).to have(0).errors_on :sidekiq_msg
+      end
+    end
+  end
 end
