@@ -23,6 +23,7 @@ Wattle::Application.routes.draw do
     member do
       post :reactivate
       post :deactivate
+      post :reset_api_key
     end
   end
   get '/create/wat' => 'wats#create'

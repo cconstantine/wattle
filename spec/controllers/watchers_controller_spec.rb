@@ -173,4 +173,21 @@ describe WatchersController, :type => :controller do
       end
     end
   end
+
+  describe "POST #reset_api_key" do
+    let(:watcher) { watchers(:default) }
+    subject { post :reset_api_key, id: watcher.to_param }
+
+    context 'when logged in' do
+      before do
+        login watchers(:default)
+        @request.env['HTTP_REFERER'] = '/something'
+      end
+
+      it {should be_redirect}
+      it "should change the watchers key" do
+        expect {subject}.to change {watcher.reload.api_key}
+      end
+    end
+  end
 end
