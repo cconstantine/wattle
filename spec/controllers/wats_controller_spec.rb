@@ -20,6 +20,20 @@ describe WatsController, :type => :controller do
         expect(assigns[:wats]).to have(Wat.count).items
       end
     end
+
+    context 'when supplying a valid api token' do
+      subject { get :index, per_page: 100, api_key: token}
+      let(:token) { TokenSource.new.generate }
+      before do
+        watchers(:default).update_column :api_key, token
+      end
+
+      it "should get all wats" do
+        subject
+        expect(assigns[:wats]).to have(Wat.count).items
+      end
+
+    end
   end
 
   describe "GET #show" do
