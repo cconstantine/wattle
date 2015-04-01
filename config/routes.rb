@@ -26,8 +26,11 @@ Wattle::Application.routes.draw do
       post :reset_api_key
     end
   end
+
   get '/create/wat' => 'wats#create'
   resources :stats, only: :index
+  
+  get '/aggregate_wats/:scale', to: "aggregate_wats#periodic"
 
   resources :grouping_unsubscribes, only: :destroy
   resources :groupings do
