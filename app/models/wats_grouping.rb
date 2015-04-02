@@ -9,7 +9,7 @@ class WatsGrouping < ActiveRecord::Base
 
 
   state_machine :state, initial: :active do
-    state :active, :resolved, :wontfix
+    state :active, :resolved, :wontfix, :muffled
 
     event :activate do
       transition [:resolved, :wontfix] => :active
@@ -22,12 +22,17 @@ class WatsGrouping < ActiveRecord::Base
     event :wontfix do
       transition :active => :wontfix
     end
+
+    event :muffle do
+      transition [:wontfix, :active] => :muffled
+    end
   end
 
-  scope :open,          -> {where(state: [:wontfix, :active])}
+  scope :open,          -> {where.not(state: :resolved)}
   scope :active,        -> {where(state: :active)}
   scope :resolved,      -> {where(state: :resolved)}
   scope :wontfix,       -> {where(state: :wontfix)}
+  scope :muffled,       -> {where(state: :wontfix)}
 
 
   def set_state
