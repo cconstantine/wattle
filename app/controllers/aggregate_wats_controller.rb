@@ -4,14 +4,8 @@ class AggregateWatsController < ApplicationController
 
   def periodic
     raise "Timescale not allowed: #{params[:scale]}" unless ALLOWED_SCALES.include?(params[:scale])
-    respond_with count_by_timescale(params[:scale])
-  end
-
-  private
-
-  def count_by_timescale(timescale)
-    date_segment = Wat.send(:sanitize_conditions,["date_trunc(?, created_at)",timescale])
-    grouped_query = Wat.group(date_segment)
-    grouped_query.order('2 desc').count #order by the time column(2nd), since we cant predict the aggregate alias assigned by ActiveRecord
+    counter = WatCounter.new params[:scale]
+    @wats = counter.group(:app_env, :language, :app_name).page(params[:page]).per(params[:per_page] || 1000)
+    respond_with counter.format(@wats)
   end
 end
