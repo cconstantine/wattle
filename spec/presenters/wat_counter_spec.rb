@@ -67,10 +67,11 @@ describe WatCounter do
       expect(counter.send :groupings).to include(:app_env)
     end
     it "groups the wats" do
-      data = counter.group(:app_env).count.to_a
+      data = counter.group(:app_env).order(:app_env).count.to_a
       first_key, second_key, _ = *data.map(&:first)
-      expect(first_key[1]).to eq("demo")
-      expect(second_key[1]).to eq("production")
+      expect(%q[demo staging production]).to include(first_key[1])
+      expect(%q[demo staging production]).to include(second_key[1])
+      expect(second_key[1]).not_to eq(first_key[1])
     end
   end
 
