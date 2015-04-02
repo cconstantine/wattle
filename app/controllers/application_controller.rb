@@ -35,7 +35,15 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @current_watcher ||= Watcher.where(id: session[:watcher_id]).first
+    @current_watcher ||= web_user || api_user
+  end
+
+  def web_user
+    Watcher.where(id: session[:watcher_id]).first
+  end
+
+  def api_user
+    Watcher.where(api_key: params[:api_key]).first if params[:api_key]
   end
   helper_method :current_user
 

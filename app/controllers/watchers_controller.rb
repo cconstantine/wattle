@@ -2,7 +2,7 @@ class WatchersController < ApplicationController
   respond_to :html
 
   before_filter :load_watchers, only: :index
-  before_filter :load_watcher, only: [:show, :update, :reactivate, :deactivate]
+  before_filter :load_watcher, only: [:show, :update, :reactivate, :deactivate, :reset_api_key]
 
   before_filter :only_update_self, only: :update
 
@@ -30,6 +30,11 @@ class WatchersController < ApplicationController
 
   def deactivate
     @watcher.deactivate!
+    redirect_to request.referer
+  end
+
+  def reset_api_key
+    @watcher.update_attributes api_key: TokenSource.new.generate
     redirect_to request.referer
   end
 

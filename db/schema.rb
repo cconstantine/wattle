@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150305222712) do
+ActiveRecord::Schema.define(version: 20150401172624) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(version: 20150305222712) do
     t.string   "state",           limit: 255, default: "active", null: false
     t.text     "default_filters"
     t.text     "email_filters"
+    t.string   "api_key"
   end
 
   create_table "wats", force: :cascade do |t|

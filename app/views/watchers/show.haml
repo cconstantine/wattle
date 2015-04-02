@@ -8,6 +8,12 @@
 %h2
   = @watcher.display_name
 %pre= @watcher.email
+- if current_user == @watcher
+  %p
+    - if @watcher.api_key
+      API Key:
+      = @watcher.api_key
+    = button_to "Reset API Key", reset_api_key_watcher_path(@watcher), class: 'btn btn-info', method: :post
 
 
 =form_for current_user, id: "update-default-filters" do |f|
