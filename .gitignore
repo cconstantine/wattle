@@ -1,6 +1,8 @@
 .idea
+.bundle
 log
 spec/fixtures
 tmp
 tags
 *.swp
+*.sqlc
