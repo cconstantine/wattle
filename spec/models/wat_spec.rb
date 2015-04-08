@@ -276,6 +276,15 @@ describe Wat do
       let(:filter_params) {{state: :wontfix}}
       it {should have(5).item}
     end
+
+    context "with a hostname" do
+      let(:filter_params) {{hostname: :host1}}
+      it {should have(5).item}
+      context "with more than one hostname" do
+        let(:filter_params) {{hostname: [:host1, :host2]}}
+        it {should have(10).item}
+      end
+    end
   end
 
   describe "#create!" do

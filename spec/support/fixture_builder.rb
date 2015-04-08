@@ -23,16 +23,16 @@ FixtureBuilder.configure do |fbuilder|
     ) {raise RuntimeError.new( "a test")})
 
     @grouping1 = 5.times.map do |i|
-      Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}
+      Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production', hostname: :host1})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
     @grouping2 = 5.times.map do |i|
-      Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}
+      Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production', hostname: :host2})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
     @grouping3 = 5.times.map do |i|
       # These two need to be on the same line
-      Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}; Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'demo'})  {raise RuntimeError.new( "a test")}
+      Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production', hostname: :host3})  {raise RuntimeError.new( "a test")}; Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'demo'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
 
     grouping_users = [

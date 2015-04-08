@@ -130,6 +130,11 @@ describe Grouping do
       it {is_expected.to have(Grouping.open.app_name(:app2).app_env("production").count).items}
     end
 
+    context "with a hostname" do
+      let(:filter_params) {{hostname: ["host1", "host2"]}}
+      it {is_expected.to have(2).items}
+    end
+
     context "with a state" do
       let(:filter_params) {{state: :wontfix}}
       it {is_expected.to have(1).item}

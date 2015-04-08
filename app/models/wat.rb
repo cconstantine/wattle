@@ -27,6 +27,7 @@ class Wat < ActiveRecord::Base
     running_scope = running_scope.where(:app_env  => opts[:app_env])  if opts[:app_env]
     running_scope = running_scope.where(:language => opts[:language]) if opts[:language]
     running_scope = running_scope.by_user(opts[:app_user])            if opts[:app_user]
+    running_scope = running_scope.where(:hostname => opts[:hostname]) if opts[:hostname]
 
     running_scope
   }
@@ -88,6 +89,10 @@ SQL
 
   def self.app_envs
     distinct(:app_env)
+  end
+
+  def self.app_hosts
+    distinct(:hostname)
   end
 
   def key_line

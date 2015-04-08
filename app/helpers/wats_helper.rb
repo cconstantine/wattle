@@ -15,4 +15,8 @@ module WatsHelper
   def languages
     Wat.languages
   end
+
+  def app_hosts
+    Wat.app_hosts
+  end
 end

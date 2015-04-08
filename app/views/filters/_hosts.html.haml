@@ -1,0 +1,8 @@
+%li.nav-header.mb20
+  Hosts
+  %ul.filter#app_names
+    - app_hosts.each do |name|
+      %li
+        =label_tag do
+          = check_box_tag "#{prefix}[hostname][]", name, filter_set.checked?(:hostname, name)
+          = name
