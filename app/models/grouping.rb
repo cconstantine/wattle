@@ -81,7 +81,7 @@ class Grouping < ActiveRecord::Base
       key_line: key_line,
       error_class: error_class,
       state: state,
-      message: wats.group(:message).count.keys,
+      message: wats.group(:message).count.keys.map {|m| m.slice(0, 32765)},
       app_name: wats.first.app_name,
       app_env: wats.group(:app_env).count.keys,
       language: wats.first.language,

@@ -281,4 +281,32 @@ describe Grouping do
       expect(grouping).to have_received(:reindex)
     end
   end
+
+  describe "#search_data" do
+    let(:grouping) {groupings(:grouping1)}
+    subject { grouping.search_data }
+
+    it "should have the right keys" do
+      expect(subject.keys).to match_array([
+          :key_line,
+          :error_class,
+          :state,
+          :message,
+          :app_name,
+          :app_env,
+          :language,
+          :user_emails])
+    end
+
+    context "with a long message" do
+      before {grouping.wats.last.update!(message: "I'm a long message!  " * 32767 )}
+      it "should trim the message" do
+        expect(subject[:message].count).to_not be_blank
+
+        subject[:message].each do |x|
+          expect(x.length).to be <= 32766
+        end
+      end
+    end
+  end
 end
