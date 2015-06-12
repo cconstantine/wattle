@@ -196,7 +196,7 @@ describe GroupingsController, versioning: true, :type => :controller do
 
       it { should redirect_to '/something' }
       it "should resolve the grouping" do
-        expect { subject }.to change { grouping.reload.active? }.from(false).to(true)
+        expect { subject }.to change { grouping.reload.unacknowledged? }.from(false).to(true)
       end
 
       context "with a wontfix grouping" do

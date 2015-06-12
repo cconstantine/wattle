@@ -32,8 +32,8 @@ class Wat < ActiveRecord::Base
     running_scope
   }
 
-  scope :open,          -> {joins(:groupings).where("groupings.state" => [:wontfix, :active]) }
-  scope :active,        -> {joins(:groupings).where("groupings.state" => :active)}
+  scope :open,          -> {joins(:groupings).where("groupings.state" => [:wontfix, :unacknowledged]) }
+  scope :unacknowledged,        -> {joins(:groupings).where("groupings.state" => :unacknowledged)}
   scope :resolved,      -> {joins(:groupings).where("groupings.state" => :resolved)}
   scope :wontfix,       -> {joins(:groupings).where("groupings.state" => :wontfix)}
 
@@ -132,7 +132,7 @@ SQL
   end
 
   def send_email
-    groupings.active.pluck(:id).each do |grouping_id|
+    groupings.unacknowledged.pluck(:id).each do |grouping_id|
       GroupingNotifier.debounce_enqueue(grouping_id, GroupingNotifier::DEBOUNCE_DELAY)
     end
   end

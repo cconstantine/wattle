@@ -219,7 +219,7 @@ describe Wat do
         allow(GroupingNotifier).to receive(:debounce_enqueue) {  }
         subject
 
-        expect(GroupingNotifier).to have_received(:debounce_enqueue).with wat.groupings.active.last.id, GroupingNotifier::DEBOUNCE_DELAY
+        expect(GroupingNotifier).to have_received(:debounce_enqueue).with wat.groupings.unacknowledged.last.id, GroupingNotifier::DEBOUNCE_DELAY
       end
     end
 

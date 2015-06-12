@@ -32,7 +32,7 @@ class GroupingNotifier
   end
 
   def send_email_now?
-    grouping.active? && (grouping.last_emailed_at.nil? ||  (grouping.last_emailed_at <= Time.zone.now - DEBOUNCE_DELAY))
+    grouping.unacknowledged? && (grouping.last_emailed_at.nil? ||  (grouping.last_emailed_at <= Time.zone.now - DEBOUNCE_DELAY))
   end
 
   def wats
@@ -44,7 +44,7 @@ class GroupingNotifier
     return false if grouping.app_envs.include? 'honeypot'
     return false if grouping.is_javascript? && js_wats_per_hour_in_previous_weeks > js_wats_in_previous_day / 2
     return false if grouping.muffled? && similar_wats_per_hour_in_previous_weeks > similar_wats_in_previous_day / 2
-    (grouping.active? || grouping.muffled?) && (grouping.last_emailed_at.nil? || grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?)
+    (grouping.unacknowledged? || grouping.muffled?) && (grouping.last_emailed_at.nil? || grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?)
   end
 
   def similar_wats_per_hour_in_previous_weeks()
@@ -96,9 +96,4 @@ class GroupingNotifier
 
     return Time.zone.now < Time.at(enqueued_at + notify_after)
   end
-
-  # def send_email_later
-  #   Rails.logger.info("Delaying notification for grouping #{grouping.id}")
-  #   GroupingNotifier.delay_for(DEBOUNCE_DELAY).notify(grouping.id) unless Rails.env.test?
-  # end
 end

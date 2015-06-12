@@ -3,8 +3,8 @@
   %ul.filter#states
     %li
       =label_tag do
-        = check_box_tag "#{prefix}[state][]", 'active', filter_set.checked?(:state, 'active')
-        Active
+        = check_box_tag "#{prefix}[state][]", 'unacknowledged', filter_set.checked?(:state, 'unacknowledged')
+        Unacknowledged
     %li
       =label_tag do
         = check_box_tag "#{prefix}[state][]", 'muffled', filter_set.checked?(:state, 'muffled')

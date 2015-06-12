@@ -177,7 +177,7 @@ describe Grouping do
   describe "#open?" do
     subject {grouping}
 
-    context "with an active wat" do
+    context "with an unacknowledged wat" do
       let(:grouping) {groupings(:grouping1)}
       it {is_expected.to be_open}
     end

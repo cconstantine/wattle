@@ -14,30 +14,30 @@ class Grouping < ActiveRecord::Base
   has_many :grouping_owners, dependent: :destroy
   has_many :owners, through: :grouping_owners, source: :watcher
 
-  state_machine :state, initial: :active do
-    state :active, :resolved, :wontfix, :muffled
+  state_machine :state, initial: :unacknowledged do
+    state :unacknowledged, :resolved, :wontfix, :muffled
 
     event :activate do
-      transition [:resolved, :wontfix, :muffled] => :active
+      transition [:resolved, :wontfix, :muffled] => :unacknowledged
     end
 
     event :resolve do
-      transition [:wontfix, :active, :muffled] => :resolved
+      transition [:wontfix, :unacknowledged, :muffled] => :resolved
     end
 
     event :wontfix do
-      transition [:active, :muffled] => :wontfix
+      transition [:unacknowledged, :muffled] => :wontfix
     end
 
     event :muffle do
-      transition [:wontfix, :active] => :muffled
+      transition [:wontfix, :unacknowledged] => :muffled
     end
 
     after_transition any => any, :do => :reindex
   end
 
   scope :open,          -> {where.not(state: :resolved)}
-  scope :active,        -> {where(state: :active)}
+  scope :unacknowledged,        -> {where(state: :unacknowledged)}
   scope :resolved,      -> {where(state: :resolved)}
   scope :wontfix,  -> {where(state: :wontfix)}
   scope :state,         -> (state) {where(state: state)}
@@ -110,7 +110,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def open?
-    wontfix? || active? || muffled?
+    wontfix? || unacknowledged? || muffled?
   end
 
   def app_envs(filters={})
@@ -163,7 +163,7 @@ class Grouping < ActiveRecord::Base
 
   def self.get_or_create_from_wat!(wat)
     disable_search_callbacks
-    open.matching(wat).first_or_create!(wat.matching_selector.merge(state: "active", uniqueness_string: wat.uniqueness_string))
+    open.matching(wat).first_or_create!(wat.matching_selector.merge(state: "unacknowledged", uniqueness_string: wat.uniqueness_string))
   ensure
     enable_search_callbacks
   end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150408004507) do
+ActiveRecord::Schema.define(version: 20150611223203) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,11 +41,11 @@ ActiveRecord::Schema.define(version: 20150408004507) do
     t.string   "error_class",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "state",             limit: 255, default: "active", null: false
+    t.string   "state",             limit: 255, default: "unacknowledged", null: false
     t.datetime "last_emailed_at"
     t.text     "message"
     t.datetime "latest_wat_at"
-    t.string   "uniqueness_string", limit: 255,                    null: false
+    t.string   "uniqueness_string", limit: 255,                            null: false
   end
 
   add_index "groupings", ["key_line", "error_class"], name: "index_groupings_on_key_line_and_error_class", using: :btree

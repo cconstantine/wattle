@@ -35,7 +35,7 @@ class StatsController < ApplicationController
       current_date += step
     end
 
-    @active_groupings = {
+    @unacknowledged_groupings = {
       title: {
         text: 'Daily Stats',
       },
@@ -47,10 +47,10 @@ class StatsController < ApplicationController
         zoomType: 'xy'
       },
       series: [{
-                 name: 'Active Groupings',
+                 name: 'Unacknowledged Groupings',
                  data: avg_per_grouping
                }, {
-                 name: 'Active Groupings (smoothed)',
+                 name: 'Unacknowledged Groupings (smoothed)',
                  data: smoothing(avg_per_grouping)
                }]
     }

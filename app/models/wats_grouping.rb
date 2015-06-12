@@ -8,28 +8,28 @@ class WatsGrouping < ActiveRecord::Base
   before_create :set_state
 
 
-  state_machine :state, initial: :active do
-    state :active, :resolved, :wontfix, :muffled
+  state_machine :state, initial: :unacknowledged do
+    state :unacknowledged, :resolved, :wontfix, :muffled
 
     event :activate do
-      transition [:resolved, :wontfix] => :active
+      transition [:resolved, :wontfix] => :unacknowledged
     end
 
     event :resolve do
-      transition [:wontfix, :active] => :resolved
+      transition [:wontfix, :unacknowledged] => :resolved
     end
 
     event :wontfix do
-      transition :active => :wontfix
+      transition :unacknowledged => :wontfix
     end
 
     event :muffle do
-      transition [:wontfix, :active] => :muffled
+      transition [:wontfix, :unacknowledged] => :muffled
     end
   end
 
   scope :open,          -> {where.not(state: :resolved)}
-  scope :active,        -> {where(state: :active)}
+  scope :unacknowledged,        -> {where(state: :unacknowledged)}
   scope :resolved,      -> {where(state: :resolved)}
   scope :wontfix,       -> {where(state: :wontfix)}
   scope :muffled,       -> {where(state: :wontfix)}

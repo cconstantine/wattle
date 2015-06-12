@@ -34,9 +34,9 @@
 .states-and-environments-container{
   @extend .clearfix;
 
-  .active-tag {
+  .unacknowledged-tag {
     @extend .alert;
-    background-color: $active;
+    background-color: $unacknowledged;
   }
 
   .wontfix-tag {
@@ -70,9 +70,9 @@
   }
 }
 
-.group_state_active {
+.group_state_unacknowledged {
   h4 {
-    background: $active;
+    background: $unacknowledged;
   }
 }
 

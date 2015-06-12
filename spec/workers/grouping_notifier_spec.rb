@@ -128,7 +128,7 @@ describe GroupingNotifier do
           end
         end
       end
-      context "when the grouping is active" do
+      context "when the grouping is unacknowledged" do
         let(:grouping) {groupings(:grouping1)}
         it {is_expected.to be_needs_notifying}
 
