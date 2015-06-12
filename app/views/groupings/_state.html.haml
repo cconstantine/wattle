@@ -5,7 +5,7 @@
     = link_to "Won't Fix", wontfix_grouping_path(group), method: :post, class: "btn btn-default"
 
   - if group.unacknowledged? || group.wontfix?
-    = link_to "Muffle", muffle_grouping_path(group), method: :post, class: "btn btn-warning"
+    = link_to "Acknowledge", acknowledge_grouping_path(group), method: :post, class: "btn btn-warning"
 
   - unless group.resolved?
     = link_to "Resolve", resolve_grouping_path(group), method: :post, class: "btn btn-success"

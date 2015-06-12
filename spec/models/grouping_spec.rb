@@ -189,8 +189,8 @@ describe Grouping do
       let(:grouping) {groupings(:resolved)}
       it {is_expected.to_not be_open}
     end
-    context "with a muffled wat" do
-      let(:grouping) {groupings(:muffled)}
+    context "with a acknowledged wat" do
+      let(:grouping) {groupings(:acknowledged)}
       it {is_expected.to be_open}
     end
   end

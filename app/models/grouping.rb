@@ -15,22 +15,22 @@ class Grouping < ActiveRecord::Base
   has_many :owners, through: :grouping_owners, source: :watcher
 
   state_machine :state, initial: :unacknowledged do
-    state :unacknowledged, :resolved, :wontfix, :muffled
+    state :unacknowledged, :resolved, :wontfix, :acknowledged
 
     event :activate do
-      transition [:resolved, :wontfix, :muffled] => :unacknowledged
+      transition [:resolved, :wontfix, :acknowledged] => :unacknowledged
     end
 
     event :resolve do
-      transition [:wontfix, :unacknowledged, :muffled] => :resolved
+      transition [:wontfix, :unacknowledged, :acknowledged] => :resolved
     end
 
     event :wontfix do
-      transition [:unacknowledged, :muffled] => :wontfix
+      transition [:unacknowledged, :acknowledged] => :wontfix
     end
 
-    event :muffle do
-      transition [:wontfix, :unacknowledged] => :muffled
+    event :acknowledge do
+      transition [:wontfix, :unacknowledged] => :acknowledged
     end
 
     after_transition any => any, :do => :reindex
@@ -110,7 +110,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def open?
-    wontfix? || unacknowledged? || muffled?
+    wontfix? || unacknowledged? || acknowledged?
   end
 
   def app_envs(filters={})

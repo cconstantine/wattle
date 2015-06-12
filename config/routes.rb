@@ -51,7 +51,7 @@ Wattle::Application.routes.draw do
       post :resolve
       post :wontfix
       post :activate
-      post :muffle
+      post :acknowledge
     end
   end
 

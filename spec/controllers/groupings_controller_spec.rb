@@ -94,9 +94,9 @@ describe GroupingsController, versioning: true, :type => :controller do
 
       end
 
-      context "when it is muffled with a note" do
+      context "when it is acknowledged with a note" do
         before do
-          grouping.muffle!
+          grouping.acknowledge!
           grouping.notes.create!(watcher: watcher, message: "Derpy dper dperkjdf")
         end
 
@@ -208,13 +208,13 @@ describe GroupingsController, versioning: true, :type => :controller do
     end
   end
 
-  describe "POST #muffle" do
+  describe "POST #acknowledge" do
     let(:wat) { grouping.wats.first }
     let(:grouping) { groupings(:grouping2) }
 
     subject do
       @request.env['HTTP_REFERER'] = '/something'
-      post :muffle, id: grouping.to_param
+      post :acknowledge, id: grouping.to_param
     end
 
 
@@ -229,8 +229,8 @@ describe GroupingsController, versioning: true, :type => :controller do
       end
 
       it { should redirect_to '/something' }
-      it "should muffle the grouping" do
-        expect { subject }.to change { grouping.reload.muffled? }.from(false).to(true)
+      it "should acknowledge the grouping" do
+        expect { subject }.to change { grouping.reload.acknowledged? }.from(false).to(true)
       end
     end
   end

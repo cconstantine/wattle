@@ -48,8 +48,8 @@ class GroupingsController < ApplicationController
     redirect_to request.referer
   end
 
-  def muffle
-    @grouping.muffle!
+  def acknowledge
+    @grouping.acknowledge!
     redirect_to request.referer
   end
 

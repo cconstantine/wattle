@@ -110,8 +110,8 @@ describe GroupingNotifier do
         let(:grouping) {groupings(:wontfix)}
         it {is_expected.to_not be_needs_notifying}
       end
-      context "when the grouping is muffled" do
-        let(:grouping) {groupings(:muffled)}
+      context "when the grouping is acknowledged" do
+        let(:grouping) {groupings(:acknowledged)}
 
         context "with 1000 wats per hour in the last weeks" do
           before { allow(grouping_notifier).to receive(:similar_wats_per_hour_in_previous_weeks) { 1000 } }

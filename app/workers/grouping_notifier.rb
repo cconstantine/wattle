@@ -43,8 +43,8 @@ class GroupingNotifier
     return false if sidekiq_and_too_new?
     return false if grouping.app_envs.include? 'honeypot'
     return false if grouping.is_javascript? && js_wats_per_hour_in_previous_weeks > js_wats_in_previous_day / 2
-    return false if grouping.muffled? && similar_wats_per_hour_in_previous_weeks > similar_wats_in_previous_day / 2
-    (grouping.unacknowledged? || grouping.muffled?) && (grouping.last_emailed_at.nil? || grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?)
+    return false if grouping.acknowledged? && similar_wats_per_hour_in_previous_weeks > similar_wats_in_previous_day / 2
+    (grouping.unacknowledged? || grouping.acknowledged?) && (grouping.last_emailed_at.nil? || grouping.wats.where("wats.created_at > ?", grouping.last_emailed_at).any?)
   end
 
   def similar_wats_per_hour_in_previous_weeks()

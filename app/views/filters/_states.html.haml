@@ -7,8 +7,8 @@
         Unacknowledged
     %li
       =label_tag do
-        = check_box_tag "#{prefix}[state][]", 'muffled', filter_set.checked?(:state, 'muffled')
-        Muffled
+        = check_box_tag "#{prefix}[state][]", 'acknowledged', filter_set.checked?(:state, 'acknowledged')
+        Acknowledged
     %li
       =label_tag do
         = check_box_tag "#{prefix}[state][]", 'wontfix', filter_set.checked?(:state, 'wontfix')

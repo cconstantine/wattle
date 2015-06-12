@@ -5,7 +5,7 @@ describe GroupingVersion, versioning: true do
   let(:grouping) {groupings :grouping1}
 
   describe "#create" do
-    subject {grouping.muffle! }
+    subject {grouping.acknowledge! }
     it "should make a stream_event" do
       expect {subject}.to change {StreamEvent.count}.by 1
     end

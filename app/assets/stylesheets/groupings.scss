@@ -49,9 +49,9 @@
     background-color: $resolved;
   }
 
-  .muffled-tag {
+  .acknowledged-tag {
     @extend .alert;
-    background-color: $muffled;
+    background-color: $acknowledged;
   }
 
   .alert {
@@ -76,9 +76,9 @@
   }
 }
 
-.group_state_muffled {
+.group_state_acknowledged {
   h4 {
-    background: $muffled;
+    background: $acknowledged;
   }
 }
 
