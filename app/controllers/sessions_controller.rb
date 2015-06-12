@@ -9,6 +9,10 @@ class SessionsController < ApplicationController
     render text: "Unable to find or create user"
   end
 
+  def delete
+    session.destroy
+    redirect_to root_path
+  end
   protected
 
   def auth_hash

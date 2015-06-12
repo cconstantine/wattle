@@ -11,7 +11,8 @@ feature "Filtering the wat groupings" do
 
   it "lets a user save default page filters" do
     visit root_path
-    first(".settings_link").click
+    click_on "Jim Bob"
+    click_on "Settings"
 
     within ".watcher_default_filter_fields" do
       expect(page.find(:checkbox, "ruby")).to_not be_checked
@@ -43,7 +44,9 @@ feature "Filtering the wat groupings" do
 
   it "lets a user save default email filters" do
     visit root_path
-    first(".settings_link").click
+
+    click_on "Jim Bob"
+    click_on "Settings"
 
     within ".watcher_email_filter_fields" do
       expect(page.find(:checkbox, "javascript")).to_not be_checked
@@ -69,7 +72,9 @@ feature "Filtering the wat groupings" do
 
   it "lets a user save default email and page filters" do
     visit root_path
-    first(".settings_link").click
+
+    click_on "Jim Bob"
+    click_on "Settings"
 
     within ".watcher_default_filter_fields" do
       expect(page.find(:checkbox, "ruby")).to_not be_checked

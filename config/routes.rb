@@ -59,5 +59,6 @@ Wattle::Application.routes.draw do
   end
 
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
+  match '/auth', to: 'sessions#delete', via: [:delete]
 
 end

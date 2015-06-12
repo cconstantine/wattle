@@ -41,6 +41,12 @@ feature "Interacting with wats", js: true, :type => :feature do
       expect(page).to have_content "RuntimeError"
     end
 
+    scenario "lets you log out" do
+      click_on "Jim Bob"
+      click_on "Logout"
+      expect(page).to have_content "Sign In"
+    end
+
     context "viewing a grouping" do
       let(:grouping) {groupings(:grouping1)}
       before do
