@@ -9,30 +9,30 @@ class WatsGrouping < ActiveRecord::Base
 
 
   state_machine :state, initial: :unacknowledged do
-    state :unacknowledged, :resolved, :wontfix, :acknowledged
+    state :unacknowledged, :resolved, :deprioritized, :acknowledged
 
     event :activate do
-      transition [:resolved, :wontfix] => :unacknowledged
+      transition [:resolved, :deprioritized] => :unacknowledged
     end
 
     event :resolve do
-      transition [:wontfix, :unacknowledged] => :resolved
+      transition [:deprioritized, :unacknowledged] => :resolved
     end
 
-    event :wontfix do
-      transition :unacknowledged => :wontfix
+    event :deprioritized do
+      transition :unacknowledged => :deprioritized
     end
 
     event :acknowledge do
-      transition [:wontfix, :unacknowledged] => :acknowledged
+      transition [:deprioritized, :unacknowledged] => :acknowledged
     end
   end
 
   scope :open,          -> {where.not(state: :resolved)}
   scope :unacknowledged,        -> {where(state: :unacknowledged)}
   scope :resolved,      -> {where(state: :resolved)}
-  scope :wontfix,       -> {where(state: :wontfix)}
-  scope :acknowledged,       -> {where(state: :wontfix)}
+  scope :deprioritized,       -> {where(state: :deprioritized)}
+  scope :acknowledged,       -> {where(state: :deprioritized)}
 
 
   def set_state

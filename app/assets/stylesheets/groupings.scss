@@ -39,9 +39,9 @@
     background-color: $unacknowledged;
   }
 
-  .wontfix-tag {
+  .deprioritized-tag {
     @extend .alert;
-    background-color: $wontfix;
+    background-color: $deprioritized;
   }
 
   .resolved-tag {
@@ -87,9 +87,9 @@
     background: $resolved;
   }
 }
-.group_listing.group_state_wontfix {
+.group_listing.group_state_deprioritized {
   h4 {
-    background: $wontfix;
+    background: $deprioritized;
   }
 }
 

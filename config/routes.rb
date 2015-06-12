@@ -49,7 +49,7 @@ Wattle::Application.routes.draw do
     member do
       get  :chart
       post :resolve
-      post :wontfix
+      post :deprioritize
       post :activate
       post :acknowledge
     end

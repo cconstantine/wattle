@@ -273,7 +273,7 @@ describe Wat do
     end
 
     context "with a state" do
-      let(:filter_params) {{state: :wontfix}}
+      let(:filter_params) {{state: :deprioritized}}
       it {should have(5).item}
     end
 
@@ -405,8 +405,8 @@ describe Wat do
       end
     end
 
-    context "with an existing wontfix duplicate error" do
-      let!(:grouping) { Grouping.where(key_line: wat.key_line, error_class: wat.error_class).first_or_create!.tap {|g| g.wontfix!} }
+    context "with an existing deprioritized duplicate error" do
+      let!(:grouping) { Grouping.where(key_line: wat.key_line, error_class: wat.error_class).first_or_create!.tap {|g| g.deprioritize!} }
 
       it "should create a grouping" do
         expect {subject}.to change {Grouping.count}.by 0

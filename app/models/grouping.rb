@@ -15,22 +15,22 @@ class Grouping < ActiveRecord::Base
   has_many :owners, through: :grouping_owners, source: :watcher
 
   state_machine :state, initial: :unacknowledged do
-    state :unacknowledged, :resolved, :wontfix, :acknowledged
+    state :unacknowledged, :resolved, :deprioritized, :acknowledged
 
     event :activate do
-      transition [:resolved, :wontfix, :acknowledged] => :unacknowledged
+      transition [:resolved, :deprioritized, :acknowledged] => :unacknowledged
     end
 
     event :resolve do
-      transition [:wontfix, :unacknowledged, :acknowledged] => :resolved
+      transition [:deprioritized, :unacknowledged, :acknowledged] => :resolved
     end
 
-    event :wontfix do
-      transition [:unacknowledged, :acknowledged] => :wontfix
+    event :deprioritize do
+      transition [:unacknowledged, :acknowledged] => :deprioritized
     end
 
     event :acknowledge do
-      transition [:wontfix, :unacknowledged] => :acknowledged
+      transition [:deprioritized, :unacknowledged] => :acknowledged
     end
 
     after_transition any => any, :do => :reindex
@@ -39,7 +39,7 @@ class Grouping < ActiveRecord::Base
   scope :open,          -> {where.not(state: :resolved)}
   scope :unacknowledged,        -> {where(state: :unacknowledged)}
   scope :resolved,      -> {where(state: :resolved)}
-  scope :wontfix,  -> {where(state: :wontfix)}
+  scope :deprioritized,  -> {where(state: :deprioritized)}
   scope :state,         -> (state) {where(state: state)}
   scope :matching, ->(wat) {language_non_distinct(wat.language).where(wat.matching_selector).recursive_distinct('groupings.id')}
   scope :filtered, ->(opts=nil) {
@@ -110,7 +110,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def open?
-    wontfix? || unacknowledged? || acknowledged?
+    deprioritized? || unacknowledged? || acknowledged?
   end
 
   def app_envs(filters={})

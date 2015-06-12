@@ -11,8 +11,8 @@
         Acknowledged
     %li
       =label_tag do
-        = check_box_tag "#{prefix}[state][]", 'wontfix', filter_set.checked?(:state, 'wontfix')
-        Won't Fix
+        = check_box_tag "#{prefix}[state][]", 'deprioritized', filter_set.checked?(:state, 'deprioritized')
+        Deprioritize
     %li
       =label_tag do
         = check_box_tag "#{prefix}[state][]", 'resolved', filter_set.checked?(:state, 'resolved')

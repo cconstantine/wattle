@@ -106,8 +106,8 @@ describe GroupingNotifier do
         let(:grouping) {groupings(:resolved)}
         it {is_expected.to_not be_needs_notifying}
       end
-      context "when the grouping is wontfix" do
-        let(:grouping) {groupings(:wontfix)}
+      context "when the grouping is deprioritized" do
+        let(:grouping) {groupings(:deprioritized)}
         it {is_expected.to_not be_needs_notifying}
       end
       context "when the grouping is acknowledged" do
@@ -185,8 +185,8 @@ describe GroupingNotifier do
     context "when the grouping was not notified recently" do
       before { grouping.update_column(:last_emailed_at, 1.day.ago)}
       it {is_expected.to be_truthy}
-      context "with a wontfix grouping" do
-        let(:grouping) {groupings(:wontfix)}
+      context "with a deprioritized grouping" do
+        let(:grouping) {groupings(:deprioritized)}
 
         it {is_expected.to be_falsey}
       end

@@ -77,10 +77,10 @@ FixtureBuilder.configure do |fbuilder|
 
     @resolved.resolve!
 
-    @wontfix = 5.times.map do |i|
+    @deprioritized = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}
     end.first.groupings.first
-    @wontfix.wontfix!
+    @deprioritized.deprioritize!
 
     @acknowledged = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}

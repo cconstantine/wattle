@@ -136,15 +136,15 @@ describe Grouping do
     end
 
     context "with a state" do
-      let(:filter_params) {{state: :wontfix}}
+      let(:filter_params) {{state: :deprioritized}}
       it {is_expected.to have(1).item}
       context "with an app_name" do
-        let(:filter_params) {{state: :wontfix, app_name: :app1}}
+        let(:filter_params) {{state: :deprioritized, app_name: :app1}}
         it {is_expected.to have(1).item}
       end
 
       context "with an app_env" do
-        let(:filter_params) {{state: :wontfix, app_env: :production}}
+        let(:filter_params) {{state: :deprioritized, app_env: :production}}
         it {is_expected.to have(1).item}
       end
 
@@ -181,8 +181,8 @@ describe Grouping do
       let(:grouping) {groupings(:grouping1)}
       it {is_expected.to be_open}
     end
-    context "with a wontfix wat" do
-      let(:grouping) {groupings(:wontfix)}
+    context "with a deprioritized wat" do
+      let(:grouping) {groupings(:deprioritized)}
       it {is_expected.to be_open}
     end
     context "with a resolved wat" do

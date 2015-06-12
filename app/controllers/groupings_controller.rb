@@ -43,8 +43,8 @@ class GroupingsController < ApplicationController
     redirect_to request.referer
   end
 
-  def wontfix
-    @grouping.wontfix!
+  def deprioritize
+    @grouping.deprioritize!
     redirect_to request.referer
   end
 

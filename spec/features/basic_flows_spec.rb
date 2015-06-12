@@ -44,7 +44,7 @@ feature "Interacting with wats", js: true, :type => :feature do
     context "viewing a grouping" do
       let(:grouping) {groupings(:grouping1)}
       before do
-        visit grouping_path(grouping, filters: {state: ["unacknowledged", "resolved", "wontfix", "acknowledged"]})
+        visit grouping_path(grouping, filters: {state: ["unacknowledged", "resolved", "deprioritized", "acknowledged"]})
       end
 
       scenario "clicking on the header takes you to the exception" do
@@ -64,10 +64,10 @@ feature "Interacting with wats", js: true, :type => :feature do
 
       scenario "acknowledging" do
         within ".states" do
-          click_on "Won't Fix"
+          click_on "Deprioritize"
         end
         within ".current_state" do
-          expect(page).to have_content "Wontfix"
+          expect(page).to have_content "Deprioritized"
         end
       end
 

@@ -142,13 +142,13 @@ describe GroupingsController, versioning: true, :type => :controller do
     end
   end
 
-  describe "POST #wontfix" do
+  describe "POST #deprioritize" do
     let(:wat) { grouping.wats.first }
     let(:grouping) { groupings(:grouping2) }
 
     subject do
       @request.env['HTTP_REFERER'] = '/something'
-      post :wontfix, id: grouping.to_param
+      post :deprioritize, id: grouping.to_param
     end
 
     context "when logged in" do
@@ -163,11 +163,11 @@ describe GroupingsController, versioning: true, :type => :controller do
 
       it { should redirect_to '/something' }
       it "should resolve the grouping" do
-        expect { subject }.to change { grouping.reload.wontfix? }.from(false).to(true)
+        expect { subject }.to change { grouping.reload.deprioritized? }.from(false).to(true)
       end
 
-      context "with a wontfix grouping" do
-        let(:grouping) { groupings(:wontfix) }
+      context "with a deprioritized grouping" do
+        let(:grouping) { groupings(:deprioritized) }
         it "should raise and error" do
           expect { subject }.to raise_error StateMachine::InvalidTransition
         end
@@ -177,7 +177,7 @@ describe GroupingsController, versioning: true, :type => :controller do
 
   describe "POST #activate" do
     let(:wat) { grouping.wats.first }
-    let(:grouping) { groupings(:wontfix) }
+    let(:grouping) { groupings(:deprioritized) }
 
     subject do
       @request.env['HTTP_REFERER'] = '/something'
@@ -199,7 +199,7 @@ describe GroupingsController, versioning: true, :type => :controller do
         expect { subject }.to change { grouping.reload.unacknowledged? }.from(false).to(true)
       end
 
-      context "with a wontfix grouping" do
+      context "with a deprioritized grouping" do
         let(:grouping) { groupings(:grouping1) }
         it "should raise and error" do
           expect { subject }.to raise_error StateMachine::InvalidTransition

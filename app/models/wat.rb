@@ -32,10 +32,10 @@ class Wat < ActiveRecord::Base
     running_scope
   }
 
-  scope :open,          -> {joins(:groupings).where("groupings.state" => [:wontfix, :unacknowledged]) }
+  scope :open,          -> {joins(:groupings).where("groupings.state" => [:deprioritized, :unacknowledged]) }
   scope :unacknowledged,        -> {joins(:groupings).where("groupings.state" => :unacknowledged)}
   scope :resolved,      -> {joins(:groupings).where("groupings.state" => :resolved)}
-  scope :wontfix,       -> {joins(:groupings).where("groupings.state" => :wontfix)}
+  scope :deprioritized,       -> {joins(:groupings).where("groupings.state" => :deprioritized)}
 
   scope :after, -> (start_time) {where('wats.captured_at > ?', start_time)}
   scope :language, -> (language) {where(language: language)}
