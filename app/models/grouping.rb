@@ -81,7 +81,7 @@ class Grouping < ActiveRecord::Base
       app_name: wats.first.app_name,
       app_env: wats.group(:app_env).count.keys,
       language: wats.first.language,
-      user_emails: app_user_stats(filters: {}, key_name: :email,  limit: 1000).keys#  wats.limit(100).pluck('distinct wats.app_user -> \'email\'').join(' ')
+      user_emails: app_user_stats(filters: {}, key_name: :email,  limit: 1000).keys
     }
   end
 

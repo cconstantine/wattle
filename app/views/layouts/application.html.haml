@@ -32,7 +32,6 @@
       #bs-example-navbar-collapse-1.collapse.navbar-collapse
         %ul.nav.navbar-nav
           %li= link_to "Reports", groupings_path(params.slice(:utf8, :filters))
-          %li= link_to "Stats", stats_path(params.slice(:utf8, :filters))
           %li= link_to "Watchers", watchers_path(params.slice(:utf8, :filters))
           %li= link_to "Settings", watcher_path(current_user, params.slice(:utf8, :filters))
         %ul.navbar-right.nav.navbar-nav
