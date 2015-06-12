@@ -37,10 +37,10 @@ $grey: #90A3AD;
 $light-blue: #73D0FA;
 $blue: #03A9F4;
 
-$unacknowledged: $light-blue;
-$deprioritized: $orange;
+$unacknowledged: $orange;
+$deprioritized: $grey;
 $resolved: $green;
-$acknowledged: $grey;
+$acknowledged: $light-blue;
 
 
 /* ::Opacity */
@@ -55,17 +55,20 @@ $acknowledged: $grey;
 /* Bootstrap Overrides */
 
 .btn-primary {
-  background-color: $blue;
+  background-color: $acknowledged;
   border: none;
 }
 
 .btn-warning {
-  background-color: $orange;
+  background-color: $acknowledged;
   border: none;
+  &:hover {
+    background-color: darken($acknowledged, 25%);
+  }
 }
 
 .btn-success {
-  background-color: $green;
+  background-color: $resolved;
   border: none;
 }
 

@@ -31,7 +31,14 @@
       / Collect the nav links, forms, and other content for toggling
       #bs-example-navbar-collapse-1.collapse.navbar-collapse
         %ul.nav.navbar-nav
-          %li= link_to "Reports", groupings_path(params.slice(:utf8, :filters))
+          %li{class: ("active" if (params[:state].blank? || params[:state] == 'unacknowledged'))}
+            =link_to "Unacknowledged", groupings_state_path({state: :unacknowledged}.merge params.slice(:utf8, :filters))
+          %li{class: ("active" if params[:state] == 'acknowledged')}
+            = link_to "Acknowledged", groupings_state_path({state: :acknowledged}.merge params.slice(:utf8, :filters))
+          %li{class: ("active" if params[:state] == 'deprioritized')}
+            = link_to "Deprioritized", groupings_state_path({state: :deprioritized}.merge params.slice(:utf8, :filters))
+          %li{class: ("active" if params[:state] == 'resolved')}
+            = link_to "Resolved", groupings_state_path({state: :resolved}.merge params.slice(:utf8, :filters))
 
         %ul.navbar-right.nav.navbar-nav
           %li.dropdown

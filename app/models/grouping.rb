@@ -42,7 +42,6 @@ class Grouping < ActiveRecord::Base
     opts ||= {}
 
     running_scope = self
-    running_scope = running_scope.state(opts[:state])       if opts[:state]
     running_scope = running_scope.app_name_non_distinct(opts[:app_name]) if opts[:app_name]
     running_scope = running_scope.app_env_non_distinct(opts[:app_env])   if opts[:app_env]
     running_scope = running_scope.language_non_distinct(opts[:language]) if opts[:language]
@@ -92,7 +91,6 @@ class Grouping < ActiveRecord::Base
       # raise search_query.inspect
 
       wheres = {}
-      wheres[:state] = filters[:state] if filters[:state]
       wheres[:app_env] = filters[:app_env] if filters[:app_env]
       wheres[:app_name] = filters[:app_name] if filters[:app_name]
       wheres[:language] = filters[:language] if filters[:language]
@@ -198,15 +196,6 @@ class Grouping < ActiveRecord::Base
   def self.rescore
     Grouping.find_each do |grouping|
       grouping.rescore!
-    end
-  end
-
-  def rescore!
-    transaction do
-      self.wats.where("wats_groupings.state != ?", :resolved).find_each do |wat|
-        self.upvote wat.created_at
-      end
-      self.save!
     end
   end
 

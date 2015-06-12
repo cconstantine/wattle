@@ -1,11 +1,10 @@
 class GroupingsController < ApplicationController
   respond_to :html
 
-  before_filter :load_group, except: [:index, :index_chart]
+  before_filter :load_group, except: :index
 
   def index
-    @groupings = Grouping.filtered_by_params(filters, page: params[:page])
-
+    @groupings = Grouping.state(params[:state] || :unacknowledged).filtered_by_params(filters, page: params[:page])
 
     respond_with(@groupings)
   end

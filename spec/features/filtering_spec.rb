@@ -18,10 +18,6 @@ feature "Filtering the wat groupings" do
       expect(page.find(:checkbox, "ruby")).to_not be_checked
       check "ruby"
       expect(page.find(:checkbox, "ruby")).to be_checked
-
-      expect(page.find(:checkbox, "Resolved")).to_not be_checked
-      check "Resolved"
-      expect(page.find(:checkbox, "Resolved")).to be_checked
     end
 
     click_button "Save"
@@ -32,7 +28,6 @@ feature "Filtering the wat groupings" do
 
     within ".page_filters" do
       expect(page.find(:checkbox, "ruby")).to be_checked
-      expect(page.find(:checkbox, "Resolved")).to be_checked
     end
 
     # Make sure emails go out appropriately when a new wat comes in
@@ -80,10 +75,6 @@ feature "Filtering the wat groupings" do
       expect(page.find(:checkbox, "ruby")).to_not be_checked
       check "ruby"
       expect(page.find(:checkbox, "ruby")).to be_checked
-
-      expect(page.find(:checkbox, "Resolved")).to_not be_checked
-      check "Resolved"
-      expect(page.find(:checkbox, "Resolved")).to be_checked
     end
 
     within ".watcher_email_filter_fields" do
@@ -103,7 +94,6 @@ feature "Filtering the wat groupings" do
 
     within ".watcher_default_filter_fields" do
       expect(page.find(:checkbox, "ruby")).to be_checked
-      expect(page.find(:checkbox, "Resolved")).to be_checked
     end
 
     # Make sure emails go out appropriately when a new wat comes in

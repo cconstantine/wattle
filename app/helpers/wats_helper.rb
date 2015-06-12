@@ -1,6 +1,6 @@
 module WatsHelper
   def wat_heading(wat)
-    return (wat.message || "Unknown" )unless wat.error_class
+    return (wat.message || "Unknown" ) unless wat.error_class
     wat.error_class.gsub("::", ":: ")
   end
 

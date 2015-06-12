@@ -30,6 +30,7 @@ Wattle::Application.routes.draw do
   get '/create/wat' => 'wats#create'
 
   get '/aggregate_wats/:scale', to: "aggregate_wats#periodic"
+  get "/groupings/:state", to: "groupings#index", as: :groupings_state, constraints: { :state => /[a-zA-Z]+/ }
 
   resources :grouping_unsubscribes, only: :destroy
   resources :groupings do
@@ -46,7 +47,6 @@ Wattle::Application.routes.draw do
     resources :wats, only: [:show, :index]
 
     member do
-      get  :chart
       post :resolve
       post :deprioritize
       post :acknowledge

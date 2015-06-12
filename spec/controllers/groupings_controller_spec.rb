@@ -33,8 +33,31 @@ describe GroupingsController, versioning: true, :type => :controller do
 
         it "should include unfiltered groupings" do
           subject
-          expect(assigns[:groupings].to_a).to have(Grouping.filtered(ApplicationController::DEFAULT_FILTERS).count).items
+          expect(assigns[:groupings].to_a).to have(Grouping.state(:unacknowledged).filtered(ApplicationController::DEFAULT_FILTERS).count).items
           expect(assigns[:groupings].to_a.map(&:app_envs).flatten.uniq).to match_array ['demo', 'production', 'staging']
+        end
+
+        context "states" do
+          context "without a stated state" do
+            it "it only gives wats in 'unacknowledged'" do
+              subject
+              expect(assigns[:groupings].to_a.map(&:state).uniq).to eq ["unacknowledged"]
+            end
+          end
+          context "with unacknowledged selected" do
+            let(:params) {{state: :unacknowledged}}
+            it "it only gives wats in 'unacknowledged'" do
+              subject
+              expect(assigns[:groupings].to_a.map(&:state).uniq).to eq ["unacknowledged"]
+            end
+          end
+          context "with resolved selected" do
+            let(:params) {{state: :resolved}}
+            it "it only gives wats in 'unacknowledged'" do
+              subject
+              expect(assigns[:groupings].to_a.map(&:state).uniq).to eq ["resolved"]
+            end
+          end
         end
 
         context "filtered" do
@@ -52,8 +75,7 @@ describe GroupingsController, versioning: true, :type => :controller do
         end
         context "ordering" do
           subject { get :index, order: order }
-          let(:newest) { Grouping.wat_order.reverse.first }
-
+          let(:newest) { Grouping.state(:unacknowledged).wat_order.reverse.first }
 
           context "without a specified order, page is new" do
             let(:order) { nil }

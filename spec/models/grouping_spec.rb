@@ -134,21 +134,6 @@ describe Grouping do
       let(:filter_params) {{hostname: ["host1", "host2"]}}
       it {is_expected.to have(2).items}
     end
-
-    context "with a state" do
-      let(:filter_params) {{state: :deprioritized}}
-      it {is_expected.to have(1).item}
-      context "with an app_name" do
-        let(:filter_params) {{state: :deprioritized, app_name: :app1}}
-        it {is_expected.to have(1).item}
-      end
-
-      context "with an app_env" do
-        let(:filter_params) {{state: :deprioritized, app_env: :production}}
-        it {is_expected.to have(1).item}
-      end
-
-    end
   end
 
   describe "#get_or_create_from_wat!" do
