@@ -62,7 +62,7 @@ feature "Interacting with wats", js: true, :type => :feature do
         end
       end
 
-      scenario "acknowledging" do
+      scenario "deprioritizing" do
         within ".states" do
           click_on "Deprioritize"
         end
@@ -71,7 +71,7 @@ feature "Interacting with wats", js: true, :type => :feature do
         end
       end
 
-      scenario "muffling" do
+      scenario "acknowledging" do
         within ".states" do
           click_on "Acknowledge"
         end
@@ -92,13 +92,13 @@ feature "Interacting with wats", js: true, :type => :feature do
       context "with a resolved grouping" do
         let(:grouping) {groupings(:resolved)}
 
-        scenario "reactivating" do
+        scenario "unresolving" do
           within ".states" do
-            click_on "Unacknowledge"
+            click_on "Unresolve"
           end
 
           within ".current_state" do
-            expect(page).to have_content "Unacknowledged"
+            expect(page).to have_content "Acknowledged"
           end
         end
       end

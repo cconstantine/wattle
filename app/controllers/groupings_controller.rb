@@ -38,11 +38,6 @@ class GroupingsController < ApplicationController
     redirect_to request.referer
   end
 
-  def activate
-    @grouping.activate!
-    redirect_to request.referer
-  end
-
   def deprioritize
     @grouping.deprioritize!
     redirect_to request.referer

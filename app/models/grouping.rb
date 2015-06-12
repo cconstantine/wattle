@@ -17,10 +17,6 @@ class Grouping < ActiveRecord::Base
   state_machine :state, initial: :unacknowledged do
     state :unacknowledged, :resolved, :deprioritized, :acknowledged
 
-    event :activate do
-      transition [:resolved, :deprioritized, :acknowledged] => :unacknowledged
-    end
-
     event :resolve do
       transition [:deprioritized, :unacknowledged, :acknowledged] => :resolved
     end
@@ -30,7 +26,7 @@ class Grouping < ActiveRecord::Base
     end
 
     event :acknowledge do
-      transition [:deprioritized, :unacknowledged] => :acknowledged
+      transition [:deprioritized, :unacknowledged, :resolved] => :acknowledged
     end
 
     after_transition any => any, :do => :reindex

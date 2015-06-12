@@ -1,11 +1,11 @@
 .states.pull-right
-  - if !group.unacknowledged?
-    = link_to "Unacknowledge", activate_grouping_path(group), method: :post, class: "btn btn-primary"
-  - else
+  - unless group.deprioritized? || group.resolved?
     = link_to "Deprioritize", deprioritize_grouping_path(group), method: :post, class: "btn btn-default"
 
   - if group.unacknowledged? || group.deprioritized?
     = link_to "Acknowledge", acknowledge_grouping_path(group), method: :post, class: "btn btn-warning"
 
-  - unless group.resolved?
+  - if group.resolved?
+    = link_to "Unresolve", acknowledge_grouping_path(group), method: :post, class: "btn btn-default"
+  - else
     = link_to "Resolve", resolve_grouping_path(group), method: :post, class: "btn btn-success"

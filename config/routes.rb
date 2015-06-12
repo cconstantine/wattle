@@ -50,7 +50,6 @@ Wattle::Application.routes.draw do
       get  :chart
       post :resolve
       post :deprioritize
-      post :activate
       post :acknowledge
     end
   end

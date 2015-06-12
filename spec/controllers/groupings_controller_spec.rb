@@ -175,39 +175,6 @@ describe GroupingsController, versioning: true, :type => :controller do
     end
   end
 
-  describe "POST #activate" do
-    let(:wat) { grouping.wats.first }
-    let(:grouping) { groupings(:deprioritized) }
-
-    subject do
-      @request.env['HTTP_REFERER'] = '/something'
-      post :activate, id: grouping.to_param
-    end
-
-    context "when logged in" do
-      before do
-        login watcher
-      end
-
-      it "should save the papertrail" do
-        expect { subject }.to change { grouping.versions.count }.by 1
-        expect(grouping.reload.versions.last.watcher).to eq watcher
-      end
-
-      it { should redirect_to '/something' }
-      it "should resolve the grouping" do
-        expect { subject }.to change { grouping.reload.unacknowledged? }.from(false).to(true)
-      end
-
-      context "with a deprioritized grouping" do
-        let(:grouping) { groupings(:grouping1) }
-        it "should raise and error" do
-          expect { subject }.to raise_error StateMachine::InvalidTransition
-        end
-      end
-    end
-  end
-
   describe "POST #acknowledge" do
     let(:wat) { grouping.wats.first }
     let(:grouping) { groupings(:grouping2) }
