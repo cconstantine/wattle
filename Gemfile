@@ -38,6 +38,7 @@ gem 'responders', '~> 2.0'
 gem 'cancancan'
 gem 'foreman'
 gem 'health_check'
+gem 'rack-timeout'
 
 group :production do
   gem 'rails_12factor'
@@ -55,6 +56,7 @@ group :test, :development do
   gem 'rr', require: false
   gem 'rspec-rails'#, "~> 2"
   gem 'fixture_builder'
+  gem 'json_spec'
 end
 
 group :test do
