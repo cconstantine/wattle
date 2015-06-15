@@ -22,7 +22,6 @@ class Wat < ActiveRecord::Base
 
   scope :filtered, ->(opts={}) {
     running_scope = all
-    running_scope = running_scope.joins(:groupings).where("groupings.state" => opts[:state]) if opts[:state]
     running_scope = running_scope.where(:app_name => opts[:app_name]) if opts[:app_name]
     running_scope = running_scope.where(:app_env  => opts[:app_env])  if opts[:app_env]
     running_scope = running_scope.where(:language => opts[:language]) if opts[:language]

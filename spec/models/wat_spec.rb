@@ -272,11 +272,6 @@ describe Wat do
       it {should have(Wat.where(app_name: :app2, app_env: "production").count).items}
     end
 
-    context "with a state" do
-      let(:filter_params) {{state: :deprioritized}}
-      it {should have(5).item}
-    end
-
     context "with a hostname" do
       let(:filter_params) {{hostname: :host1}}
       it {should have(5).item}
