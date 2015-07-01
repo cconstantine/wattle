@@ -3,7 +3,7 @@ require "spec_helper"
 shared_examples_for "the debounce enqueue method" do
 
   let(:klass) { described_class }
-  let(:grouping) {groupings(:grouping1)}
+  let!(:grouping) {groupings(:grouping1)}
 
   before do
     allow(klass).to receive(:perform_async)

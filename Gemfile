@@ -38,6 +38,7 @@ gem 'slim', ">= 1.3.0", :require => false
 gem 'sinatra', '>= 1.3.0', :require => false
 gem 'highcharts-rails'
 gem 'moment_ago'
+gem 'libv8', '=3.16.14.7'
 
 gem 'puma'
 gem 'newrelic_rpm'
