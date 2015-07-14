@@ -321,13 +321,82 @@ describe Wat do
 
   describe "#key_line" do
     subject {wat.key_line}
-    let(:wat) { wats(:default)}
 
-    it {should match /spec/ }
+    let(:wat) do
+      Wat.new(
+        language: "ruby",
+        backtrace: backtrace,
+        rails_root: rails_root
+      )
+    end
+    let(:test_prefix) { "/something/this/way/comes" }
+    let(:backtrace) {[ "#{test_prefix}/gems/path1", "#{test_prefix}/path2"]}
 
-    context "with an exception from a gem" do
-      let(:error) {capture_error {Wat.create!(:not_a_field => 1)} }
-      it {should match /spec/ }
+    context "with a rails_root" do
+      let(:rails_root) { test_prefix }
+
+      it { should eq "#{test_prefix}/gems/path1" }
+    end
+
+    context "without a rails_root" do
+      let(:rails_root) { nil }
+
+      it { should eq "#{test_prefix}/path2" }
+    end
+
+    context "when nothing is in the rails_root" do
+      let(:rails_root) { "/puppies/kittens" }
+
+      it { should eq "#{test_prefix}/gems/path1" }
+    end
+
+    context "without a backtrace" do
+      let(:backtrace) { nil }
+      let(:rails_root) { nil }
+
+      it { should eq "" }
+    end
+  end
+
+  describe "#key_line_clean" do
+    subject {wat.key_line_clean}
+
+    let(:wat) do
+      Wat.new(
+        rails_root: rails_root
+      )
+    end
+    let(:key_line) { "/foo/releases/5/something" }
+
+    before { allow(wat).to receive(:key_line) { key_line } }
+
+    context "with a rails_roots" do
+
+      context "when the rails_root matches the key_line" do
+        let(:rails_root) { "/foo/releases/5" }
+
+        it { should eq "/something" }
+      end
+
+      context "when the rails_root does not match the key_line" do
+        let(:rails_root) { "/not/our/root" }
+
+        it { should eq key_line }
+      end
+    end
+
+    context "without a rails_roots" do
+      let(:rails_root) { nil }
+
+      context "with a release path" do
+        it { should eq "/foo/something" }
+      end
+
+      context "with a non-releases path" do
+        let(:key_line) { "/our/custom/path" }
+
+        it { should eq key_line }
+      end
     end
   end
 

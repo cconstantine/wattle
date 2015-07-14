@@ -95,14 +95,24 @@ SQL
   end
 
   def key_line
-    return nil unless backtrace.present?
+    return "" unless backtrace.present?
+
     backtrace.detect do |line|
-      !EXCLUDES.any? {|e| e.match(line) }
-    end
+      if rails_root.present?
+        line.match /^#{Regexp.escape(rails_root)}/
+      else
+        !EXCLUDES.any? {|e| e.match(Regexp.escape(line)) }
+      end
+    end || backtrace.try(:first)
   end
 
   def key_line_clean
-    (key_line || backtrace.try(:first) || "").sub(/releases\/\d+\//, '')
+    if rails_root.present?
+      the_regexp = /^#{Regexp.escape(rails_root)}/
+    else
+      the_regexp = /releases\/\d+\//
+    end
+    key_line.sub(the_regexp, '')
   end
 
   def matching_selector
