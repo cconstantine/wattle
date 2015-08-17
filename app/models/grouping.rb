@@ -76,31 +76,26 @@ class Grouping < ActiveRecord::Base
       key_line: key_line,
       error_class: error_class,
       state: state,
-      message: wats.group(:message).count.keys.map {|m| m.slice(0, 32765)},
+      message: wats.group(:message).count.keys.map {|m| (m||"").slice(0, 32765)},
       app_name: wats.first.app_name,
       app_env: wats.group(:app_env).count.keys,
+      hostname: wats.group(:hostname).count.keys,
       language: wats.first.language,
-      user_emails: app_user_stats(filters: {}, key_name: :email,  limit: 1000).keys
+      user_emails: app_user_stats(filters: {}, key_name: :email,  limit: 1000).keys,
+      latest_wat_at: latest_wat_at
     }
   end
 
   def self.filtered_by_params(filters, opts={})
     search_query = filters[:search_query]
+    search_query = "*" if search_query.blank?
 
-    unless search_query.blank?
-      # raise search_query.inspect
+    wheres = {state: opts[:state]}
+    wheres[:app_env] = filters[:app_env] if filters[:app_env]
+    wheres[:app_name] = filters[:app_name] if filters[:app_name]
+    wheres[:language] = filters[:language] if filters[:language]
 
-      wheres = {}
-      wheres[:app_env] = filters[:app_env] if filters[:app_env]
-      wheres[:app_name] = filters[:app_name] if filters[:app_name]
-      wheres[:language] = filters[:language] if filters[:language]
-
-      @groupings = Grouping.search(search_query, fields: [{key_line: :text_middle}, :error_class, :message, :user_emails], where: wheres, page: opts[:page], per_page: 20)
-    else
-      @groupings = Grouping.filtered(filters)
-      @groupings = @groupings.wat_order.reverse
-      @groupings = @groupings.page(opts[:page]).per(20)
-    end
+    Grouping.search(search_query, fields: [{key_line: :text_middle}, :error_class, :message, :user_emails], where: wheres, page: opts[:page], per_page: 20, order: {latest_wat_at: :desc})
   end
 
   def open?

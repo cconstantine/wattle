@@ -4,7 +4,7 @@ class GroupingsController < ApplicationController
   before_filter :load_group, except: :index
 
   def index
-    @groupings = Grouping.state(params[:state] || :unacknowledged).filtered_by_params(filters, page: params[:page])
+    @groupings = Grouping.filtered_by_params(filters, page: params[:page], state: params[:state] || :unacknowledged)
 
     respond_with(@groupings)
   end

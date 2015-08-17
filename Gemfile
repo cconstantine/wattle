@@ -45,6 +45,8 @@ gem 'newrelic_rpm'
 
 gem 'paper_trail'
 gem 'searchkick'
+gem 'typhoeus'
+
 
 gem 'responders', '~> 2.0'
 

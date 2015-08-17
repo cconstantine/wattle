@@ -51,6 +51,7 @@ RSpec.configure do |config|
 
   config.before(:each) do |example|
     reset_mailer
+    Grouping.reindex
 
     # Clears out the jobs for tests using the fake testing
     Sidekiq::Worker.clear_all

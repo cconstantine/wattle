@@ -280,7 +280,9 @@ describe Grouping do
           :app_name,
           :app_env,
           :language,
-          :user_emails])
+          :user_emails,
+          :hostname,
+          :latest_wat_at])
     end
 
     context "with a long message" do
