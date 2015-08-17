@@ -65,11 +65,5 @@ describe Watcher do
         expect { subject }.to raise_error ActiveRecord::RecordInvalid
       end
     end
-    context "when the hash is bad" do
-      let(:auth_data) { nil }
-      it "should raise an error" do
-        expect { subject }.to raise_error
-      end
-    end
   end
 end
