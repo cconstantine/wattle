@@ -49,6 +49,7 @@ gem 'typhoeus'
 
 
 gem 'responders', '~> 2.0'
+gem 'cancancan'
 
 group :production do
   gem 'rails_12factor'

@@ -68,6 +68,42 @@ feature "Interacting with wats", js: true, :type => :feature do
         end
       end
 
+      context "with a note" do
+        let!(:note)  { grouping.notes.create!(watcher: note_author, message: "some note") }
+
+        context "written by the logged in user" do
+          let(:note_author) { Watcher.last }
+
+          scenario "destroying a note" do
+            visit grouping_path(grouping, filters: {state: ["unacknowledged", "resolved", "deprioritized", "acknowledged"]})
+
+            within "#note_#{note.id}" do
+              expect(page).to have_content "Jim Bob"
+              expect(page).to have_content "some note"
+
+              first('.delete').click
+            end
+
+            expect(page).to_not have_content "some note"
+          end
+
+        end
+        context "written by someone else" do
+          let(:note_author) { watchers(:another_watcher) }
+
+          scenario "someone else's note isn't deletable" do
+            visit grouping_path(grouping, filters: {state: ["unacknowledged", "resolved", "deprioritized", "acknowledged"]})
+
+            within "#note_#{note.id}" do
+              expect(page).to have_content note_author.name
+              expect(page).to have_content "some note"
+
+              expect(page).to_not have_css(".delete")
+            end
+          end
+        end
+      end
+
       scenario "deprioritizing" do
         within ".states" do
           click_on "Deprioritize"

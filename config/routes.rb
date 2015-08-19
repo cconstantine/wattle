@@ -42,6 +42,8 @@ Wattle::Application.routes.draw do
     resources :grouping_owners, only: :create
   end
 
+  resources :notes, only: :destroy
+
   resources :groupings do
     resources :notes, only: :create
     resources :wats, only: [:show, :index]

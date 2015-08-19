@@ -2,7 +2,7 @@ class Note < ActiveRecord::Base
   belongs_to :watcher
   belongs_to :grouping
 
-  has_one :stream_event, as: :context
+  has_one :stream_event, as: :context, dependent: :destroy
 
   after_create :create_event
 

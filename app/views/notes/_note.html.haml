@@ -1,5 +1,9 @@
-.stream-event
+.stream-event{ id: "note_#{note.id}"}
   #{ note.watcher.present? ? note.watcher.display_name : "Someone" } said:
+  - if can? :destroy, note
+    = link_to note, {method: :delete, class: 'pull-right'} do
+      .glyphicon.glyphicon-remove.delete
   =markdown note.message
   .at
     #{time_ago_in_words note.created_at} ago
+  %hr

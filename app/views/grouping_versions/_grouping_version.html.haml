@@ -3,3 +3,4 @@
   %span.state-change #{ grouping_version.reify.state } to #{(grouping_version.next.try(:reify) || grouping_version.item.reload).try(:state)}
   .at
     #{time_ago_in_words grouping_version.created_at} ago
+  %hr
