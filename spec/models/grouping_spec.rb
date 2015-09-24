@@ -103,6 +103,42 @@ describe Grouping do
     end
   end
 
+  describe "#filtered_by_params" do
+    let(:filter_params) { {} }
+    let(:filter_opts) { {} }
+
+    let(:scope) {Grouping.state(:unacknowledged)}
+
+    subject {scope.filtered_by_params(filter_params, filter_opts)}
+
+    it {is_expected.to have(scope.count).items}
+
+    context "specifying the state" do
+      let(:filter_opts) { { state: :acknowledged }}
+      it {is_expected.to have(Grouping.state(:acknowledged).count).items}
+    end
+
+    context "specifying the app_env" do
+      let(:filter_params) { { app_env: :demo }}
+      it {is_expected.to have(scope.app_env(:demo).count).items}
+    end
+    context "specifying the app_name" do
+      let(:filter_params) { { app_name: :app1 }}
+      it {is_expected.to have(scope.app_name(:app1).count).items}
+    end
+    context "specifying the language" do
+      let(:filter_params) { { language: :javascript }}
+      it {is_expected.to have(scope.language(:javascript).count).items}
+    end
+    context "specifying the hostname" do
+      let(:filter_params) { { hostname: :host2 }}
+      it {is_expected.to have(scope.by_host(:host2).count).items}
+    end
+    context "specifying the user" do
+      let(:filter_params) { { app_user: '2' }}
+      it {is_expected.to have(scope.by_user('2').count).items}
+    end
+  end
 
   describe "#filtered" do
     let(:filter_params) {{}}
@@ -282,6 +318,7 @@ describe Grouping do
           :language,
           :user_emails,
           :hostname,
+          :user_ids,
           :latest_wat_at])
     end
 

@@ -67,6 +67,7 @@ class Grouping < ActiveRecord::Base
   scope :app_name, -> (an) { app_name_non_distinct(an).recursive_distinct('groupings.id') }
   scope :language, -> (an) { language_non_distinct(an).recursive_distinct('groupings.id') }
   scope :by_user,  -> (user_id) { by_user_non_distinct(user_id).recursive_distinct('groupings.id') }
+  scope :by_host,  -> (host)    { by_host_non_distinct(host).recursive_distinct('groupings.id') }
 
   searchkick(callbacks: false, text_middle: [:key_line, :user_emails], index_name: "#{Rails.application.class.parent_name.downcase}_#{model_name.plural}_#{Rails.env.to_s}")
 
@@ -82,6 +83,7 @@ class Grouping < ActiveRecord::Base
       hostname: wats.group(:hostname).count.keys,
       language: wats.first.language,
       user_emails: app_user_stats(filters: {}, key_name: :email,  limit: 1000).keys,
+      user_ids: app_user_stats(filters: {}, key_name: :id).keys,
       latest_wat_at: latest_wat_at
     }
   end
@@ -90,12 +92,14 @@ class Grouping < ActiveRecord::Base
     search_query = filters[:search_query]
     search_query = "*" if search_query.blank?
 
-    wheres = {state: opts[:state]}
+    wheres = { state: (opts[:state]  || :unacknowledged) }
     wheres[:app_env] = filters[:app_env] if filters[:app_env]
     wheres[:app_name] = filters[:app_name] if filters[:app_name]
     wheres[:language] = filters[:language] if filters[:language]
+    wheres[:hostname] = filters[:hostname] if filters[:hostname]
+    wheres[:user_ids] = filters[:app_user] if filters[:app_user]
 
-    Grouping.search(search_query, fields: [{key_line: :text_middle}, :error_class, :message, :user_emails], where: wheres, page: opts[:page], per_page: 20, order: {latest_wat_at: :desc})
+    Grouping.search(search_query, fields: [:hostname, :user_ids, {key_line: :text_middle}, :error_class, :message, :user_emails], where: wheres, page: opts[:page], per_page: 20, order: {latest_wat_at: :desc})
   end
 
   def open?
