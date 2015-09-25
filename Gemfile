@@ -47,7 +47,6 @@ gem 'paper_trail'
 gem 'searchkick'
 gem 'typhoeus'
 
-
 gem 'responders', '~> 2.0'
 gem 'cancancan'
 
@@ -60,6 +59,9 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'quiet_assets'
+
+  gem 'capistrano', '>= 3.4.0'
+  gem 'capistrano-rails'
 end
 
 group :test, :development do
