@@ -46,6 +46,7 @@ class Wat < ActiveRecord::Base
 
   scope :distinct_users, -> {select('distinct app_user -> \'id\'')}
   scope :distinct_browsers, -> {select('distinct request_headers -> \'HTTP_USER_AGENT\'')}
+  scope :distinct_hostnames, -> {select('distinct hostname')}
 
   # See: http://zogovic.com/post/44856908222/optimizing-postgresql-query-for-distinct-values
   def self.distinct(column)

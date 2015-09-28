@@ -79,9 +79,16 @@
         .big-number
           %a.mb20{"href" => "#", "data-target" => "#browsers-affected", "data-toggle" => "modal"}
             #{ grouping.browser_count(filters: filters) }
+      .wat-card
+        .small-title
+          hosts
+        .big-number
+          %a.mb20{"href" => "#", "data-target" => "#hosts-affected", "data-toggle" => "modal"}
+            #{ grouping.host_count(filters: filters) }
 
 
 = render partial: 'urls_modal', locals: {wats: wats, grouping: grouping}
 = render partial: 'wat_chart_modal', locals: {grouping: grouping}
 = render partial: 'users_modal', locals: {grouping: grouping}
 = render partial: 'browsers_modal', locals: {grouping: grouping}
+= render partial: 'hosts_modal', locals: {grouping: grouping}
