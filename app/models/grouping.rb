@@ -140,18 +140,20 @@ class Grouping < ActiveRecord::Base
     .limit(limit).count
   end
 
-  def browser_agent_stats(filters: {}, key_name: :HTTP_USER_AGENT, limit: nil)
-    agents = Hash.new {0}
-    browser_stats(filters: filters, key_name: key_name, limit: limit).each do |browser, count|
-      agent = Agent.new(browser || "Unknown")
-      browser = "#{agent.name} #{agent.version}" if agent.name != :Unknown
-      agents[browser] += count
-    end
-    agents.sort_by {|k, v| -v}
-  end
-
   def browser_count(filters: {}, key_name: :HTTP_USER_AGENT)
     wats.filtered(filters).distinct_browsers.count
+  end
+
+
+  def host_stats(filters: {}, key_name: :HTTP_USER_AGENT, limit: nil)
+    wats.filtered(filters)
+      .group(:hostname)
+      .order("count(hostname) desc")
+      .limit(limit).count
+  end
+
+  def host_count(filters: {})
+    wats.filtered(filters).distinct_hostnames.count
   end
 
   def self.get_or_create_from_wat!(wat)

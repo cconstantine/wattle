@@ -103,6 +103,32 @@ describe Grouping do
     end
   end
 
+  describe "#host_stats" do
+    subject {grouping.host_stats()}
+    context "with no host info" do
+      let(:grouping) {groupings(:grouping4)}
+      it {is_expected.to eq( {nil => 5})}
+    end
+
+    context "with some interesting browser info" do
+      let(:grouping) {groupings(:grouping1)}
+      it {is_expected.to eq( {"host1" => 5})}
+    end
+  end
+
+  describe "#host_count" do
+    subject {grouping.host_count()}
+    context "with no host info" do
+      let(:grouping) {groupings(:grouping4)}
+      it {is_expected.to eq 0}
+    end
+
+    context "with some interesting browser info" do
+      let(:grouping) {groupings(:grouping1)}
+      it {is_expected.to eq 1}
+    end
+  end
+
   describe "#filtered_by_params" do
     let(:filter_params) { {} }
     let(:filter_opts) { {} }
