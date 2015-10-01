@@ -1,6 +1,9 @@
 workers Integer(ENV['PUMA_WORKERS'] || 3)
 threads Integer(ENV['MIN_THREADS']  || 1), Integer(ENV['MAX_THREADS'] || 16)
 
+directory  '/var/www/wattle/current'
+
+
 preload_app!
 
 rackup      DefaultRackup
