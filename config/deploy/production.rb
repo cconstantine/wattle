@@ -6,7 +6,7 @@
 # server 'example.com', user: 'deploy', roles: %w{app db web}, my_property: :my_value
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
-server "wattle-b-n1.west2.omadahealth.net", user: "deploy", roles: [:app, :web, :db, :jobs], primary: true
+server "wattle.vagrant", user: "deploy", roles: [:app, :web, :db, :jobs], primary: true
 
 
 

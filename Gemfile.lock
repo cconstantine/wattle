@@ -403,6 +403,7 @@ DEPENDENCIES
   capistrano-rails
   capybara
   coffee-rails (>= 4.0)
+  dotenv
   email_spec
   execjs
   fixture_builder
