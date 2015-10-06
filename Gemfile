@@ -50,6 +50,8 @@ gem 'typhoeus'
 gem 'responders', '~> 2.0'
 gem 'cancancan'
 
+gem 'dotenv-rails'
+
 group :production do
   gem 'rails_12factor'
 end
