@@ -51,6 +51,8 @@ gem 'typhoeus'
 gem 'responders', '~> 2.0'
 gem 'cancancan'
 
+gem 'foreman'
+
 group :production do
   gem 'rails_12factor'
 end
