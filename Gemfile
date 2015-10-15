@@ -51,6 +51,7 @@ gem 'responders', '~> 2.0'
 gem 'cancancan'
 
 gem 'dotenv-rails'
+gem 'foreman'
 
 group :production do
   gem 'rails_12factor'
