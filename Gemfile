@@ -2,19 +2,10 @@ source 'https://rubygems.org'
 
 #ruby File.read(".ruby-version").strip#'2.1.1'
 gem 'rails'#, "~> 4.2"
-
 gem 'pg'
-
 gem "haml-rails"
 gem 'jquery-rails'
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.0.1'
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-
 gem 'httpclient'
 gem 'wat_catcher'#, path: "../wat_catcher"
 gem 'kaminari'
@@ -24,7 +15,6 @@ gem 'secrets', :github => "austinfromboston/secrets"
 gem 'state_machine', :github => "seuros/state_machine"
 gem 'user-agent'
 gem 'redcarpet'
-
 gem 'sass-rails',   '>= 4.0'
 gem 'coffee-rails', '>= 4.0'
 gem 'bootstrap-sass-rails'
@@ -39,19 +29,15 @@ gem 'sinatra', '>= 1.3.0', :require => false
 gem 'highcharts-rails'
 gem 'moment_ago'
 gem 'libv8', '=3.16.14.7'
-
 gem 'puma'
 gem 'newrelic_rpm'
-
 gem 'paper_trail'
 gem 'searchkick'
 gem 'typhoeus'
-
-
 gem 'responders', '~> 2.0'
 gem 'cancancan'
-
 gem 'foreman'
+gem 'health_check'
 
 group :production do
   gem 'rails_12factor'
