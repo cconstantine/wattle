@@ -149,6 +149,8 @@ GEM
       html2haml (>= 1.0.1)
       railties (>= 4.0.1)
     hashie (3.4.2)
+    health_check (1.5.1)
+      rails (>= 2.3.0)
     highcharts-rails (4.1.8)
       railties (>= 3.1)
     hitimes (1.2.3)
@@ -370,6 +372,7 @@ DEPENDENCIES
   fixture_builder
   foreman
   haml-rails
+  health_check
   highcharts-rails
   httpclient
   jbuilder (~> 1.0.1)
