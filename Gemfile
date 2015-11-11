@@ -59,6 +59,7 @@ group :test, :development do
   gem 'rr', require: false
   gem 'rspec-rails'#, "~> 2"
   gem 'fixture_builder'
+  gem 'json_spec'
 end
 
 group :test do
