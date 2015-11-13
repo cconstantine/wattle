@@ -59,6 +59,11 @@ Wattle::Application.routes.draw do
     get :an_exception
     get :rendered_exception
   end
+  namespace :api do 
+    resources :groupings do
+      get :count_by_state, on: :collection
+    end
+  end
 
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   match '/auth', to: 'sessions#delete', via: [:delete]
