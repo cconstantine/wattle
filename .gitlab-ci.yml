@@ -4,5 +4,5 @@ before_script:
   - bundle exec rake db:create
 
 rspec:
-  test: "rspec"
+  script: "rspec"
 
