@@ -5,27 +5,4 @@ before_script:
 
 rspec:
   test: "rspec"
-  tags:
-    - ruby
-    - postgres
-  only:
-    - branches
 
-staging:
-  deploy: "cap deploy stating"
-  tags:
-    - capistrano
-    - debian
-  except:
-    - stable
-
-production:
-  deploy:
-    - cap deploy production
-    - cap notify
-  tags:
-    - capistrano
-    - debian
-  only:
-    - master
-    - /^deploy-.*$/
