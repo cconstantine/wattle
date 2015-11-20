@@ -9,5 +9,5 @@ before_script:
   - bundle exec rake db:test:prepare
 
 rspec:
-  script: "rspec"
+  script: "rspec && false"
 
