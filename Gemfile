@@ -38,10 +38,10 @@ gem 'responders', '~> 2.0'
 gem 'cancancan'
 gem 'foreman'
 gem 'health_check'
-gem 'rack-timeout'
 
 group :production do
   gem 'rails_12factor'
+  gem 'rack-timeout'
 end
 
 group :development do
