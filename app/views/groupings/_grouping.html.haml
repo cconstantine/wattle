@@ -1,12 +1,12 @@
 .row.mb20
   .col-md-7
-    - wat = grouping.wats.filtered(filters).order(:id).last
+    - wat = wats(grouping).order(:id).last
     - if wat
       %h3= wat_heading(wat)
     .states-and-environments-container.pull-left
       .current_state{class: "#{grouping.state}-tag"}
         = grouping.state.capitalize
-      - grouping.app_envs(filters).each do |app_env|
+      - grouping.app_envs().each do |app_env|
         .environments.alert
           = app_env
 

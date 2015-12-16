@@ -40,8 +40,8 @@ gem 'foreman'
 gem 'health_check'
 
 group :production do
-  gem 'rails_12factor'
   gem 'rack-timeout'
+  gem 'rails_12factor'
 end
 
 group :development do

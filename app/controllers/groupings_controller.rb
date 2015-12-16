@@ -12,7 +12,7 @@ class GroupingsController < ApplicationController
   def show
     wat_chart_values = @grouping.chart_data(filters)
     @stream_events = @grouping.stream_events.order(:happened_at)
-
+    @wats = @grouping.wats.filtered(filters)
     @chart = {
       title: {
         text: 'Daily Stats',

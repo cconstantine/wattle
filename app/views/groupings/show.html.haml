@@ -1,12 +1,18 @@
-- wats = wats(@grouping)
-- if wats.empty?
+- if @wats.empty?
   %h5 Yo man, there's too many filters to show anything anymore so you might want to filter less in your filtering
 - else
   .grouping_data
-    = render @grouping, wats: wats
+    = render @grouping, wats: @wats
 
-  - paged_wats = wats.order("captured_at desc").page(params[:page]).per(1)
-
+  - paged_wats = @wats.order("captured_at desc").page(params[:page]).per(1)
+  -#
+  -#.text
+  -#  %dt Grouping(s)
+  -#  %dd!
+  -#    - wat.groupings.order(:id).each do |grouping|
+  -#      %div
+  -#        = link_to "Grouping ##{grouping.id}", grouping_path(grouping)
+  -#        = "on #{grouping.created_at.to_date} (#{grouping.wats.count} wats)"
   .row
     .col-md-7
 

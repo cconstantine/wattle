@@ -20,7 +20,7 @@ class WatsController < ApplicationController
   skip_before_filter :verify_authenticity_token, :require_login, only: [:create, :options]
 
   def index
-    @wats = Wat.includes(:groupings).order('id desc').page(params[:page]).per(params[:per_page] || 20)
+    @wats = Wat.includes(:grouping).order('id desc').page(params[:page]).per(params[:per_page] || 20)
     respond_with(@wats)
   end
 

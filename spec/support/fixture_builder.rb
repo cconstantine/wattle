@@ -1,4 +1,3 @@
-
 FixtureBuilder.configure do |fbuilder|
   # rebuild fixtures automatically when these files change:
   fbuilder.files_to_check += Dir["spec/factories/*.rb", "spec/support/fixture_builder.rb", "app/models/*.rb"]
@@ -24,16 +23,16 @@ FixtureBuilder.configure do |fbuilder|
 
     @grouping1 = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production', hostname: :host1})  {raise RuntimeError.new( "a test")}
-    end.first.groupings.first
+    end.first.grouping
 
     @grouping2 = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production', hostname: :host2})  {raise RuntimeError.new( "a test")}
-    end.first.groupings.first
+    end.first.grouping
 
     @grouping3 = 5.times.map do |i|
       # These two need to be on the same line
       Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production', hostname: :host3})  {raise RuntimeError.new( "a test")}; Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'demo'})  {raise RuntimeError.new( "a test")}
-    end.first.groupings.first
+    end.first.grouping
 
     grouping_users = [
         { "user" => {"id" => 1 }, "browser" => nil},
@@ -46,12 +45,12 @@ FixtureBuilder.configure do |fbuilder|
     @grouping4 = grouping_users.map do |grouping_info|
       headers = { "HTTP_USER_AGENT" => grouping_info["browser"] }
       Wat.create_from_exception!(nil, {app_user: grouping_info["user"], request_headers: headers, app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}
-    end.first.groupings.first
+    end.first.grouping
 
     @claimed = 5.times.map do |i|
       # These two need to be on the same line
       Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production'})  {raise RuntimeError.new( "a test")}; Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'demo'})  {raise RuntimeError.new( "a test")}
-    end.first.groupings.first
+    end.first.grouping
 
     @with_owned_grouping = Watcher.create!(name: "Owning Watcher", first_name: "Owning Watcher", email: "test5@example.com")
 
@@ -59,32 +58,32 @@ FixtureBuilder.configure do |fbuilder|
 
     @normal_javascripts = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app2, app_env: 'production', language: :javascript})  {raise RuntimeError.new( "a test")}
-    end.first.groupings.first
+    end.first.grouping
 
     @demo_grouping = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'demo'})  {raise RuntimeError.new( "a test")}
-    end.first.groupings.first
+    end.first.grouping
 
     @staging_grouping = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app3, app_env: 'staging'})  {raise RuntimeError.new( "a test")}
-    end.first.groupings.first
+    end.first.grouping
 
 
     # Create some wats without groupings
     @resolved = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}
-    end.first.groupings.first
+    end.first.grouping
 
     @resolved.resolve!
 
     @deprioritized = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}
-    end.first.groupings.first
+    end.first.grouping
     @deprioritized.deprioritize!
 
     @acknowledged = 5.times.map do |i|
       Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production'})  {raise RuntimeError.new( "a test")}
-    end.first.groupings.first
+    end.first.grouping
     @acknowledged.acknowledge!
   end
 end

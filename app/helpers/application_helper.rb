@@ -1,7 +1,6 @@
 module ApplicationHelper
   def wats(grouping)
-    filtered = grouping.wats.filtered(filters)
-    filtered
+    grouping.wats.filtered(filters)
   end
 
   def markdown(text)

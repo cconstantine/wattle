@@ -48,13 +48,6 @@
           %dt Language
           %dd= wat.language.capitalize
 
-      .text
-        %dt Grouping(s)
-        %dd!
-          - wat.groupings.order(:id).each do |grouping|
-            %div
-              = link_to "Grouping ##{grouping.id}", grouping_path(grouping)
-              = "on #{grouping.created_at.to_date} (#{grouping.wats.count} wats)"
 
       .text
         - if wat.page_url.present?
@@ -103,7 +96,7 @@
           %dt User Filters
           %dd
             - user = wat.app_user
-            - grouping = wat.groupings.last
+            - grouping = wat.grouping
             %ul
               %li= link_to 'Filter this user', grouping_path(grouping, filters: filters.filters.merge(app_user: [user["id"]]))
 

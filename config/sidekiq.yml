@@ -1,4 +1,4 @@
-:concurrency: 25
+:concurrency: 10
 
 production:
   :pidfile: /var/www/wattle/shared/tmp/pids/sidekiq.pid
@@ -8,3 +8,4 @@ production:
   - [high, 5]
   - default
   - mailers
+  - searchkick
