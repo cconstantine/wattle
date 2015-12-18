@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 20151214220926) do
   add_index "groupings", ["message"], name: "index_groupings_on_message", using: :btree
   add_index "groupings", ["state"], name: "index_groupings_on_state", using: :btree
   add_index "groupings", ["uniqueness_string"], name: "index_groupings_on_uniqueness_string", unique: true, where: "((state)::text <> 'resolved'::text)", using: :btree
+  add_index "groupings", ["uniqueness_string"], name: "index_groupings_on_uniqueness_string_search", using: :btree
 
   create_table "notes", force: :cascade do |t|
     t.integer  "watcher_id"

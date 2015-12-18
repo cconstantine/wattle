@@ -47,6 +47,19 @@
           .pull-right
             = link_to "Permalink", grouping_path(grouping, filters.filters), class: :mb20
             .glyphicon.glyphicon-copy
+          - if Grouping.similar(@grouping).count > 1
+            %br
+            .pull-right
+              .text
+                %dt Previous Groupings
+                %dd!
+                  - Grouping.similar(@grouping).order(id: :desc).each do |grouping|
+                    - if grouping == @grouping
+                      = "---"
+                    - else
+                      %div
+                        = link_to "Grouping ##{grouping.id}", grouping_path(grouping)
+                        = "on #{grouping.created_at.to_date} (#{grouping.wats.count} wats)"
 
 .row.mb20
   .col-md-6

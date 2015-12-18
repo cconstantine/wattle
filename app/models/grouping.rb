@@ -29,6 +29,8 @@ class Grouping < ActiveRecord::Base
     after_transition any => any, :do => :reindex
   end
 
+  scope :similar, -> (grouping) { where(:uniqueness_string => grouping.uniqueness_string) }
+
   scope :open,          -> {where.not(state: :resolved)}
   scope :unacknowledged,        -> {where(state: :unacknowledged)}
   scope :resolved,      -> {where(state: :resolved)}
