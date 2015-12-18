@@ -1,4 +1,4 @@
-- wat = group.wats.filtered(filters).order(:id).last
+- wat = wats(group).order(:id).last
 %article.group_listing{class: ["group_state_#{group.state}", "group_#{group_counter}"]}
   %h4
     .incident_user_count.pull-right #{ pluralize(group.app_user_count(filters: filters), 'user') } affected

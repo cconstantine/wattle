@@ -2,20 +2,20 @@ class Wat < ActiveRecord::Base
   #before_save :clean_backtrace
   EXCLUDES = [/\/gems\//]
 
-  has_many :wats_groupings, dependent: :destroy
-  has_many :groupings, through: :wats_groupings
+  belongs_to :grouping, inverse_of: :wats
 
   before_save :cleanup_hstore_columns
   before_create :ensure_captured_at
 
-  after_create :construct_groupings!
+  before_validation :ensure_grouping!
 
   after_commit :send_email, on: :create unless Rails.env.test?
   after_create :send_email              if     Rails.env.test?
-  after_commit :reindex_groupings
+  after_commit :reindex_grouping
 
   after_create :upvote_groupings
 
+  validates :grouping, presence: true
   validates :language, inclusion: { in: %w(ruby javascript) }, allow_nil: true
   validate :request_headers_not_ignored
   validate :validate_sidekiq_job_retry_count
@@ -31,10 +31,10 @@ class Wat < ActiveRecord::Base
     running_scope
   }
 
-  scope :open,          -> {joins(:groupings).where("groupings.state" => [:deprioritized, :unacknowledged]) }
-  scope :unacknowledged,        -> {joins(:groupings).where("groupings.state" => :unacknowledged)}
-  scope :resolved,      -> {joins(:groupings).where("groupings.state" => :resolved)}
-  scope :deprioritized,       -> {joins(:groupings).where("groupings.state" => :deprioritized)}
+  scope :open,          -> {joins(:grouping).where("groupings.state" => [:deprioritized, :unacknowledged]) }
+  scope :unacknowledged,        -> {joins(:grouping).where("groupings.state" => :unacknowledged)}
+  scope :resolved,      -> {joins(:grouping).where("groupings.state" => :resolved)}
+  scope :deprioritized,       -> {joins(:grouping).where("groupings.state" => :deprioritized)}
 
   scope :after, -> (start_time) {where('wats.captured_at > ?', start_time)}
   scope :language, -> (language) {where(language: language)}
@@ -44,9 +44,9 @@ class Wat < ActiveRecord::Base
   scope :app_env,   -> (name) {where(:app_env => name) }
   scope :by_user,   -> (user_id) {where('app_user -> \'id\' in (?)', user_id)}
 
-  scope :distinct_users, -> {select('distinct app_user -> \'id\'')}
-  scope :distinct_browsers, -> {select('distinct request_headers -> \'HTTP_USER_AGENT\'')}
-  scope :distinct_hostnames, -> {select('distinct hostname')}
+  scope :distinct_users, -> {recursive_distinct('app_user -> \'id\'')}
+  scope :distinct_browsers, -> {recursive_distinct('request_headers -> \'HTTP_USER_AGENT\'')}
+  scope :distinct_hostnames, -> {recursive_distinct('hostname')}
 
   # See: http://zogovic.com/post/44856908222/optimizing-postgresql-query-for-distinct-values
   def self.distinct(column)
@@ -137,28 +137,22 @@ SQL
     return Agent.new(request_headers["HTTP_USER_AGENT"]) if request_headers.present? && request_headers["HTTP_USER_AGENT"]
   end
 
-  def construct_groupings!
-    self.groupings = (Grouping.matching(self) << Grouping.get_or_create_from_wat!(self)).uniq
+  def ensure_grouping!
+    self.grouping ||= Grouping.get_or_create_from_wat!(self)
   end
 
   def send_email
-    groupings.unacknowledged.pluck(:id).each do |grouping_id|
-      GroupingNotifier.debounce_enqueue(grouping_id, GroupingNotifier::DEBOUNCE_DELAY)
-    end
+    GroupingNotifier.debounce_enqueue(grouping_id, GroupingNotifier::DEBOUNCE_DELAY)
   end
 
-  def reindex_groupings
-    groupings.each do |grouping|
-      GroupingReindexer.debounce_enqueue(grouping.id, GroupingReindexer::DEBOUNCE_DELAY)
-    end
+  def reindex_grouping
+    GroupingReindexer.debounce_enqueue(grouping_id, GroupingReindexer::DEBOUNCE_DELAY)
   end
 
 
   def upvote_groupings
-    groupings.open.find_each do |grouping|
-      grouping.update_sorting(self.created_at)
-      grouping.save!
-    end
+    grouping.update_sorting(self.created_at)
+    grouping.save!
   end
 
   def cleanup_hstore_columns
@@ -207,5 +201,10 @@ SQL
     return unless sidekiq_msg["retry"].to_s == "true"
 
     errors.add(:sidekiq_msg) unless sidekiq_msg["retry_count"].to_i > 3
+  end
+
+  def destroy
+    super
+    grouping.destroy if grouping.wats.empty?
   end
 end

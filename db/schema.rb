@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150714205136) do
+ActiveRecord::Schema.define(version: 20151218230210) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20150714205136) do
   add_index "groupings", ["message"], name: "index_groupings_on_message", using: :btree
   add_index "groupings", ["state"], name: "index_groupings_on_state", using: :btree
   add_index "groupings", ["uniqueness_string"], name: "index_groupings_on_uniqueness_string", unique: true, where: "((state)::text <> 'resolved'::text)", using: :btree
+  add_index "groupings", ["uniqueness_string"], name: "index_groupings_on_uniqueness_string_search", using: :btree
 
   create_table "notes", force: :cascade do |t|
     t.integer  "watcher_id"
@@ -128,27 +129,19 @@ ActiveRecord::Schema.define(version: 20150714205136) do
     t.datetime "captured_at",                                       null: false
     t.text     "hostname"
     t.text     "rails_root"
+    t.integer  "grouping_id"
   end
 
   add_index "wats", ["app_env"], name: "index_wats_on_app_env", using: :btree
   add_index "wats", ["app_name"], name: "index_wats_on_app_name", using: :btree
   add_index "wats", ["app_user"], name: "wats_user_index", using: :gin
+  add_index "wats", ["captured_at", "grouping_id"], name: "index_wats_on_captured_at_and_grouping_id", using: :btree
   add_index "wats", ["captured_at"], name: "index_wats_on_captured_at", using: :btree
   add_index "wats", ["created_at"], name: "index_wats_on_created_at", using: :btree
+  add_index "wats", ["grouping_id", "app_user"], name: "index_wats_on_grouping_id_and_app_user", using: :btree
+  add_index "wats", ["grouping_id"], name: "index_wats_on_grouping_id", using: :btree
   add_index "wats", ["hostname"], name: "index_wats_on_hostname", using: :btree
+  add_index "wats", ["id", "captured_at", "grouping_id"], name: "index_wats_on_id_and_captured_at_and_grouping_id", using: :btree
   add_index "wats", ["language"], name: "index_wats_on_language", using: :btree
-
-  create_table "wats_groupings", force: :cascade do |t|
-    t.integer  "wat_id",                  null: false
-    t.integer  "grouping_id",             null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "state",       limit: 255, null: false
-  end
-
-  add_index "wats_groupings", ["grouping_id", "wat_id"], name: "index_wats_groupings_on_grouping_id_and_wat_id", unique: true, using: :btree
-  add_index "wats_groupings", ["grouping_id"], name: "index_wats_groupings_on_grouping_id", using: :btree
-  add_index "wats_groupings", ["state", "grouping_id", "wat_id"], name: "index_wats_groupings_on_state_and_grouping_id_and_wat_id", using: :btree
-  add_index "wats_groupings", ["wat_id"], name: "index_wats_groupings_on_wat_id", using: :btree
 
 end

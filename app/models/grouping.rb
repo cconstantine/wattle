@@ -1,11 +1,8 @@
 class Grouping < ActiveRecord::Base
   has_paper_trail class_name: "GroupingVersion", :only => [:state]
 
-  has_many :wats_groupings
-  has_many :open_wats_groupings, -> {self.open }, class_name: "WatsGrouping"
-  has_many :wats, through: :open_wats_groupings
-  has_many :all_wats, through: :wats_groupings
-  has_many :new_wats, ->(grouping) { grouping.last_emailed_at.present? ? where('wats.created_at > ?', grouping.last_emailed_at) : self }, class_name: "Wat", through: :wats_groupings, source: :wat
+  has_many :wats, inverse_of: :grouping
+  has_many :new_wats, ->(grouping) { grouping.last_emailed_at.present? ? where('wats.created_at > ?', grouping.last_emailed_at) : self }, class_name: "Wat", source: :wat
   has_many :notes
   has_many :stream_events
   has_many :grouping_unsubscribes, dependent: :destroy
@@ -31,6 +28,8 @@ class Grouping < ActiveRecord::Base
 
     after_transition any => any, :do => :reindex
   end
+
+  scope :similar, -> (grouping) { where(:uniqueness_string => grouping.uniqueness_string) }
 
   scope :open,          -> {where.not(state: :resolved)}
   scope :unacknowledged,        -> {where(state: :unacknowledged)}
@@ -107,11 +106,13 @@ class Grouping < ActiveRecord::Base
   end
 
   def app_envs(filters={})
-    wats.filtered(filters).select(:app_env).uniq.map &:app_env
+    wats.filtered(filters)
+        .group("app_env")
+        .order("count(app_env) desc").count.keys
   end
 
   def languages
-    wats.select(:language).uniq.map &:language
+    wats.filtered(filters).distinct(:language)
   end
 
   def is_javascript?
@@ -130,7 +131,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def app_user_count(filters: {}, key_name: :id)
-    wats.filtered(filters).distinct_users.count
+    app_user_stats(filters: filters, key_name: key_name, limit: 1000).tap do |x| x.delete nil end.size
   end
 
   def browser_stats(filters: {}, key_name: :HTTP_USER_AGENT, limit: nil)
@@ -141,7 +142,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def browser_count(filters: {}, key_name: :HTTP_USER_AGENT)
-    wats.filtered(filters).distinct_browsers.count
+    browser_stats(filters: filters, key_name: key_name, limit: 1000).tap do |x| x.delete nil end.size
   end
 
 
@@ -153,7 +154,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def host_count(filters: {})
-    wats.filtered(filters).distinct_hostnames.count
+    host_stats(filters: filters, limit: 1000).tap do |x| x.delete nil end.size
   end
 
   def self.get_or_create_from_wat!(wat)

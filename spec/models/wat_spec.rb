@@ -18,25 +18,11 @@ describe Wat do
       expect {wat.reload}.to raise_error ActiveRecord::RecordNotFound
     end
 
-    it "removes the associated wat grouping" do
-      wg = wat.wats_groupings.to_a
-      expect(wg).to_not be_empty
-
-      subject
-      wg.each do |x|
-        expect {x.reload}.to raise_error ActiveRecord::RecordNotFound
-      end
-    end
-
     it "removes the grouping if we are the last wat" do
-      groupings = wat.groupings.to_a
+      grouping = wat.grouping
       subject
-      expect(groupings).to_not be_empty
 
-      subject
-      groupings.each do |x|
-        expect {x.reload}.to raise_error ActiveRecord::RecordNotFound
-      end
+      expect {grouping.reload}.to raise_error ActiveRecord::RecordNotFound
     end
   end
 
@@ -219,7 +205,7 @@ describe Wat do
         allow(GroupingNotifier).to receive(:debounce_enqueue) {  }
         subject
 
-        expect(GroupingNotifier).to have_received(:debounce_enqueue).with wat.groupings.unacknowledged.last.id, GroupingNotifier::DEBOUNCE_DELAY
+        expect(GroupingNotifier).to have_received(:debounce_enqueue).with wat.grouping.id, GroupingNotifier::DEBOUNCE_DELAY
       end
     end
 
@@ -402,7 +388,7 @@ describe Wat do
 
   describe "construct_groupings!" do
     let(:wat) { wats(:default)}
-    subject { wat.construct_groupings! }
+    subject { wat.ensure_grouping! }
 
     context "with a brand new wat" do
       let(:wat) { Wat.new_from_exception {raise RuntimeError.new 'hi'} }
@@ -421,14 +407,14 @@ describe Wat do
 
       it "should bind to the existing grouping" do
         subject
-        expect(wat.groupings).to include(grouping)
+        expect(wat.grouping).to eq grouping
       end
       context "a javascript exception" do
         let(:wat) {wats(:javascript)}
-        let(:grouping) { wat.groupings.first }
+        let(:grouping) { wat.grouping }
         it "should bind to the existing grouping" do
           subject
-          expect(wat.groupings).to include(grouping)
+          expect(wat.grouping).to eq grouping
         end
 
       end
@@ -445,12 +431,12 @@ describe Wat do
         end
 
         before do
-          existing_wat.construct_groupings!
+          existing_wat.ensure_grouping!
         end
 
         it "should bind to the existing grouping" do
           subject
-          expect(wat.groupings).to include(existing_wat.groupings.first)
+          expect(wat.grouping).to eq existing_wat.grouping
         end
 
       end
@@ -459,13 +445,15 @@ describe Wat do
     context "with an existing resolved duplicate error" do
       let!(:grouping) { Grouping.where(key_line: wat.key_line, error_class: wat.error_class).first_or_create!.tap {|g| g.resolve!} }
 
+      before { wat.update_column(:grouping_id, nil)}
+
       it "should create a grouping" do
         expect {subject}.to change {Grouping.count}.by 1
       end
 
       it "should not bind to the existing grouping" do
         subject
-        expect(wat.groupings).to include(grouping)
+        expect(wat.grouping).to_not eq grouping
       end
     end
 
@@ -478,7 +466,7 @@ describe Wat do
 
       it "should bind to the existing grouping" do
         subject
-        expect(wat.groupings).to include(grouping)
+        expect(wat.grouping).to eq grouping
       end
     end
   end

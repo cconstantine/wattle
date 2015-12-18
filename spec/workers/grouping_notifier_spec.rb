@@ -55,7 +55,7 @@ describe GroupingNotifier do
 
     context "with a sidekiq job" do
       let(:retry_option) {true}
-      let(:grouping) {Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production', sidekiq_msg: {"retry"=>retry_option, "retry_count" => 5, "queue"=>"default", "class"=>"FailedWorker", "args"=>[], "jid"=>"7f3849342188a8b17456ab33", "enqueued_at"=>enqueued_at.to_f.to_s}}) {raise "Something"}.groupings.first}
+      let(:grouping) {Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production', sidekiq_msg: {"retry"=>retry_option, "retry_count" => 5, "queue"=>"default", "class"=>"FailedWorker", "args"=>[], "jid"=>"7f3849342188a8b17456ab33", "enqueued_at"=>enqueued_at.to_f.to_s}}) {raise "Something"}.grouping}
 
       context "the retry option is nil" do
         let(:enqueued_at) { Time.now }
@@ -86,7 +86,7 @@ describe GroupingNotifier do
       end
 
       context "with a specified notify_after" do
-        let(:grouping) {Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production', sidekiq_msg: {"retry"=>true, "retry_count" => 5, "queue"=>"default", "notify_after"=>"700", "class"=>"FailedWorker", "args"=>[], "jid"=>"7f3849342188a8b17456ab33", "enqueued_at"=>enqueued_at.to_f.to_s}}) {raise "Something"}.groupings.first}
+        let(:grouping) {Wat.create_from_exception!(nil, {app_name: :app1, app_env: 'production', sidekiq_msg: {"retry"=>true, "retry_count" => 5, "queue"=>"default", "notify_after"=>"700", "class"=>"FailedWorker", "args"=>[], "jid"=>"7f3849342188a8b17456ab33", "enqueued_at"=>enqueued_at.to_f.to_s}}) {raise "Something"}.grouping}
 
         context "grouping's wat is too recent" do
           let(:enqueued_at) { Time.now }
