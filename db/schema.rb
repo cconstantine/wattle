@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151214220926) do
+ActiveRecord::Schema.define(version: 20151218230210) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,16 +37,15 @@ ActiveRecord::Schema.define(version: 20151214220926) do
   add_index "grouping_unsubscribes", ["watcher_id", "grouping_id"], name: "index_grouping_unsubscribes_on_watcher_id_and_grouping_id", unique: true, using: :btree
 
   create_table "groupings", force: :cascade do |t|
-    t.string   "key_line",             limit: 255
-    t.string   "error_class",          limit: 255
+    t.string   "key_line",          limit: 255
+    t.string   "error_class",       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "state",                limit: 255, default: "unacknowledged", null: false
+    t.string   "state",             limit: 255, default: "unacknowledged", null: false
     t.datetime "last_emailed_at"
     t.text     "message"
     t.datetime "latest_wat_at"
-    t.string   "uniqueness_string",    limit: 255,                            null: false
-    t.integer  "previous_grouping_id"
+    t.string   "uniqueness_string", limit: 255,                            null: false
   end
 
   add_index "groupings", ["key_line", "error_class"], name: "index_groupings_on_key_line_and_error_class", using: :btree
