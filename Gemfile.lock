@@ -10,6 +10,13 @@ GIT
   specs:
     state_machine (1.2.0)
 
+GIT
+  remote: git@github.com:omadahealth/logviously
+  revision: a5e39e6cabb65a2e9398343000a968e9e0388b16
+  specs:
+    logviously (0.0.0)
+      lograge (> 0.3.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -192,6 +199,10 @@ GEM
     launchy (2.4.3)
       addressable (~> 2.3)
     libv8 (3.16.14.7)
+    lograge (0.3.5)
+      actionpack (>= 3)
+      activesupport (>= 3)
+      railties (>= 3)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -408,6 +419,7 @@ DEPENDENCIES
   kaminari-bootstrap
   launchy
   libv8 (= 3.16.14.7)
+  logviously!
   moment_ago
   newrelic_rpm
   omniauth-gplus

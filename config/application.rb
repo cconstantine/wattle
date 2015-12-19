@@ -40,6 +40,7 @@ module Wattle
     config.middleware.use(WatCatcher::RackMiddleware)
 
     config.autoload_paths += %W(#{config.root}/app/workers/concerns)
+    config.logger = Logviously.configure(config)
 
     ::Sidekiq.configure_server do |config|
       config.server_middleware do |chain|
