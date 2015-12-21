@@ -154,6 +154,18 @@ describe GroupingNotifier do
     end
   end
 
+  describe "#similar_wats_per_hour_in_previous_weeks" do
+    subject { grouping_notifier.similar_wats_per_hour_in_previous_weeks }
+
+    it { is_expected.to eq 2 }
+  end
+  describe "#similar_wats_in_previous_day" do
+    subject { grouping_notifier.similar_wats_in_previous_day }
+
+    it { is_expected.to eq 53 }
+  end
+
+
   describe "#send_email", sidekiq: :inline do
     subject {grouping_notifier.send_email}
 

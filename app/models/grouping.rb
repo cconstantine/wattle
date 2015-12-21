@@ -78,9 +78,9 @@ class Grouping < ActiveRecord::Base
       state: state,
       message: wats.group(:message).count.keys.map {|m| (m||"").slice(0, 32765)},
       app_name: wats.first.app_name,
-      app_env: wats.group(:app_env).count.keys,
+      app_env: app_envs,
       hostname: wats.group(:hostname).count.keys,
-      language: wats.first.language,
+      language: language,
       user_emails: app_user_stats(filters: {}, key_name: :email,  limit: 1000).keys,
       user_ids: app_user_stats(filters: {}, key_name: :id).keys,
       latest_wat_at: latest_wat_at
@@ -111,8 +111,8 @@ class Grouping < ActiveRecord::Base
         .order("count(app_env) desc").count.keys
   end
 
-  def languages
-    wats.filtered(filters).distinct(:language)
+  def language
+    wats.first.language
   end
 
   def is_javascript?
