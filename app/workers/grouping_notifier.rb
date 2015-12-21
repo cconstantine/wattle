@@ -48,11 +48,11 @@ class GroupingNotifier
   end
 
   def similar_wats_per_hour_in_previous_weeks()
-    Wat.language(grouping.languages).open.after(24.day.ago).count / 24
+    Wat.language(grouping.language).open.after(24.day.ago).count / 24
   end
 
   def similar_wats_in_previous_day()
-    Wat.language(grouping.languages).open.after(1.day.ago).count
+    Wat.language(grouping.language).open.after(1.day.ago).count
   end
 
   def js_wats_per_hour_in_previous_weeks
