@@ -4,7 +4,7 @@ module Api
 
     def count_by_state
       if params[:app_name] && params[:app_env] && params[:language]
-        @groupings = Grouping.filtered(params).where("groupings.updated_at > ?", 7.days.ago).group(:state).count
+        @groupings = Grouping.filtered(params.merge(captured_at: 14.days.ago)).group(:state).count
 
 				respond_to do |format|
 	      	format.json  { render :json => @groupings }
