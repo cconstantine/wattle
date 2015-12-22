@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151218230210) do
+ActiveRecord::Schema.define(version: 20151222224411) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,15 +37,15 @@ ActiveRecord::Schema.define(version: 20151218230210) do
   add_index "grouping_unsubscribes", ["watcher_id", "grouping_id"], name: "index_grouping_unsubscribes_on_watcher_id_and_grouping_id", unique: true, using: :btree
 
   create_table "groupings", force: :cascade do |t|
-    t.string   "key_line",          limit: 255
-    t.string   "error_class",       limit: 255
+    t.string   "key_line"
+    t.string   "error_class"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "state",             limit: 255, default: "unacknowledged", null: false
+    t.string   "state",             default: "unacknowledged", null: false
     t.datetime "last_emailed_at"
     t.text     "message"
     t.datetime "latest_wat_at"
-    t.string   "uniqueness_string", limit: 255,                            null: false
+    t.string   "uniqueness_string",                            null: false
   end
 
   add_index "groupings", ["key_line", "error_class"], name: "index_groupings_on_key_line_and_error_class", using: :btree
@@ -67,24 +67,24 @@ ActiveRecord::Schema.define(version: 20151218230210) do
   add_index "notes", ["watcher_id"], name: "index_notes_on_watcher_id", using: :btree
 
   create_table "stream_events", force: :cascade do |t|
-    t.datetime "happened_at",              null: false
-    t.integer  "grouping_id",              null: false
-    t.integer  "context_id",               null: false
-    t.string   "context_type", limit: 255, null: false
+    t.datetime "happened_at",  null: false
+    t.integer  "grouping_id",  null: false
+    t.integer  "context_id",   null: false
+    t.string   "context_type", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "stream_events", ["context_id", "context_type"], name: "index_stream_events_on_context_id_and_context_type", using: :btree
+  add_index "stream_events", ["context_type", "context_id"], name: "index_stream_events_on_context_type_and_context_id", using: :btree
   add_index "stream_events", ["grouping_id"], name: "index_stream_events_on_grouping_id", using: :btree
   add_index "stream_events", ["happened_at", "grouping_id"], name: "index_stream_events_on_happened_at_and_grouping_id", using: :btree
 
   create_table "versions", force: :cascade do |t|
-    t.string   "type",       limit: 255, null: false
-    t.string   "item_type",  limit: 255, null: false
-    t.integer  "item_id",                null: false
-    t.string   "event",      limit: 255, null: false
-    t.string   "whodunnit",  limit: 255
+    t.string   "type",       null: false
+    t.string   "item_type",  null: false
+    t.integer  "item_id",    null: false
+    t.string   "event",      null: false
+    t.string   "whodunnit"
     t.text     "object"
     t.datetime "created_at"
   end
@@ -100,12 +100,12 @@ ActiveRecord::Schema.define(version: 20151218230210) do
   add_index "wat_ignores", ["user_agent"], name: "index_wat_ignores_on_user_agent", using: :btree
 
   create_table "watchers", force: :cascade do |t|
-    t.string   "first_name",      limit: 255
-    t.string   "name",            limit: 255
-    t.string   "email",           limit: 255
+    t.string   "first_name"
+    t.string   "name"
+    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "state",           limit: 255, default: "active", null: false
+    t.string   "state",           default: "active", null: false
     t.text     "default_filters"
     t.text     "email_filters"
     t.string   "api_key"
@@ -120,13 +120,13 @@ ActiveRecord::Schema.define(version: 20151218230210) do
     t.hstore   "request_headers"
     t.hstore   "request_params"
     t.text     "page_url"
-    t.text     "app_env",                     default: "unknown",   null: false
+    t.text     "app_env",         default: "unknown",   null: false
     t.hstore   "sidekiq_msg"
-    t.text     "app_name",                    default: "unknown",   null: false
-    t.text     "backtrace",                                                      array: true
-    t.string   "language",        limit: 255
-    t.hstore   "app_user",                    default: {"id"=>nil}
-    t.datetime "captured_at",                                       null: false
+    t.text     "app_name",        default: "unknown",   null: false
+    t.text     "backtrace",                                          array: true
+    t.string   "language"
+    t.hstore   "app_user",        default: {"id"=>nil}
+    t.datetime "captured_at",                           null: false
     t.text     "hostname"
     t.text     "rails_root"
     t.integer  "grouping_id"
@@ -138,7 +138,14 @@ ActiveRecord::Schema.define(version: 20151218230210) do
   add_index "wats", ["captured_at", "grouping_id"], name: "index_wats_on_captured_at_and_grouping_id", using: :btree
   add_index "wats", ["captured_at"], name: "index_wats_on_captured_at", using: :btree
   add_index "wats", ["created_at"], name: "index_wats_on_created_at", using: :btree
+  add_index "wats", ["grouping_id", "app_env", "app_name", "app_user", "hostname"], name: "gaaah_index", using: :btree
+  add_index "wats", ["grouping_id", "app_env", "app_name", "hostname"], name: "gaah_index", using: :btree
+  add_index "wats", ["grouping_id", "app_env", "app_user", "hostname"], name: "gaah2_index", using: :btree
+  add_index "wats", ["grouping_id", "app_env", "hostname"], name: "gah_index", using: :btree
+  add_index "wats", ["grouping_id", "app_name", "app_user", "hostname"], name: "gaah3_index", using: :btree
+  add_index "wats", ["grouping_id", "app_user", "hostname"], name: "gah2_index", using: :btree
   add_index "wats", ["grouping_id", "app_user"], name: "index_wats_on_grouping_id_and_app_user", using: :btree
+  add_index "wats", ["grouping_id", "hostname"], name: "ga_index", using: :btree
   add_index "wats", ["grouping_id"], name: "index_wats_on_grouping_id", using: :btree
   add_index "wats", ["hostname"], name: "index_wats_on_hostname", using: :btree
   add_index "wats", ["id", "captured_at", "grouping_id"], name: "index_wats_on_id_and_captured_at_and_grouping_id", using: :btree
