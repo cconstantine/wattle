@@ -46,6 +46,7 @@ class Grouping < ActiveRecord::Base
     running_scope = running_scope.language_non_distinct(opts[:language]) if opts[:language]
     running_scope = running_scope.by_user_non_distinct(opts[:app_user])  if opts[:app_user]
     running_scope = running_scope.by_host_non_distinct(opts[:hostname])  if opts[:hostname]
+    running_scope = running_scope.after_non_distinct(opts[:captured_at])  if opts[:captured_at]
 
     running_scope.recursive_distinct('groupings.id')
   }
@@ -61,6 +62,7 @@ class Grouping < ActiveRecord::Base
   scope :language_non_distinct, -> (an) { joins(:wats).references(:wats).where('wats.language IN (?)', an) }
   scope :by_user_non_distinct,  -> (user_id) { joins(:wats).references(:wats).where('wats.app_user -> \'id\' = ?', user_id) }
   scope :by_host_non_distinct,  -> (host) { joins(:wats).references(:wats).where('wats.hostname IN (?)', host) }
+  scope :after_non_distinct,    -> (captured_at) { joins(:wats).references(:wats).where('wats.captured_at > ?', captured_at) }
 
   scope :app_env,  -> (ae) { app_env_non_distinct(ae).recursive_distinct('groupings.id') }
   scope :app_name, -> (an) { app_name_non_distinct(an).recursive_distinct('groupings.id') }
