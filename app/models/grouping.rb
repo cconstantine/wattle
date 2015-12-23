@@ -2,7 +2,7 @@ class Grouping < ActiveRecord::Base
   has_paper_trail class_name: "GroupingVersion", :only => [:state]
 
   has_many :wats, inverse_of: :grouping
-  has_many :new_wats, ->(grouping) { grouping.last_emailed_at.present? ? where('wats.created_at > ?', grouping.last_emailed_at) : self }, class_name: "Wat", source: :wat
+  has_many :new_wats, ->(grouping) { grouping.last_emailed_at.present? ? where('wats.captured_at > ?', grouping.last_emailed_at) : self }, class_name: "Wat", source: :wat
   has_many :notes
   has_many :stream_events
   has_many :grouping_unsubscribes, dependent: :destroy
