@@ -12,7 +12,7 @@ GIT
 
 GIT
   remote: git@github.com:omadahealth/logviously
-  revision: a5e39e6cabb65a2e9398343000a968e9e0388b16
+  revision: 86b511eb6a65cf3b0b9cb8b3577944d369a6af36
   specs:
     logviously (0.0.0)
       lograge (> 0.3.3)
