@@ -28,7 +28,7 @@ describe Grouping do
       it { should have(5).items }
     end
     context "with a last_emailed_at between the latest and 2nd to lastest wat" do
-      before {grouping.update_column(:last_emailed_at, grouping.wats.order('id desc').limit(2).last.created_at)}
+      before {grouping.update_column(:last_emailed_at, grouping.wats.order('id desc').limit(1).last.created_at)}
       it {should have(1).item}
     end
     context "with a last_emailed_at before the latest wat" do

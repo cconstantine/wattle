@@ -9,7 +9,7 @@ class GroupingMailer < ActionMailer::Base
     @wat = grouping.wats.last
     @new_count = grouping.new_wats.count
 
-    @new_users_count = grouping.new_wats.distinct('app_user -> \'id\'').count
+    @new_users_count = grouping.new_wats.count('app_user -> \'id\'')
     @users_count = grouping.app_user_count
 
     @app_envs = @grouping.new_wats.pluck(:app_env).uniq

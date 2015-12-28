@@ -133,7 +133,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def app_user_count(filters: {}, key_name: :id)
-    app_user_stats(filters: filters, key_name: key_name, limit: 1000).tap do |x| x.delete nil end.size
+    wats.filtered(filters).count("distinct app_user -> '#{key_name}'")
   end
 
   def browser_stats(filters: {}, key_name: :HTTP_USER_AGENT, limit: nil)
@@ -144,7 +144,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def browser_count(filters: {}, key_name: :HTTP_USER_AGENT)
-    browser_stats(filters: filters, key_name: key_name, limit: 1000).tap do |x| x.delete nil end.size
+    wats.filtered(filters).count("distinct request_headers -> '#{key_name}'")
   end
 
 
@@ -156,7 +156,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def host_count(filters: {})
-    host_stats(filters: filters, limit: 1000).tap do |x| x.delete nil end.size
+    wats.filtered(filters).count('distinct hostname')
   end
 
   def self.get_or_create_from_wat!(wat)
