@@ -15,7 +15,7 @@
         %dl.dl-horizontal
           .text
             %dt Application
-            %dd #{ wat.app_name }: #{ wat.app_env }
+            %dd #{ wat.app_name }: #{ group.app_envs.join(", ") }
             - if wat.page_url.present?
               .text
                 %dt Page URL
