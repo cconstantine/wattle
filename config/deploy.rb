@@ -47,7 +47,7 @@ namespace :puma do
   end
   task :restart do
     on roles :web do
-      execute :sudo, 'service wattle-rails reload || service wattle-rails start'
+      execute "sudo service wattle-rails reload || sudo service wattle-rails start"
     end
   end
 end
