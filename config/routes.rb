@@ -28,7 +28,8 @@ Wattle::Application.routes.draw do
   end
 
   get '/create/wat' => 'wats#create'
-
+  resources :stats, only: :index
+  
   get '/aggregate_wats/:scale', to: "aggregate_wats#periodic"
   get "/groupings/:state", to: "groupings#index", as: :groupings_state, constraints: { :state => /[a-zA-Z]+/ }
 
