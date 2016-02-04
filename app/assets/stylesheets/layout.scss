@@ -24,3 +24,7 @@ li{
 .navbar-nav.navbar-right:last-child {
   margin-right: 0;
 }
+
+.divider-vertical {
+  border-left: 1px solid lightgray;     // right or left is the same
+}
