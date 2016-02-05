@@ -58,6 +58,13 @@ describe GroupingsController, versioning: true, :type => :controller do
               expect(assigns[:groupings].to_a.map(&:state).uniq).to eq ["resolved"]
             end
           end
+          context "with all selected" do
+            let(:params) {{state: :all}}
+            it "it only gives wats in any state" do
+              subject
+              expect(assigns[:groupings].to_a.map(&:state).uniq).to match_array Grouping.select("state").uniq.map(&:state)
+            end
+          end
         end
 
         context "filtered" do

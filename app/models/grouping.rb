@@ -93,8 +93,11 @@ class Grouping < ActiveRecord::Base
     search_query = filters[:search_query]
     search_query = "*" if search_query.blank?
 
-    wheres = { state: (opts[:state]  || :unacknowledged) }
-    wheres[:app_env] = filters[:app_env] if filters[:app_env]
+    opts[:state] ||= :unacknowledged
+
+    wheres = { }
+    wheres[:state]    = opts[:state] if (opts[:state].to_s != 'all')
+    wheres[:app_env]  = filters[:app_env] if filters[:app_env]
     wheres[:app_name] = filters[:app_name] if filters[:app_name]
     wheres[:language] = filters[:language] if filters[:language]
     wheres[:hostname] = filters[:hostname] if filters[:hostname]
