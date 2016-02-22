@@ -1,6 +1,6 @@
 class ChangeGroupingStateMuffledToAcknowledged < ActiveRecord::Migration
   class Grouping < ActiveRecord::Base;  end
-  class WatGrouping < ActiveRecord::Base;  end
+  class WatsGrouping < ActiveRecord::Base;  end
 
   class Watcher < ActiveRecord::Base
     serialize :default_filters
