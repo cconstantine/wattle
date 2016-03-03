@@ -15,4 +15,9 @@ module ApplicationHelper
     ).render(text).html_safe
   end
 
+  def project_select(projects)
+    projects.map do |project|
+      [ project.name, project.id ]
+    end
+  end
 end

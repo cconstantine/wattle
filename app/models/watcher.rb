@@ -38,4 +38,8 @@ class Watcher < ActiveRecord::Base
   def display_name
     name || first_name ||  email
   end
+
+  def tracker(grouping)
+    Tracker.new(pivotal_tracker_api_key, grouping)
+  end
 end

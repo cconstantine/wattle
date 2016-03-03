@@ -39,6 +39,7 @@ gem 'cancancan'
 gem 'foreman'
 gem 'health_check'
 gem 'rack-timeout'
+gem 'tracker_api'
 
 group :production do
   gem 'rails_12factor'

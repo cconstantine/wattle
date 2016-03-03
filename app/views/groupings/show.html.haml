@@ -11,6 +11,7 @@
     .col-md-7
       = render paged_wats
     .col-md-4.col-md-offset-1.m20.mb30.mt30
+      = render partial: "tracker_integration"
       = render partial: "stream_events/index", locals: {stream_events: @stream_events }
       = paginate paged_wats
 

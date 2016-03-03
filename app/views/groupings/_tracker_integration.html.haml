@@ -1,0 +1,12 @@
+.mb20
+  - if @grouping.pivotal_tracker_story_id.present?
+    = link_to "View this wat's Pivotal Tracker story", "https://www.pivotaltracker.com/story/show/#{@grouping.pivotal_tracker_story_id}", target: "_blank"
+  - else
+    - if @tracker_api.has_key?
+      = form_for @tracker_api do |f|
+        = f.hidden_field :grouping_id
+        = f.label :tracker_project, "Create a story"
+        = f.select :tracker_project, project_select(@tracker_api.projects)
+        = f.submit "Create Tracker story", class: "btn btn-primary"
+    - else
+      Add #{ link_to "your Tracker API key", watcher_path(current_user) } on the settings page to create stories with the click of a button

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303183631) do
+ActiveRecord::Schema.define(version: 20160303215926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 20160303183631) do
     t.text     "message"
     t.datetime "latest_wat_at"
     t.string   "uniqueness_string",                            null: false
+    t.string   "pivotal_tracker_story_id"
   end
 
   add_index "groupings", ["key_line", "error_class"], name: "index_groupings_on_key_line_and_error_class", using: :btree

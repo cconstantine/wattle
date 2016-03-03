@@ -15,15 +15,18 @@ class WatchersController < ApplicationController
   end
 
   def update
-    attrs = filters_params(:pivotal_tracker_api_key, default_filters: {}, email_filters: {})
+    attrs = {}
+    attrs[:default_filters] = filters_params(:default_filters) if filters_params(:default_filters).present?
+    attrs[:email_filters] = filters_params(:email_filters) if filters_params(:email_filters).present?
+    attrs[:pivotal_tracker_api_key] = filters_params(:pivotal_tracker_api_key)
     @watcher.update_attributes!(attrs)
     flash[:notice] = "Your defaults were saved!"
     redirect_to :back
   end
 
   def reactivate
-   @watcher.activate!
-   redirect_to request.referer
+    @watcher.activate!
+    redirect_to request.referer
   end
 
   def deactivate
@@ -51,7 +54,7 @@ class WatchersController < ApplicationController
     redirect_to :back unless @watcher == current_user
   end
 
-  def filters_params(*which_filters)
-    params.require(:watcher).permit(*which_filters)
+  def filters_params(which_filter)
+    params.require(:watcher).permit![which_filter]
   end
 end

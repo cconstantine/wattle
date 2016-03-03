@@ -32,7 +32,8 @@
 
     .col-lg-2
       .tracker_api_settings
-        = f.label :pivotal_tracker_api_key, "Pivotal Tracker API key"
+        = f.label :pivotal_tracker_api_key, "Pivotal Tracker API token"
         = f.text_field :pivotal_tracker_api_key
+        %p Go get it from #{ link_to "Pivotal Tracker", "https://www.pivotaltracker.com/profile", target: "_blank" }
 
   = f.submit "Save"

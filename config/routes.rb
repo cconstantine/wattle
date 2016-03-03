@@ -44,6 +44,7 @@ Wattle::Application.routes.draw do
   end
 
   resources :notes, only: :destroy
+  resources :trackers, only: :create
 
   resources :groupings do
     resources :notes, only: :create
