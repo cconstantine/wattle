@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151222224411) do
+ActiveRecord::Schema.define(version: 20160303183631) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,6 +109,7 @@ ActiveRecord::Schema.define(version: 20151222224411) do
     t.text     "default_filters"
     t.text     "email_filters"
     t.string   "api_key"
+    t.string   "pivotal_tracker_api_key"
   end
 
   create_table "wats", force: :cascade do |t|

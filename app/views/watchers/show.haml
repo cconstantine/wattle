@@ -30,4 +30,9 @@
         =render partial: 'filters/app_envs',  locals: {prefix: "watcher[email_filters]", filter_set: FilterSet.new(filters: @watcher.email_filters)}
         =render partial: 'filters/languages', locals: {prefix: "watcher[email_filters]", filter_set: FilterSet.new(filters: @watcher.email_filters)}
 
+    .col-lg-2
+      .tracker_api_settings
+        = f.label :pivotal_tracker_api_key, "Pivotal Tracker API key"
+        = f.text_field :pivotal_tracker_api_key
+
   = f.submit "Save"
