@@ -44,6 +44,47 @@ def capture_error &block
   return err
 end
 
+class Tracker
+  include ActiveModel::Model
+
+  attr_accessor :grouping
+
+  class Project
+    def name
+      "Testy Project"
+    end
+
+    def id
+      42
+    end
+  end
+
+  def initialize(api_key, grouping)
+    @api_key = api_key
+    @grouping = grouping
+  end
+
+  def has_key?
+    @api_key.present?
+  end
+
+  def projects
+    [ Project.new ]
+  end
+
+  def grouping_id
+    @grouping.id
+  end
+
+  def tracker_project
+    ""
+  end
+
+  def create_story(project_id, name)
+    OpenStruct.new(id: "totally_real", name: name)
+  end
+end
+
 require 'support/fixture_builder'
 Sidekiq::Testing.fake!
 
@@ -70,6 +111,16 @@ RSpec.configure do |config|
       Sidekiq::Testing.inline!
     else
       Sidekiq::Testing.fake!
+    end
+
+    allow_any_instance_of(Watcher).to receive(:tracker) do |watcher|
+      the_grouping = nil
+      if defined? grouping
+        the_grouping = grouping
+      else
+        the_grouping = groupings(:grouping1)
+      end
+      Tracker.new(watcher.pivotal_tracker_api_key, the_grouping)
     end
   end
 

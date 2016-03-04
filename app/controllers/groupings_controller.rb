@@ -29,6 +29,7 @@ class GroupingsController < ApplicationController
                  data: wat_chart_values
                }]
     }
+    @tracker_api = current_user.tracker
     respond_with(@grouping)
   end
 

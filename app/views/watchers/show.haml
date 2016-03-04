@@ -30,4 +30,18 @@
         =render partial: 'filters/app_envs',  locals: {prefix: "watcher[email_filters]", filter_set: FilterSet.new(filters: @watcher.email_filters)}
         =render partial: 'filters/languages', locals: {prefix: "watcher[email_filters]", filter_set: FilterSet.new(filters: @watcher.email_filters)}
 
+    .col-lg-2
+      .tracker_api_settings
+        = f.label :pivotal_tracker_api_key, "Pivotal Tracker API token"
+        = f.text_field :pivotal_tracker_api_key
+        %p Go get it from #{ link_to "Pivotal Tracker", "https://www.pivotaltracker.com/profile", target: "_blank" }
+
+        .mt30
+          %h4 Current Tracker Projects
+          %ul
+          - @watcher.pivotal_tracker_projects.each do |project|
+            %li= project.name
+
+          = button_to "Refresh projects", refresh_projects_watcher_path(@watcher), class: 'btn btn-info mt10', method: :post
+
   = f.submit "Save"

@@ -31,7 +31,7 @@ feature "Filtering the wat groupings" do
     end
 
     # Make sure emails go out appropriately when a new wat comes in
-    Wat.create_from_exception!(nil, app_name: "app1", app_env: "staging") {raise "hi"}
+    Wat.create_from_exception!(nil, app_name: "app1", app_env: "staging") { raise "hi" }
     expect(find_email("test@example.com", with_text: "been detected in")).to be_present
     expect(find_email("user@example.com", with_text: "been detected in")).to be_present
 
@@ -59,7 +59,7 @@ feature "Filtering the wat groupings" do
     end
 
     # Make sure emails go out appropriately when a new wat comes in
-    Wat.create_from_exception!(nil, app_name: "app1", app_env: "staging") {raise "hi"}
+    Wat.create_from_exception!(nil, app_name: "app1", app_env: "staging") { raise "hi" }
     expect(find_email("test@example.com", with_text: "been detected in")).to be_present
     expect(find_email("user@example.com", with_text: "been detected in")).to_not be_present
   end
@@ -97,8 +97,23 @@ feature "Filtering the wat groupings" do
     end
 
     # Make sure emails go out appropriately when a new wat comes in
-    Wat.create_from_exception!(nil, app_name: "app1", app_env: "staging") {raise "hi"}
+    Wat.create_from_exception!(nil, app_name: "app1", app_env: "staging") { raise "hi" }
     expect(find_email("test@example.com", with_text: "been detected in")).to be_present
     expect(find_email("user@example.com", with_text: "been detected in")).to_not be_present
+  end
+
+  it "lets a user save their tracker API key" do
+    visit root_path
+
+    click_on "Jim Bob"
+    click_on "Settings"
+
+    expect do
+      fill_in "watcher[pivotal_tracker_api_key]", with: "cool-api-key"
+      click_button "Save"
+
+      click_on "Jim Bob"
+      click_on "Settings"
+    end.to change { page.find("#watcher_pivotal_tracker_api_key").value }.to "cool-api-key"
   end
 end
