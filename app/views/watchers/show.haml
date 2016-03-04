@@ -42,6 +42,6 @@
           - @watcher.pivotal_tracker_projects.each do |project|
             %li= project.name
 
-          = button_to "Refresh projects", refresh_projects_watcher_path(@watcher), class: 'btn btn-info mt10', method: :post
+          = link_to "Refresh projects", refresh_projects_watcher_path(@watcher), class: 'btn btn-info mt10', method: :post
 
   = f.submit "Save"
