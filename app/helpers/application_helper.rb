@@ -15,8 +15,8 @@ module ApplicationHelper
     ).render(text).html_safe
   end
 
-  def project_select(projects)
-    projects.map do |project|
+  def project_select
+    current_user.pivotal_tracker_projects.map do |project|
       [ project.name, project.id ]
     end
   end

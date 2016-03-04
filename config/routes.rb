@@ -24,6 +24,7 @@ Wattle::Application.routes.draw do
       post :reactivate
       post :deactivate
       post :reset_api_key
+      post :refresh_projects
     end
   end
 

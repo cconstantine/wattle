@@ -5,7 +5,8 @@ FixtureBuilder.configure do |fbuilder|
   # now declare objects
   fbuilder.factory do
     fbuilder.name :default, Watcher.create!(name: "Fake Watcher", first_name: "Fake", email: "test@example.com")
-    fbuilder.name :default_with_tracker, Watcher.create!(name: "Fake Watcher", first_name: "Fake", email: "tracker_test@example.com", pivotal_tracker_api_key: "foo")
+    @default_with_tracker = Watcher.create!(name: "Fake Watcher", first_name: "Fake", email: "tracker_test@example.com", pivotal_tracker_api_key: "foo")
+    @default_with_tracker.pivotal_tracker_projects.create!(name: "Testy Project", tracker_id: "an_id")
     inactive_watcher = Watcher.create!(name: "Inactive Fake Watcher", first_name: "Inactive", email: "inactive@example.com")
     inactive_watcher.deactivate!
     fbuilder.name :inactive, inactive_watcher

@@ -2,7 +2,7 @@ class WatchersController < ApplicationController
   respond_to :html
 
   before_filter :load_watchers, only: :index
-  before_filter :load_watcher, only: [:show, :update, :reactivate, :deactivate, :reset_api_key]
+  before_filter :load_watcher, only: [:show, :update, :reactivate, :deactivate, :reset_api_key, :refresh_projects]
 
   before_filter :only_update_self, only: :update
 
@@ -39,6 +39,15 @@ class WatchersController < ApplicationController
     redirect_to request.referer
   end
 
+  def refresh_projects
+    ActiveRecord::Base.transaction do
+      @watcher.pivotal_tracker_projects.destroy_all
+      @watcher.tracker.projects.each do |project|
+        @watcher.pivotal_tracker_projects.create!(name: project.name, tracker_id: project.id)
+      end
+    end
+    redirect_to request.referer
+  end
 
   protected
 

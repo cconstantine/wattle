@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303215926) do
+ActiveRecord::Schema.define(version: 20160304002440) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,16 @@ ActiveRecord::Schema.define(version: 20160303215926) do
 
   add_index "notes", ["grouping_id"], name: "index_notes_on_grouping_id", using: :btree
   add_index "notes", ["watcher_id"], name: "index_notes_on_watcher_id", using: :btree
+
+  create_table "pivotal_tracker_projects", force: :cascade do |t|
+    t.text     "name"
+    t.string   "tracker_id"
+    t.integer  "watcher_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pivotal_tracker_projects", ["watcher_id"], name: "index_pivotal_tracker_projects_on_watcher_id", using: :btree
 
   create_table "stream_events", force: :cascade do |t|
     t.datetime "happened_at",  null: false

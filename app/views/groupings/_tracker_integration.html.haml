@@ -4,9 +4,9 @@
   - else
     - if @tracker_api.has_key?
       = form_for @tracker_api do |f|
-        = f.hidden_field :grouping_id
+        = f.hidden_field :grouping_id, value: @grouping.id
         = f.label :tracker_project, "Create a story"
-        = f.select :tracker_project, project_select(@tracker_api.projects)
+        = f.select :tracker_project, project_select
         = f.submit "Create Tracker story", class: "btn btn-primary"
     - else
       Add #{ link_to "your Tracker API key", watcher_path(current_user) } on the settings page to create stories with the click of a button

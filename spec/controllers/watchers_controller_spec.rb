@@ -200,4 +200,22 @@ describe WatchersController, :type => :controller do
       end
     end
   end
+
+  describe "POST #refresh_projects" do
+    let(:watcher) { watchers(:default) }
+    subject { post :refresh_projects, id: watcher.to_param }
+
+    context 'when logged in' do
+      before do
+        login watchers(:default_with_tracker)
+        @request.env['HTTP_REFERER'] = '/something'
+      end
+
+      it { should be_redirect }
+
+      it "should update the Pivotal Tracker projects" do
+        expect { subject }.to change { watcher.reload.pivotal_tracker_projects.count }
+      end
+    end
+  end
 end

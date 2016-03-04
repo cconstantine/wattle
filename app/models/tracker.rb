@@ -3,9 +3,8 @@ class Tracker
 
   attr_accessor :grouping
 
-  def initialize(api_key, grouping)
+  def initialize(api_key)
     @api_key = api_key
-    @grouping = grouping
   end
 
   def has_key?
@@ -14,10 +13,6 @@ class Tracker
 
   def projects
     client.projects
-  end
-
-  def grouping_id
-    @grouping.id
   end
 
   def tracker_project

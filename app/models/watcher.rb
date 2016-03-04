@@ -12,6 +12,8 @@ class Watcher < ActiveRecord::Base
   has_many :grouping_owners, dependent: :destroy
   has_many :owned_groupings, through: :grouping_owners, source: :grouping
 
+  has_many :pivotal_tracker_projects
+
   class << self
     def find_or_create_from_auth_hash!(auth_hash)
       where(email: auth_hash[:email]).first_or_create!(auth_hash.slice(:first_name, :name))
@@ -39,7 +41,7 @@ class Watcher < ActiveRecord::Base
     name || first_name ||  email
   end
 
-  def tracker(grouping)
-    Tracker.new(pivotal_tracker_api_key, grouping)
+  def tracker
+    Tracker.new(pivotal_tracker_api_key)
   end
 end

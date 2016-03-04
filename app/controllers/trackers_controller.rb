@@ -4,7 +4,7 @@ class TrackersController < ApplicationController
   def create
     story_name = "Grouping #{@grouping.id}: #{@grouping.error_class}"
     description = "[View grouping #{@grouping.id} in Wattle](#{grouping_url(@grouping)})"
-    story = current_user.tracker(@grouping).create_story(story_params[:tracker_project],
+    story = current_user.tracker.create_story(story_params[:tracker_project],
       name: story_name,
       description: description
     )
