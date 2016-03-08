@@ -14,6 +14,7 @@ class Wat < ActiveRecord::Base
   after_commit :reindex_grouping
 
   after_create :upvote_groupings
+  after_create :log_wat_creation
 
   validates :grouping, presence: true
   validates :language, inclusion: { in: %w(ruby javascript) }, allow_nil: true
@@ -201,6 +202,10 @@ SQL
     return unless sidekiq_msg["retry"].to_s == "true"
 
     errors.add(:sidekiq_msg) unless sidekiq_msg["retry_count"].to_i > 3
+  end
+
+  def log_wat_creation
+    Rails.logger.error("Created new wat: " + self.as_json.slice("app_name", "app_env", "language", "captured_at", "hostname").to_json)
   end
 
   def destroy
