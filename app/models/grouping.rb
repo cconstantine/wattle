@@ -90,13 +90,13 @@ class Grouping < ActiveRecord::Base
   end
 
   def self.filtered_by_params(filters, opts={})
-    search_query = filters[:search_query]
-    search_query = "*" if search_query.blank?
+    search_query = "*"
 
     opts[:state] ||= :unacknowledged
 
-    wheres = { }
-    wheres[:state]    = opts[:state] if (opts[:state].to_s != 'all')
+    wheres = {
+        state: opts[:state]
+    }
     wheres[:app_env]  = filters[:app_env] if filters[:app_env]
     wheres[:app_name] = filters[:app_name] if filters[:app_name]
     wheres[:language] = filters[:language] if filters[:language]
