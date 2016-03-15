@@ -4,6 +4,7 @@ class GroupingsController < ApplicationController
   before_filter :load_group, except: :index
 
   def index
+    @active_tab = params[:state] || "unacknowledged"
     @groupings = Grouping.filtered_by_params(filters, page: params[:page], state: params[:state])
 
     respond_with(@groupings)

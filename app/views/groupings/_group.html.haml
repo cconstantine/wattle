@@ -38,7 +38,7 @@
     .col-md-5
       .group_state.pull-right
         .clearfix
-          = render partial: "state", locals: {group: group}
+          = render partial: "groupings/state", locals: {group: group}
 
         .timestamp.mt10
           - if wat.captured_at.present?

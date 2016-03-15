@@ -32,16 +32,16 @@
       / Collect the nav links, forms, and other content for toggling
       #bs-example-navbar-collapse-1.collapse.navbar-collapse
         %ul.nav.navbar-nav
-          %li{class: ("active" if (params[:state].blank? || params[:state] == 'unacknowledged'))}
+          %li{class: ("active" if @active_tab == 'unacknowledged')}
             =link_to "Unacknowledged", groupings_state_path({state: :unacknowledged}.merge params.slice(:utf8, :filters))
-          %li{class: ("active" if params[:state] == 'acknowledged')}
+          %li{class: ("active" if @active_tab == 'acknowledged')}
             = link_to "Acknowledged", groupings_state_path({state: :acknowledged}.merge params.slice(:utf8, :filters))
-          %li{class: ("active" if params[:state] == 'deprioritized')}
+          %li{class: ("active" if @active_tab == 'deprioritized')}
             = link_to "Deprioritized", groupings_state_path({state: :deprioritized}.merge params.slice(:utf8, :filters))
-          %li{class: ("active" if params[:state] == 'resolved')}
+          %li{class: ("active" if @active_tab == 'resolved')}
             = link_to "Resolved", groupings_state_path({state: :resolved}.merge params.slice(:utf8, :filters))
-          %li.divider-vertical{class: ("active" if params[:state] == 'all')}
-            = link_to "All", groupings_state_path({state: :all}.merge params.slice(:utf8, :filters))
+          %li.divider-vertical{class: ("active" if @active_tab == 'search')}
+            = link_to "Search", search_path(params.slice(:utf8, :filters))
 
         %ul.navbar-right.nav.navbar-nav
           %li.dropdown
