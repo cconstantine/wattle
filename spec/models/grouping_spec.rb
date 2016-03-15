@@ -164,10 +164,6 @@ describe Grouping do
       let(:filter_params) { { app_user: '2' }}
       it {is_expected.to have(scope.by_user('2').count).items}
     end
-    context "specifying the 'all' state" do
-      let(:filter_opts) { { state: :all }}
-      it { is_expected.to have(Grouping.count).items }
-    end
   end
 
   describe "#filtered" do
