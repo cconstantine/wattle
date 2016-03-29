@@ -20,9 +20,9 @@ GIT
 
 GIT
   remote: git@github.com:omadahealth/sidekiq_latency_api.git
-  revision: c118f67d91b7b0e3230460c4dc4d276e1c52974b
+  revision: 6da15e178141f0c180a992285837ea3e5b3d715f
   specs:
-    sidekiq_latency_api (0.1.0)
+    sidekiq_latency_api (0.1.1)
 
 GEM
   remote: https://rubygems.org/
