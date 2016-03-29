@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe ExceptionalsController, :type => :controller do
+  before { allow(controller.request).to receive(:referrer).and_return('http://example.com') }
 
   describe "GET #an_exception" do
     subject { get :an_exception, format: :json }

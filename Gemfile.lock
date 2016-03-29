@@ -15,7 +15,14 @@ GIT
   revision: 86b511eb6a65cf3b0b9cb8b3577944d369a6af36
   specs:
     logviously (0.0.0)
+      
       lograge (> 0.3.3)
+
+GIT
+  remote: git@github.com:omadahealth/sidekiq_latency_api.git
+  revision: c118f67d91b7b0e3230460c4dc4d276e1c52974b
+  specs:
+    sidekiq_latency_api (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -453,6 +460,7 @@ DEPENDENCIES
   searchkick
   secrets!
   sidekiq
+  sidekiq_latency_api!
   sinatra (>= 1.3.0)
   slim (>= 1.3.0)
   state_machine!
