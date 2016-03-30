@@ -15,8 +15,13 @@ GIT
   revision: 86b511eb6a65cf3b0b9cb8b3577944d369a6af36
   specs:
     logviously (0.0.0)
-      
       lograge (> 0.3.3)
+
+GIT
+  remote: git@github.com:omadahealth/sidekiq_healthcheck.git
+  revision: 3219aef73f0e39d0fdbdc3e4f9b40783ab09e19d
+  specs:
+    sidekiq_healthcheck (0.1.0)
 
 GIT
   remote: git@github.com:omadahealth/sidekiq_latency_api.git
@@ -460,6 +465,7 @@ DEPENDENCIES
   searchkick
   secrets!
   sidekiq
+  sidekiq_healthcheck!
   sidekiq_latency_api!
   sinatra (>= 1.3.0)
   slim (>= 1.3.0)
