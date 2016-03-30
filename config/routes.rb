@@ -18,6 +18,8 @@ Wattle::Application.routes.draw do
   end
   mount WatCatcher::Engine => '/wat_catcher'
   mount SidekiqLatencyApi::Engine => '/sidekiq_latency_api'
+  mount SidekiqHealthcheck::Engine, at: '/sidekiq_healthcheck'
+
 
   resources :wats
   resources :watchers do
