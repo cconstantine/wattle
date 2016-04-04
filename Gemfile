@@ -8,8 +8,7 @@ gem 'jquery-rails'
 gem 'jbuilder', '~> 1.0.1'
 gem 'httpclient'
 gem 'wat_catcher'#, path: "../wat_catcher"
-gem 'sidekiq_latency_api', :git => "git@github.com:omadahealth/sidekiq_latency_api.git"
-gem 'sidekiq_healthcheck', :git => "git@github.com:omadahealth/sidekiq_healthcheck.git"
+gem 'sidekiq_healthcheck'
 gem 'kaminari'
 gem 'kaminari-bootstrap'
 gem 'omniauth-gplus'
