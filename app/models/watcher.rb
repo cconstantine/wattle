@@ -1,7 +1,7 @@
 class Watcher < ActiveRecord::Base
   serialize :default_filters
   serialize :email_filters
-  RESTRICT_DOMAIN = ENV['RESTRICT_DOMAIN'] || Secret.restrict_domain || ""
+  RESTRICT_DOMAIN = WatConfig.secret_value('RESTRICT_DOMAIN') || Secret.restrict_domain || ""
 
   EMAIL_REGEX = /@#{Regexp.escape Watcher::RESTRICT_DOMAIN}\z/
 

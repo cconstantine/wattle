@@ -49,6 +49,8 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.4.0)
+    apohypaton (0.1.2)
+      diplomat (~> 0.14.0)
     arel (6.0.3)
     awesome_print (1.6.1)
     axiom-types (0.1.1)
@@ -100,6 +102,9 @@ GEM
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     diff-lcs (1.2.5)
+    diplomat (0.14.0)
+      faraday (~> 0.9)
+      json (~> 1.8)
     eco (1.0.0)
       coffee-script
       eco-source
@@ -376,6 +381,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  apohypaton
   awesome_print
   backbone-on-rails
   better_errors

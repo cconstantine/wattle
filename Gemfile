@@ -42,6 +42,8 @@ gem 'health_check'
 gem 'rack-timeout'
 gem 'tracker_api'
 
+gem 'apohypaton'
+
 group :production do
   gem 'rails_12factor'
 end

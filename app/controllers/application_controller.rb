@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def google_auth_enabled?
-    ENV['GOOGLE_KEY'] || Secret.to_h.has_key?(:google_key)
+    WatConfig.secret_value('GOOGLE_KEY') || Secret.to_h.has_key?(:google_key)
   end
 
   def require_login
