@@ -19,6 +19,7 @@ test:
   timeout: 5000
 
 production:
-  url: <%= ENV['DATABASE_URL'] %>
+  url: <%= WatConfig.secret_value 'DATABASE_URL' %>
   pool: 26
+
 

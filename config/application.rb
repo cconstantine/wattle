@@ -5,13 +5,41 @@ require 'rails/all'
 # Assets should be precompiled for production (so we don't need the gems loaded then)
 Bundler.require(*Rails.groups(assets: %w(development test)))
 
+# Configure secrets management gem
+Apohypaton.configure do |conf|
+  conf.url = URI(ENV['WATTLE_CONSUL_URL']) if ENV['WATTLE_CONSUL_URL']
+  conf.chroot = "wattle/#{Rails.env.downcase}"
+  conf.token = ENV['WATTLE_CONSUL_TOKEN']
+  conf.enabled = (Rails.env.development? || Rails.env.test?) ? false : true
+end
+
+class WatConfig
+  def self.secret_value(key)
+    ENV[key] || Apohypaton::Kv.load_secret("secrets/" + key, false)
+  end
+
+  def self.db
+    ret = if ENV['DATABSE_URL']
+            {url: ENV['DATABSE_URL']}
+          else
+            {
+                host: Apohypaton::Kv.load_secret('postgresql/host', false),
+                database: Apohypaton::Kv.load_secret('postgresql/name', false),
+                username: Apohypaton::Kv.load_secret('postgresql/user', false),
+                password: Apohypaton::Kv.load_secret('postgresql/password', false)
+            }
+          end
+    return { Rails.env.to_s => ret }
+  end
+end
+
 module Wattle
   class ConfigureMailer < Rails::Railtie
     initializer "configure_mailer.set_config", after: "secrets.load" do |app|
       url_options = ::Secret.default_url_options.to_h.symbolize_keys || {}
 
-      url_options[:host] ||= ENV['DEFAULT_URL_OPTIONS_HOST'] || WatCatcher.configuration.host || "localhost"
-      url_options[:port] ||= ENV['DEFAULT_URL_OPTIONS_PORT'] if ENV['DEFAULT_URL_OPTIONS_PORT'].present?
+      url_options[:host] ||= ::WatConfig.secret_value('DEFAULT_URL_OPTIONS_HOST') || WatCatcher.configuration.host || "localhost"
+      url_options[:port] ||= ::WatConfig.secret_value('DEFAULT_URL_OPTIONS_PORT') if ::WatConfig.secret_value('DEFAULT_URL_OPTIONS_PORT').present?
       app.config.action_mailer.default_url_options = url_options
     end
   end
@@ -35,7 +63,7 @@ module Wattle
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif *.js *.woff *.ttf *.svg wats.css)
 
     config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = { :address => ENV["SMTP_HOST"] || ENV["DOKKU_HOST"] || "localhost", :port => ENV["SMTP_PORT"] || 25 }
+    config.action_mailer.smtp_settings = { :address => ::WatConfig.secret_value("SMTP_HOST") || WatConfig.secret_value("DOKKU_HOST") || "localhost", :port => WatConfig.secret_value("SMTP_PORT") || 25 }
 
     config.middleware.use(WatCatcher::RackMiddleware)
 

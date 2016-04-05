@@ -8,8 +8,7 @@ gem 'jquery-rails'
 gem 'jbuilder', '~> 1.0.1'
 gem 'httpclient'
 gem 'wat_catcher'#, path: "../wat_catcher"
-gem 'sidekiq_latency_api', :git => "git@github.com:omadahealth/sidekiq_latency_api.git"
-gem 'sidekiq_healthcheck', :git => "git@github.com:omadahealth/sidekiq_healthcheck.git"
+gem 'sidekiq_healthcheck'
 gem 'kaminari'
 gem 'kaminari-bootstrap'
 gem 'omniauth-gplus'
@@ -35,7 +34,7 @@ gem 'puma'
 gem "logviously", git: 'git@github.com:omadahealth/logviously'
 gem 'newrelic_rpm'
 gem 'paper_trail'
-gem 'searchkick'
+gem 'searchkick', "= 0.9.1"  # pegged on 4/4/2016 because of test failures in version 1.2.1
 gem 'typhoeus'
 gem 'responders', '~> 2.0'
 gem 'cancancan'
@@ -44,6 +43,8 @@ gem 'foreman'
 gem 'health_check'
 gem 'rack-timeout'
 gem 'tracker_api'
+
+gem 'apohypaton'
 
 group :production do
   gem 'rails_12factor'
