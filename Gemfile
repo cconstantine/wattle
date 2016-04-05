@@ -34,7 +34,7 @@ gem 'puma'
 gem "logviously", git: 'git@github.com:omadahealth/logviously'
 gem 'newrelic_rpm'
 gem 'paper_trail'
-gem 'searchkick', "= 0.9.1"  # pegged on 4/4/2016 because of test failures in version 1.2.1
+gem 'searchkick'
 gem 'typhoeus'
 gem 'responders', '~> 2.0'
 gem 'cancancan'
