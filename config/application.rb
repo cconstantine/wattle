@@ -19,6 +19,8 @@ class WatConfig
   end
 
   def self.db
+    return {} unless Apohypaton.configuration.enabled?
+
     ret = if ENV['DATABSE_URL']
             {url: ENV['DATABSE_URL']}
           else
