@@ -7,7 +7,7 @@ Bundler.require(*Rails.groups(assets: %w(development test)))
 
 # Configure secrets management gem
 Apohypaton.configure do |conf|
-  conf.url = URI(ENV['WATTLE_CONSUL_URL']) if ENV['WATTLE_CONSUL_URL']
+  conf.url = URI("consul://consul.omadahealth.net:443")
   conf.chroot = "wattle/#{Rails.env.downcase}"
   conf.token = ENV['WATTLE_CONSUL_TOKEN']
   conf.enabled = (Rails.env.development? || Rails.env.test?) ? false : true
