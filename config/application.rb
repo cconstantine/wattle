@@ -17,22 +17,6 @@ class WatConfig
   def self.secret_value(key)
     ENV[key] || Apohypaton::Kv.load_secret("secrets/" + key, false)
   end
-
-  def self.db
-    return {} unless Apohypaton.configuration.enabled?
-
-    ret = if ENV['DATABSE_URL']
-            {url: ENV['DATABSE_URL']}
-          else
-            {
-                host: Apohypaton::Kv.load_secret('postgresql/host', false),
-                database: Apohypaton::Kv.load_secret('postgresql/name', false),
-                username: Apohypaton::Kv.load_secret('postgresql/user', false),
-                password: Apohypaton::Kv.load_secret('postgresql/password', false)
-            }
-          end
-    return { Rails.env.to_s => ret }
-  end
 end
 
 module Wattle
