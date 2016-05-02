@@ -71,9 +71,26 @@ describe WatsController, :type => :controller do
 
     it "should queue a job" do
       subject
-      expect(WatsController::CreateWatWorker).to have(1).enqueued.job
+      expect(WatsController::CreateNonProdWatWorker).to have(1).enqueued.job
     end
 
+    context "when getting a production wat" do
+      let(:das_post) {post :create, format: :json , wat: {
+          app_env: "production",
+          page_url: "somefoo",
+          message: "hi",
+          error_class: "ErrFoo",
+          backtrace: ["a", "b", "c"],
+          request_headers: {a: 1, b: 2},
+          sidekiq_msg: {retry: false, class: "FooClass"},
+          session: {imakey: true, imastring: "stringer"}
+      }}
+
+      it "should queue a production job" do
+        subject
+        expect(WatsController::CreateProdWatWorker).to have(1).enqueued.job
+      end
+    end
 
     it "shouldn't do any reindexing" do
       allow_any_instance_of(Grouping).to receive(:reindex) { raise RuntimeError.new "Should not get called" }
