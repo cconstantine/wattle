@@ -4,6 +4,7 @@ production:
   :pidfile: /var/www/wattle/shared/tmp/pids/sidekiq.pid
 
 :queues:
+  - [prod_wat_creation, 50]
   - [high, 5]
   - default
   - mailers

@@ -3,7 +3,6 @@ class WatsController < ApplicationController
 
   class CreateWatWorker
     include Sidekiq::Worker
-    sidekiq_options queue: :high
 
     def perform(params)
       params = YAML.load(params)
@@ -12,9 +11,16 @@ class WatsController < ApplicationController
       wat_params.delete(:created_at)
       wat_params.delete(:updated_at)
 
-      @wat = Wat.create!(wat_params)
-    rescue ActiveRecord::RecordInvalid
+      Wat.create(wat_params)
     end
+  end
+
+  class CreateProdWatWorker < CreateWatWorker
+    sidekiq_options queue: :prod_wat_creation
+  end
+
+  class CreateNonProdWatWorker < CreateWatWorker
+    sidekiq_options queue: :high
   end
 
   skip_before_filter :verify_authenticity_token, :require_login, only: [:create, :options]
@@ -30,7 +36,11 @@ class WatsController < ApplicationController
   end
 
   def create
-    CreateWatWorker.perform_async(params.to_yaml)
+    if params.require(:wat).permit(:app_env)[:app_env] == "production"
+      CreateProdWatWorker.perform_async(params.to_yaml)
+    else
+      CreateNonProdWatWorker.perform_async(params.to_yaml)
+    end
     response.headers['Content-Type'] = "image/png; charset=utf-8"
     head :ok
   end
