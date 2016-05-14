@@ -17,7 +17,7 @@ class Wat < ActiveRecord::Base
   after_create :log_wat_creation
 
   validates :grouping, presence: true
-  validates :language, inclusion: { in: %w(ruby javascript) }, allow_nil: true
+  validates :language, inclusion: { in: %w(ruby javascript r) }, allow_nil: true
   validate :request_headers_not_ignored
   validate :validate_sidekiq_job_retry_count
 
