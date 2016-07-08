@@ -22,7 +22,7 @@ class StatsController < ApplicationController
   end
 
   def index
-    ago = (params[:months] || "24").to_i
+    ago = (params[:months] || "1").to_i
     step = 1.day
     current_date = ago.months.ago.beginning_of_day
     end_date   = Time.zone.now.beginning_of_day
