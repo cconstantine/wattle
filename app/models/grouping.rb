@@ -16,6 +16,11 @@ class Grouping < ActiveRecord::Base
 
     event :resolve do
       transition [:deprioritized, :unacknowledged, :acknowledged] => :resolved
+
+    end
+
+    after_transition to: :resolved do |grouping, transition|
+      grouping.accept_tracker_story if grouping.pivotal_tracker_story_id.present?
     end
 
     event :deprioritize do
@@ -69,6 +74,7 @@ class Grouping < ActiveRecord::Base
   scope :language, -> (an) { language_non_distinct(an).recursive_distinct('groupings.id') }
   scope :by_user,  -> (user_id) { by_user_non_distinct(user_id).recursive_distinct('groupings.id') }
   scope :by_host,  -> (host)    { by_host_non_distinct(host).recursive_distinct('groupings.id') }
+  scope :retrieve_stale_groupings, -> (time_frame) { where(state: :acknowledged).where("latest_wat_at <= ?", time_frame) }
 
   searchkick(callbacks: false, text_middle: [:key_line, :user_emails], index_name: "#{Rails.application.class.parent_name.downcase}_#{model_name.plural}_#{Rails.env.to_s}")
 
@@ -208,5 +214,20 @@ class Grouping < ActiveRecord::Base
 
   def update_sorting(effective_time=nil)
     self.latest_wat_at = effective_time
+  end
+
+  def tracker_story_name
+    "Grouping #{id}: #{message} - Users: #{app_user_count} - Wats: #{wats.size}"
+  end
+
+  def accept_tracker_story
+    tracker = Watcher.retrieve_system_account.tracker
+    return unless tracker.present?
+
+    story = tracker.story(pivotal_tracker_story_id)
+    return if story.current_state == "accepted"
+
+    story.update("current_state" => "accepted")
+    story.notes.create(:text => "Accepted since associated wat has been resolved.")
   end
 end

@@ -66,4 +66,23 @@ describe Watcher do
       end
     end
   end
+
+  describe ".retrieve_system_account" do
+    subject { described_class.retrieve_system_account }
+
+    context "if the account does not exist" do
+      it "should create the system account" do
+        expect{ subject }.to change{ Watcher.count }.by(1)
+      end
+    end
+
+    context "if the account exists" do
+      before { subject }
+
+      it "should retrieve the system account" do
+        expect{ subject }.not_to change{ Watcher.count }
+        expect(subject).not_to be_nil
+      end
+    end
+  end
 end

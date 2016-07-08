@@ -18,6 +18,10 @@ class Watcher < ActiveRecord::Base
     def find_or_create_from_auth_hash!(auth_hash)
       where(email: auth_hash[:email]).first_or_create!(auth_hash.slice(:first_name, :name))
     end
+
+    def retrieve_system_account
+      find_or_create_by! name: "System Account", email: WatConfig.secret_value('SYSTEM_ACCOUNT_EMAIL'), pivotal_tracker_api_key: WatConfig.secret_value('SYSTEM_ACCOUNT_PT_API_KEY')
+    end
   end
 
 

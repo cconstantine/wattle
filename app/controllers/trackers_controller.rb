@@ -2,7 +2,7 @@ class TrackersController < ApplicationController
   before_filter :load_grouping
 
   def create
-    story_name = "Grouping #{@grouping.id}: #{@grouping.error_class}"
+    story_name = @grouping.tracker_story_name
     description = "[View grouping #{@grouping.id} in Wattle](#{grouping_url(@grouping)})"
     story = current_user.tracker.create_story(story_params[:tracker_project],
       name: story_name,

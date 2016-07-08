@@ -1,5 +1,8 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
+ENV["SYSTEM_ACCOUNT_EMAIL"] = "test-system-account@example.com"
+ENV["SYSTEM_ACCOUNT_PT_API_KEY"] = "12345"
+ENV["SYSTEM_ACCOUNT_APPS"] = "app1"
 
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
