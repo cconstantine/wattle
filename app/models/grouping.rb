@@ -227,7 +227,9 @@ class Grouping < ActiveRecord::Base
     story = tracker.story(pivotal_tracker_story_id)
     return if story.current_state == "accepted"
 
-    story.update("current_state" => "accepted")
+    story.current_state = "accepted"
+    story.save
+
     story.notes.create(:text => "Accepted since associated wat has been resolved.")
   end
 end

@@ -394,7 +394,8 @@ describe Grouping do
         expect_any_instance_of(Tracker).to receive(:client) { tracker_stub }
         expect(tracker_stub).to receive(:story).with(tracker_id).and_return(story_stub)
         expect(story_stub).to receive(:current_state)
-        expect(story_stub).to receive(:update).with("current_state" => "accepted")
+        expect(story_stub).to receive(:current_state=).with("accepted")
+        expect(story_stub).to receive(:save)
         expect(story_stub).to receive_message_chain(:notes, :create)
         subject
       end
