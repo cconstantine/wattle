@@ -396,7 +396,6 @@ describe Grouping do
         expect(story_stub).to receive(:current_state)
         expect(story_stub).to receive(:current_state=).with("accepted")
         expect(story_stub).to receive(:save)
-        expect(story_stub).to receive_message_chain(:notes, :create)
         subject
       end
     end

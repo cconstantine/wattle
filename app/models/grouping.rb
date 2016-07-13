@@ -229,7 +229,5 @@ class Grouping < ActiveRecord::Base
 
     story.current_state = "accepted"
     story.save
-
-    story.notes.create(:text => "Accepted since associated wat has been resolved.")
   end
 end
