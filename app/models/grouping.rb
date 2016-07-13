@@ -221,7 +221,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def accept_tracker_story
-    tracker = Watcher.retrieve_system_account.tracker
+    tracker = Watcher.retrieve_system_account.tracker.client
     return unless tracker.present?
 
     story = tracker.story(pivotal_tracker_story_id)

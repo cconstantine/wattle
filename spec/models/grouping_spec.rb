@@ -384,11 +384,18 @@ describe Grouping do
 
     context "if there is an associated tracker story" do
       let(:tracker_id) { "some-tracker-id" }
+      let(:tracker_stub) { double(:tracker_client) }
+      let(:story_stub) { double(:story) }
 
       before { grouping.update! pivotal_tracker_story_id: tracker_id }
 
       it "accepts the story and adds a note" do
-        expect(grouping).to receive(:accept_tracker_story)
+        expect(grouping).to receive(:accept_tracker_story).and_call_original
+        expect_any_instance_of(Tracker).to receive(:client) { tracker_stub }
+        expect(tracker_stub).to receive(:story).with(tracker_id).and_return(story_stub)
+        expect(story_stub).to receive(:current_state)
+        expect(story_stub).to receive(:update).with("current_state" => "accepted")
+        expect(story_stub).to receive_message_chain(:notes, :create)
         subject
       end
     end
