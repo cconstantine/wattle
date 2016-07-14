@@ -17,6 +17,13 @@ GIT
     logviously (0.0.0)
       lograge (> 0.3.3)
 
+GIT
+  remote: git@github.com:omadahealth/omada_utils
+  revision: 53f3f75179717d002cdb642123f7e36d9bc6508e
+  specs:
+    omada_utils (0.2.0)
+      rails (< 5.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -444,6 +451,7 @@ DEPENDENCIES
   logviously!
   moment_ago
   newrelic_rpm
+  omada_utils!
   omniauth-gplus
   paper_trail
   pg
