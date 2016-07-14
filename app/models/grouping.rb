@@ -217,7 +217,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def tracker_story_name
-    "Grouping #{id}: #{message} - Users: #{app_user_count} - Wats: #{wats.size}"
+    "Grouping #{id}: #{error_class || message} - Users: #{app_user_count} - Wats: #{wats.size}"
   end
 
   def accept_tracker_story

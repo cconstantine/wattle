@@ -367,9 +367,20 @@ describe Grouping do
 
     it "returns the approriate values for the tracker story name" do
       expect(subject).to include grouping.id.to_s
-      expect(subject).to include grouping.message.to_s
       expect(subject).to include grouping.app_user_count.to_s
       expect(subject).to include grouping.wats.size.to_s
+    end
+
+    context "if there is only an error_class of the error" do
+      before { grouping.update! error_class: "SomeErrorClass", message: nil }
+
+      it { is_expected.to include grouping.error_class }
+    end
+
+    context "if there is only a message of the error" do
+      before { grouping.update! error_class: nil, message: "some error message" }
+
+      it { is_expected.to include grouping.message }
     end
   end
 
