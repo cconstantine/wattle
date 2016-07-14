@@ -1,2 +1,2 @@
 snapshots:
-  production: "sdb-replica.omadahealth.net:/var/lib/postgresql/backups/wattle_production.sqlc"
+  production: "wattle-db-replica.omadahealth.net:/var/lib/postgresql/backups/wattle_production.sqlc"
