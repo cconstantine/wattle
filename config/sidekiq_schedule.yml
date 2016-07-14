@@ -2,6 +2,4 @@
 daily_grouping_updater:
   cron: "0 3 * * *"
   class: "DailyGroupingUpdater"
-  args:
-    app_name: <%= WatConfig.secret_value('SYSTEM_ACCOUNT_APPS') %>
 <% end %>
