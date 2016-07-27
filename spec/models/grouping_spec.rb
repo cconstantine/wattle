@@ -409,6 +409,14 @@ describe Grouping do
         expect(story_stub).to receive(:save)
         subject
       end
+
+      it "gracefully handles errors raised by Tracker" do
+        expect(grouping).to receive(:accept_tracker_story).and_call_original
+        expect_any_instance_of(Tracker).to receive(:client) { tracker_stub }
+        allow(tracker_stub).to receive(:story).with(tracker_id).and_raise("oh noes!")
+
+        expect { subject }.not_to raise_error
+      end
     end
   end
 

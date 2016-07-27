@@ -229,5 +229,7 @@ class Grouping < ActiveRecord::Base
 
     story.current_state = "accepted"
     story.save
+
+    rescue
   end
 end
