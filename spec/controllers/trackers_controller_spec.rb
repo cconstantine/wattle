@@ -17,6 +17,11 @@ describe TrackersController, type: :controller do
       it "updates grouping with the new story id" do
         expect { subject }.to change { grouping.reload.pivotal_tracker_story_id }.from(nil)
       end
+
+      it "uses the language to label the story" do
+        expect_any_instance_of(Grouping).to receive(:language)
+        subject
+      end
     end
   end
 end

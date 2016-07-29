@@ -6,7 +6,8 @@ class TrackersController < ApplicationController
     description = "[View grouping #{@grouping.id} in Wattle](#{grouping_url(@grouping)})"
     story = current_user.tracker.create_story(story_params[:tracker_project],
       name: story_name,
-      description: description
+      description: description,
+      labels: [@grouping.language]
     )
 
     @grouping.update!(pivotal_tracker_story_id: story.id)
