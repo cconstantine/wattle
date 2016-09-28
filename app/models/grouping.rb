@@ -143,6 +143,8 @@ class Grouping < ActiveRecord::Base
 
   def app_user_count(filters: {}, key_name: :id)
     wats.filtered(filters).count("distinct app_user -> '#{key_name}'")
+  rescue ActiveRecord::StatementInvalid
+    Float::INFINITY
   end
 
   def browser_stats(filters: {}, key_name: :HTTP_USER_AGENT, limit: nil)
