@@ -2,6 +2,7 @@ class GroupingsController < ApplicationController
   respond_to :html
 
   before_filter :load_group, except: :index
+  before_filter :load_chart_data, only: :show
 
   def index
     @active_tab = params[:state] || "unacknowledged"
@@ -11,25 +12,9 @@ class GroupingsController < ApplicationController
   end
 
   def show
-    wat_chart_values = @grouping.chart_data(filters)
     @stream_events = @grouping.stream_events.order(:happened_at)
     @wats = @grouping.wats.filtered(filters)
-    @chart = {
-      title: {
-        text: 'Daily Stats',
-      },
-      xAxis: {
-        type: 'datetime'
-      },
-      chart: {
-        type: 'spline',
-        zoomType: 'xy'
-      },
-      series: [{
-                 name: "Wats",
-                 data: wat_chart_values
-               }]
-    }
+
     @tracker_api = current_user.tracker
     respond_with(@grouping)
   end
@@ -51,6 +36,27 @@ class GroupingsController < ApplicationController
 
   def load_group
     @grouping = Grouping.find(params.require(:id))
+  end
+
+  def load_chart_data
+    @chart = {
+        title: {
+            text: 'Daily Stats',
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+        chart: {
+            type: 'spline',
+            zoomType: 'xy'
+        },
+        series: [{
+                     name: "Wats",
+                     data: @grouping.chart_data(filters)
+                 }]
+    }
+  rescue ActiveRecord::StatementInvalid
+
   end
 
 end

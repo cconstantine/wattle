@@ -3,4 +3,7 @@
   .modal-dialog.modal-lg
     .modal-content
       .modal-body
-        .highchart{data: {chart: @chart.to_json}}
+        - if @chart
+          .highchart{data: {chart: @chart.to_json}}
+        - else
+          Chart Unavailable
