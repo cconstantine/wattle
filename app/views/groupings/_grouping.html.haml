@@ -75,7 +75,7 @@
           users
         .big-number
           %a.mb20{"href" => "#", "data-target" => "#users-affected", "data-toggle" => "modal"}
-            #{ grouping.app_user_count(filters: filters) }
+            #{Grouping.with_timeout_default(1, "Lots") {  @grouping.app_user_count(filters: filters) } }
 
 
       - unknowns = grouping.app_user_stats(filters: filters)[nil]

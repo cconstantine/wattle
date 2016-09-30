@@ -143,8 +143,6 @@ class Grouping < ActiveRecord::Base
 
   def app_user_count(filters: {}, key_name: :id)
     wats.filtered(filters).count("distinct app_user -> '#{key_name}'")
-  rescue ActiveRecord::StatementInvalid
-    Float::INFINITY
   end
 
   def browser_stats(filters: {}, key_name: :HTTP_USER_AGENT, limit: nil)
@@ -219,7 +217,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def tracker_story_name
-    "Grouping #{id}: #{error_class || message} - Users: #{app_user_count} - Wats: #{wats.size}"
+    "Grouping #{id}: #{error_class || message} - Users: #{with_timeout_default(5.seconds, "Many") { app_user_count} } - Wats: #{wats.size}"
   end
 
   def accept_tracker_story

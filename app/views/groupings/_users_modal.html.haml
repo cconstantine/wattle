@@ -7,7 +7,7 @@
             .col-md-1
               .badge.badge-info.pull-right=  count
             = app_user
-        - if grouping.app_user_count(filters: filters) > 100
+        - if Grouping.with_timeout_default(1, true) { grouping.app_user_count(filters: filters) > 100 }
           %li.row
             .col-md-1
               .badge.badge-info.pull-right

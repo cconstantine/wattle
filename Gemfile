@@ -42,7 +42,6 @@ gem 'cancancan'
 gem 'dotenv-rails'
 gem 'foreman'
 gem 'health_check'
-gem 'rack-timeout'
 gem 'tracker_api'
 gem 'omada_utils', git: 'git@github.com:omadahealth/omada_utils'
 

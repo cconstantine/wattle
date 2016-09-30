@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
 
   DEFAULT_FILTERS = { }.with_indifferent_access
 
+  around_filter :query_timeouts
+
   protect_from_forgery with: :exception
   before_filter :require_login
 
@@ -49,4 +51,10 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_user
 
+
+  def query_timeouts
+    ActiveRecord::Base.with_timeout(60.seconds) do
+      yield
+    end
+  end
 end
