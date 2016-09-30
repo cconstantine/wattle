@@ -217,7 +217,7 @@ class Grouping < ActiveRecord::Base
   end
 
   def tracker_story_name
-    "Grouping #{id}: #{error_class || message} - Users: #{with_timeout_default(5.seconds, "Many") { app_user_count} } - Wats: #{wats.size}"
+    "Grouping #{id}: #{error_class || message} - Users: #{Grouping.with_timeout_default(5.seconds, "Many") { app_user_count} } - Wats: #{wats.size}"
   end
 
   def accept_tracker_story
