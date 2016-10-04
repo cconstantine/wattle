@@ -63,7 +63,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.8)
-    apohypaton (0.1.2)
+    apohypaton (0.3.5)
       diplomat (~> 0.14.0)
     arel (6.0.3)
     awesome_print (1.6.1)
@@ -484,4 +484,4 @@ DEPENDENCIES
   wat_catcher
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
