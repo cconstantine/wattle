@@ -33,6 +33,7 @@ class Grouping < ActiveRecord::Base
 
   scope :open,          -> {where.not(state: :resolved)}
   scope :unacknowledged,        -> {where(state: :unacknowledged)}
+  scope :acknowledged,        -> {where(state: :acknowledged)}
   scope :resolved,      -> {where(state: :resolved)}
   scope :deprioritized,  -> {where(state: :deprioritized)}
   scope :state,         -> (state) {where(state: state)}
@@ -92,10 +93,8 @@ class Grouping < ActiveRecord::Base
   def self.filtered_by_params(filters, opts={})
     search_query = "*"
 
-    opts[:state] ||= :unacknowledged
-
     wheres = {
-        state: opts[:state]
+        state: filters[:state] || opts[:state] || :unacknowledged
     }
     wheres[:app_env]  = filters[:app_env] if filters[:app_env]
     wheres[:app_name] = filters[:app_name] if filters[:app_name]
