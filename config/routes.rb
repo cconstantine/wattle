@@ -61,6 +61,7 @@ Wattle::Application.routes.draw do
   namespace :api do 
     resources :groupings do
       get :count_by_state, on: :collection
+      get "/:state/count", on: :collection, to: "groupings#count", constraints: { :state => /[a-zA-Z]+/ }
     end
   end
 
