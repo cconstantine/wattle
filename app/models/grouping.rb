@@ -36,12 +36,13 @@ class Grouping < ActiveRecord::Base
 
   scope :similar, -> (grouping) { where(:uniqueness_string => grouping.uniqueness_string) }
 
-  scope :open,          -> {where.not(state: :resolved)}
-  scope :unacknowledged,        -> {where(state: :unacknowledged)}
-  scope :resolved,      -> {where(state: :resolved)}
-  scope :deprioritized,  -> {where(state: :deprioritized)}
-  scope :state,         -> (state) {where(state: state)}
-  scope :matching, ->(wat) {language_non_distinct(wat.language).where(wat.matching_selector).recursive_distinct('groupings.id')}
+  scope :open, -> { where.not(state: :resolved) }
+  scope :unacknowledged, -> { where(state: :unacknowledged) }
+  scope :acknowledged, -> { where(state: :acknowledged) }
+  scope :resolved, -> { where(state: :resolved) }
+  scope :deprioritized, -> { where(state: :deprioritized) }
+  scope :state, -> (state) { where(state: state) }
+  scope :matching, ->(wat) { language_non_distinct(wat.language).where(wat.matching_selector).recursive_distinct('groupings.id') }
   scope :filtered, ->(opts=nil) {
     opts ||= {}
 
@@ -98,10 +99,8 @@ class Grouping < ActiveRecord::Base
   def self.filtered_by_params(filters, opts={})
     search_query = "*"
 
-    opts[:state] ||= :unacknowledged
-
     wheres = {
-        state: opts[:state]
+      state: filters[:state] || opts[:state] || :unacknowledged
     }
     wheres[:app_env]  = filters[:app_env] if filters[:app_env]
     wheres[:app_name] = filters[:app_name] if filters[:app_name]
