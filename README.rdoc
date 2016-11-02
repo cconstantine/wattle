@@ -2,6 +2,26 @@
 
 Wattle is a self-hosted open source project to help your team collect, manage and process your Exceptions, or as we like to call them, Wats[https://www.destroyallsoftware.com/talks/wat]
 
+== Development
+
+=== Pre-requisites:
+install elasticsearch
+install and run postgres
+install and run redis
+build fixtures: `rake spec:fixture_builder:build`
+
+=== Running Tests
+
+run `rspec`
+
+=== Setup DB
+
+run `rake db:create; migrate`
+
+=== Start Server
+
+run `rails s`
+
 == Server Configuration
 
 === General application configuration
