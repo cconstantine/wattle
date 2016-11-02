@@ -303,8 +303,6 @@ GEM
     redis (3.2.2)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
-    redis-semaphore (0.2.4)
-      redis
     ref (2.0.0)
     representable (3.0.0)
       declarative (~> 0.0.5)
@@ -462,7 +460,6 @@ DEPENDENCIES
   rails
   rails_12factor
   redcarpet
-  redis-semaphore
   responders (~> 2.0)
   rr
   rspec-collection_matchers

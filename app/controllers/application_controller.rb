@@ -3,6 +3,14 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   include WatCatcher::CatcherOfWats
   include Logviously::PayloadExtension
+  include RateLimit
+
+  rescue_from RateLimitExceeded do
+    respond_to do |format|
+      format.json  { render :json => ["Rate Limit Exceeded"], status: 429 }
+      format.any   { render :text => "Rate Limit Exceeded", status: 429 }
+    end
+  end
 
   DEFAULT_FILTERS = { }.with_indifferent_access
 
