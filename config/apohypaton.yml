@@ -1,0 +1,89 @@
+---
+
+common:
+  wattle-puma: &common_puma
+    port: 443
+    tags: ['update_me']
+    checks: &common_checks
+      - name: "redis"
+        notes: "Check TCP connectivity to assigned redis instance every 10s timing-out after 2s"
+        type: "tcp"
+        tcp: "<%= Apohypaton::Kv.load_secret! 'redis/host' %>:<%= Apohypaton::Kv.load_secret! 'redis/port' %>"
+        interval: "10s"
+        timeout: "2s"
+
+      - name: "postgresql"
+        notes: "Check TCP connectivity to assigned postgresql instance every 10s timing-out after 2s"
+        type: "tcp"
+        tcp: "<%= Apohypaton::Kv.load_secret! 'postgresql/host' %>:<%= Apohypaton::Kv.load_secret! 'postgresql/port' %>"
+        interval: "10s"
+        timeout: "2s"
+
+      - name: "elastic"
+        type: "http"
+        notes: "HTTP/1.1 GET / assigned elastic instance every 10s timing-out after 2s"
+        http: "<%= Apohypaton::Kv.load_secret! 'elastic_search/url' %>"
+        interval: "10s"
+
+      - name: "cluster"
+        type: "http"
+        http: "https://wattle.omadahealth.net/health_check"
+        interval: "60s"
+        timeout: "20s"
+
+  wattle-sidekiq: &common_sidekiq
+    port: 443
+    tags: ['update_me']
+    checks:
+      - name: "redis"
+        notes: "Check TCP connectivity to assigned redis instance every 10s timing-out after 2s"
+        type: "tcp"
+        tcp: "<%= Apohypaton::Kv.load_secret! 'redis/host' %>:<%= Apohypaton::Kv.load_secret! 'redis/port' %>"
+        interval: "10s"
+        timeout: "2s"
+
+      - name: "postgresql"
+        notes: "Check TCP connectivity to assigned postgresql instance every 10s timing-out after 2s"
+        type: "tcp"
+        tcp: "<%= Apohypaton::Kv.load_secret! 'postgresql/host' %>:<%= Apohypaton::Kv.load_secret! 'postgresql/port' %>"
+        interval: "10s"
+        timeout: "2s"
+
+      - name: "elastic"
+        type: "http"
+        notes: "HTTP/1.1 GET / assigned elastic instance every 10s timing-out after 2s"
+        http: "<%= Apohypaton::Kv.load_secret! 'elastic_search/url' %>"
+        interval: "10s"
+
+      - name: "cluster"
+        type: "http"
+        http: "https://wattle.omadahealth.net/health_check"
+        interval: "60s"
+        timeout: "20s"
+
+development:
+  wattle-puma:
+    <<: *common_puma
+    tags: ['dev']
+
+  wattle-sidekiq:
+    <<: *common_sidekiq
+    tags: ['dev']
+
+staging:
+  wattle-puma:
+    <<: *common_puma
+    tags: ['staging']
+
+  wattle-sidekiq:
+    <<: *common_sidekiq
+    tags: ['staging']
+
+production:
+  wattle-puma:
+    <<: *common_puma
+    tags: ['production']
+
+  wattle-sidekiq:
+    <<: *common_sidekiq
+    tags: ['production']
