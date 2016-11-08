@@ -24,7 +24,7 @@ describe ExceptionalsController, :type => :controller do
 
       it "should pass the user hash" do
         expect {subject}.to raise_error(ExpectedError)
-        expect(controller.env["wat_report"][:user]).to eq user
+        expect(request.env["wat_report"][:user]).to eq user
       end
     end
   end

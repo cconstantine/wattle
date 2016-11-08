@@ -18,6 +18,7 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
   before_filter :require_login
+  before_filter :set_paper_trail_whodunnit
 
   def filters
     @_filters ||= FilterSet.new(params: params, filters: current_user.default_filters, default_filters: DEFAULT_FILTERS)
