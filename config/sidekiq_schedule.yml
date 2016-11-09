@@ -1,5 +1,3 @@
-<% if WatConfig.secret_value('SYSTEM_ACCOUNT_APPS').present? %>
 daily_grouping_updater:
   cron: "0 3 * * *"
   class: "DailyGroupingUpdater"
-<% end %>
