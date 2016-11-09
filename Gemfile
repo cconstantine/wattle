@@ -11,6 +11,7 @@ gem 'wat_catcher'#, path: "../wat_catcher"
 gem 'sidekiq_healthcheck'
 gem 'kaminari'
 gem 'kaminari-bootstrap'
+gem 'omniauth-oauth2', '= 1.3.1'
 gem 'omniauth-gplus'
 gem 'secrets', :github => "austinfromboston/secrets"
 gem 'state_machine', :github => "seuros/state_machine"
@@ -34,7 +35,7 @@ gem 'puma'
 gem "logviously", git: 'git@github.com:omadahealth/logviously'
 gem 'newrelic_rpm'
 gem 'paper_trail'
-gem 'searchkick'
+gem 'searchkick', '=0.9.1'
 gem 'typhoeus'
 gem 'responders', '~> 2.0'
 gem 'cancancan'
