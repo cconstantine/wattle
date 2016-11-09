@@ -5,6 +5,10 @@ development:
 test:
   disabled: true
 
+staging:
+  host: <%= WatConfig.secret_value 'WATTLE_HOST' %>
+  disabled: false
+
 production:
   host: <%= WatConfig.secret_value 'WATTLE_HOST' %>
   disabled: false
