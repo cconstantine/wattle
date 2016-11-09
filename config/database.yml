@@ -18,6 +18,11 @@ test:
   pool: 100
   timeout: 5000
 
+staging:
+  url: <%= WatConfig.secret_value 'DATABASE_URL' %>
+  pool: 26
+  timeout: 5000
+
 production:
   url: <%= WatConfig.secret_value 'DATABASE_URL' %>
   pool: 26

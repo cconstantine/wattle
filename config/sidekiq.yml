@@ -1,5 +1,8 @@
 :concurrency: 10
 
+staging:
+  :pidfile: /var/www/wattle/shared/tmp/pids/sidekiq.pid
+
 production:
   :pidfile: /var/www/wattle/shared/tmp/pids/sidekiq.pid
 
