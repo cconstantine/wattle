@@ -27,7 +27,7 @@ common:
 
       - name: "cluster-rails"
         type: "http"
-        http: "https://<%= Apohypaton::Kv.load_secret! 'nginx'.first %>/health_check"
+        http: "https://<%= Apohypaton::Kv.load_secret!('nginx').first['fqdn'] %>/health_check"
         interval: "60s"
         timeout: "20s"
 
