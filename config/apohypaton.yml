@@ -27,7 +27,7 @@ common:
 
       - name: "cluster-rails"
         type: "http"
-        http: "https://wattle.omadahealth.net/health_check"
+        http: "https://<%= Apohypaton::Kv.load_secret! 'nginx'.first %>/health_check"
         interval: "60s"
         timeout: "20s"
 
@@ -54,12 +54,6 @@ common:
         notes: "HTTP/1.1 GET / assigned elastic instance every 10s timing-out after 2s"
         http: "<%= Apohypaton::Kv.load_secret! 'elastic_search/url' %>"
         interval: "10s"
-
-      - name: "cluster-sidekiq"
-        type: "http"
-        http: "https://wattle.omadahealth.net/health_check"
-        interval: "60s"
-        timeout: "20s"
 
 development:
   wattle-rails:
