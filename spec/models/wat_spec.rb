@@ -471,7 +471,8 @@ describe Wat do
     end
   end
 
-  describe "#validate_sidekiq_job_retry_count" do
+  xdescribe "#validate_sidekiq_job_retry_count" do
+
     let(:final_sidekiq_msg) { sidekiq_msg }
     let(:wat) { Wat.new sidekiq_msg: final_sidekiq_msg }
 
@@ -496,6 +497,7 @@ describe Wat do
 
       context "with a retry count of 1" do
         let(:final_sidekiq_msg) { sidekiq_msg.merge({"retry_count" => "1" }) }
+        pending "disabled"
 
         it "adds an error" do
           subject

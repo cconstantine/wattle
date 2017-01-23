@@ -19,7 +19,7 @@ class Wat < ActiveRecord::Base
   validates :grouping, presence: true
   validates :language, inclusion: { in: %w(ruby javascript r bash) }, allow_nil: true
   validate :request_headers_not_ignored
-  validate :validate_sidekiq_job_retry_count
+  # validate :validate_sidekiq_job_retry_count
 
   scope :filtered, ->(opts={}) {
     running_scope = all
